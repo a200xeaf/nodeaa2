@@ -37,7 +37,7 @@ export interface NodeStoreState {
 
 export const useNodeStore = create<NodeStoreState>((set, get) => ({
     nodes: [
-        {id: 'output', type: 'out', data: {label: 'output'}, position: {x: -50, y: 100}}
+        {id: 'output', type: 'out', data: {label: 'output'}, position: {x: 500, y: 500}}
     ],
     edges: [],
 
@@ -49,6 +49,26 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
         switch(type) {
             case 'osc': {
                 const data = { frequency: 200, type: 'sine' };
+                const position = { x: 0, y: 0 };
+
+                createAudioNode(id, type, data)
+                set({ nodes: [...get().nodes, { id, type, data, position }] })
+
+                break
+            }
+
+            case 'gain': {
+                const data = { gain_gain: 1.0 };
+                const position = { x: 0, y: 0 };
+
+                createAudioNode(id, type, data)
+                set({ nodes: [...get().nodes, { id, type, data, position }] })
+
+                break
+            }
+
+            case 'osc2': {
+                const data = { osc_frequency: 440, type: 0 };
                 const position = { x: 0, y: 0 };
 
                 createAudioNode(id, type, data)

@@ -1,5 +1,5 @@
 import React from 'react'
-import {useNodeStore} from "../engine/store.ts";
+import {useNodeStore} from "../../engine/store.ts";
 import {Handle, Position} from "@xyflow/react";
 
 interface OutProps {

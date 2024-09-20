@@ -1,11 +1,13 @@
 import React from 'react';
-import {Background, Panel, BackgroundVariant, Position, ReactFlow, useKeyPress, useViewport} from '@xyflow/react';
+import {Background, Panel, BackgroundVariant, ReactFlow} from '@xyflow/react';
 import { useNodeStore } from './engine/store';
-import Osc from './nodes/Osc.tsx';
-import Out from './nodes/Out.tsx';
+import Out from './nodes/Out/Out.tsx';
+import Gain from "./nodes/Gain/Gain.tsx";
+import Osc2 from "./nodes/Osc2/Osc2.tsx";
 
 const nodeTypes = {
-    osc: Osc,
+    osc2: Osc2,
+    gain: Gain,
     out: Out,
 };
 
@@ -40,10 +42,15 @@ const App: React.FC = () => {
         >
             <Panel position={'top-left'}>
                 <button
-                    onClick={() => createNode('osc')}
-                    className='bg-white rounded-md font-bold'>Add Osc</button>
+                    onClick={() => createNode('gain')}
+                    className='bg-white rounded-md font-bold p-2'>Add Gain
+                </button>
+                <button
+                    onClick={() => createNode('osc2')}
+                    className='bg-white rounded-md font-bold p-2'>Add Osc2
+                </button>
             </Panel>
-            <Background variant={BackgroundVariant.Lines} />
+            <Background variant={BackgroundVariant.Lines}/>
         </ReactFlow>
     );
 };
