@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { useNodeStore } from '../../engine/store.ts';
 
@@ -6,7 +6,7 @@ interface Osc2Props {
     id: string;
     data: {
         osc_frequency: number;
-        osc_type: string;
+        osc_type: number;
     };
 }
 

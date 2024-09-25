@@ -124,8 +124,7 @@ export const disconnectNodes = (sourceID: string, targetID: string) => {
 
     try {
         // Disconnect left and right channels, if target is 'output', it's context.destination
-        source.node.disconnect(target, 0, 0); // Disconnect Source left -> Target left
-        source.node.disconnect(target, 0, 1); // Disconnect Source left -> Target right
+        source.node.disconnect(target); // Disconnect Source left -> Target left
 
         console.log(`Disconnected left and right channels from ${sourceID} to ${targetID}`);
     } catch (error) {

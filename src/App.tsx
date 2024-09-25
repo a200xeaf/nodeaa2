@@ -4,6 +4,7 @@ import { useNodeStore } from './engine/store';
 import Out from './nodes/Out/Out.tsx';
 import Gain from "./nodes/Gain/Gain.tsx";
 import Osc2 from "./nodes/Osc2/Osc2.tsx";
+import {useShallow} from "zustand/react/shallow";
 
 const nodeTypes = {
     osc2: Osc2,
@@ -12,16 +13,16 @@ const nodeTypes = {
 };
 
 const App: React.FC = () => {
-    const nodes = useNodeStore((state) => state.nodes);
-    const edges = useNodeStore((state) => state.edges);
+    const nodes = useNodeStore(useShallow((state) => state.nodes));
+    const edges = useNodeStore(useShallow((state) => state.edges));
 
-    const onNodesChange = useNodeStore((state) => state.onNodesChange);
-    const onEdgesChange = useNodeStore((state) => state.onEdgesChange);
-    const onNodesDelete = useNodeStore((state) => state.onNodesDelete);
-    const onEdgesDelete = useNodeStore((state) => state.onEdgesDelete);
+    const onNodesChange = useNodeStore(useShallow((state) => state.onNodesChange));
+    const onEdgesChange = useNodeStore(useShallow((state) => state.onEdgesChange));
+    const onNodesDelete = useNodeStore(useShallow((state) => state.onNodesDelete));
+    const onEdgesDelete = useNodeStore(useShallow((state) => state.onEdgesDelete));
 
-    const addEdge = useNodeStore((state) => state.addEdge);
-    const createNode = useNodeStore((state) => state.createNode);
+    const addEdge = useNodeStore(useShallow((state) => state.addEdge));
+    const createNode = useNodeStore(useShallow((state) => state.createNode));
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')

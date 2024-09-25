@@ -16,13 +16,15 @@ const Out: React.FC<OutProps> = ({ id }) => {
             <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Audio Out</p>
             </div>
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[4rem]'>
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[4rem] justify-center items-center'>
                 <label>
-                    <button onClick={toggleAudio}>
+                    <button
+                        onClick={toggleAudio}
+                        className={`font-bold text-center p-1 text-sm ${isRunning ? 'bg-green-500' : 'bg-red-500'}`}>
                         {isRunning ? (
-                            <span>Running</span>
+                            <span className='text-white'>Running</span>
                         ) : (
-                            <span>Not running</span>
+                            <span className='text-black'>Not running</span>
                         )}
                     </button>
                 </label>

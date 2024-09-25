@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
-path.react-flow__edge-path {
+.react-flow__edge-path {
     stroke-width: 4;
+}
+
+.react-flow .react-flow__handle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%; /* Makes the element a circle */
+    background-color: limegreen; /* Outer circle color */
+}
+
+.react-flow .react-flow__handle::before {
+    content: '';
+    position: absolute;
+    top: 3px;   /* Adjust to position the inner circle */
+    left: 3px;
+    width: 8px;   /* Inner circle size */
+    height: 8px;
+    border-radius: 50%; /* Makes the inner element a circle */
+    background-color: black; /* Inner circle color */
 }

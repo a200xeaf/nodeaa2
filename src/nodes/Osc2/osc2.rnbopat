@@ -38,8 +38,27 @@
 		"style" : "",
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
-		"title" : "untitled",
+		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/Osc2/osc2.rnbopat",
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-1",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "signal" ],
+					"patching_rect" : [ 536.0, 117.0, 30.0, 23.0 ],
+					"rnbo_classname" : "sig~",
+					"rnbo_extra_attributes" : 					{
+						"unit" : "ms"
+					}
+,
+					"rnbo_serial" : 1,
+					"rnbo_uniqueid" : "sig~_obj-1",
+					"text" : "sig~"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"id" : "obj-22",
 					"maxclass" : "newobj",
@@ -48,7 +67,7 @@
 					"outlettype" : [ "signal" ],
 					"patching_rect" : [ 451.0, 117.0, 43.0, 23.0 ],
 					"rnbo_classname" : "noise~",
-					"rnbo_serial" : 6,
+					"rnbo_serial" : 1,
 					"rnbo_uniqueid" : "noise~_obj-22",
 					"text" : "noise~"
 				}
@@ -83,22 +102,22 @@
 					"patching_rect" : [ 536.0, 48.0, 224.0, 23.0 ],
 					"rnbo_classname" : "param",
 					"rnbo_extra_attributes" : 					{
-						"steps" : 0.0,
-						"ctlin" : 0.0,
-						"enum" : "",
-						"unit" : "",
-						"displayname" : "",
-						"exponent" : 1.0,
-						"tonormalized" : "",
-						"order" : "0",
+						"meta" : "",
 						"displayorder" : "-",
 						"preset" : 1,
-						"meta" : "",
+						"exponent" : 1.0,
+						"enum" : "",
 						"sendinit" : 1,
-						"fromnormalized" : ""
+						"ctlin" : 0.0,
+						"fromnormalized" : "",
+						"unit" : "",
+						"steps" : 0.0,
+						"order" : "0",
+						"tonormalized" : "",
+						"displayname" : ""
 					}
 ,
-					"rnbo_serial" : 9,
+					"rnbo_serial" : 1,
 					"rnbo_uniqueid" : "osc_type",
 					"rnboinfo" : 					{
 						"needsInstanceInfo" : 1,
@@ -674,7 +693,7 @@
 					"outlettype" : [ "signal", "signal" ],
 					"patching_rect" : [ 377.0, 117.0, 36.0, 23.0 ],
 					"rnbo_classname" : "saw~",
-					"rnbo_serial" : 3,
+					"rnbo_serial" : 1,
 					"rnbo_uniqueid" : "saw~_obj-9",
 					"text" : "saw~"
 				}
@@ -690,19 +709,19 @@
 					"patching_rect" : [ 132.0, 48.0, 319.0, 23.0 ],
 					"rnbo_classname" : "param",
 					"rnbo_extra_attributes" : 					{
-						"steps" : 0.0,
-						"ctlin" : 0.0,
-						"enum" : "",
-						"unit" : "",
-						"displayname" : "",
-						"exponent" : 1.0,
-						"tonormalized" : "",
-						"order" : "0",
+						"meta" : "",
 						"displayorder" : "-",
 						"preset" : 1,
-						"meta" : "",
+						"exponent" : 1.0,
+						"enum" : "",
 						"sendinit" : 1,
-						"fromnormalized" : ""
+						"ctlin" : 0.0,
+						"fromnormalized" : "",
+						"unit" : "",
+						"steps" : 0.0,
+						"order" : "0",
+						"tonormalized" : "",
+						"displayname" : ""
 					}
 ,
 					"rnbo_serial" : 2,
@@ -1162,7 +1181,7 @@
 						"comment" : ""
 					}
 ,
-					"rnbo_serial" : 3,
+					"rnbo_serial" : 1,
 					"rnbo_uniqueid" : "out~_obj-4",
 					"rnboinfo" : 					{
 						"needsInstanceInfo" : 1,
@@ -1258,7 +1277,7 @@
 						"comment" : ""
 					}
 ,
-					"rnbo_serial" : 1,
+					"rnbo_serial" : 2,
 					"rnbo_uniqueid" : "out~_obj-3",
 					"rnboinfo" : 					{
 						"needsInstanceInfo" : 1,
@@ -1344,6 +1363,13 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
+					"destination" : [ "obj-11", 0 ],
+					"source" : [ "obj-1", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
 					"order" : 1,
 					"source" : [ "obj-11", 0 ]
@@ -1367,7 +1393,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-11", 0 ],
+					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-13", 0 ]
 				}
 

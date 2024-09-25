@@ -68,7 +68,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             }
 
             case 'osc2': {
-                const data = { osc_frequency: 440, type: 0 };
+                const data = { osc_frequency: 440, osc_type: 1 };
                 const position = { x: 0, y: 0 };
 
                 createAudioNode(id, type, data)
