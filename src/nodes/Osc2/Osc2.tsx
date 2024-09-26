@@ -1,6 +1,7 @@
-import React, {useCallback, useEffect} from 'react';
-import { Handle, Position } from '@xyflow/react';
+import React, {useCallback} from 'react';
+import {Handle, Position} from '@xyflow/react';
 import { useNodeStore } from '../../engine/store.ts';
+import {useShallow} from "zustand/react/shallow";
 
 interface Osc2Props {
     id: string;
@@ -11,7 +12,7 @@ interface Osc2Props {
 }
 
 const Osc2: React.FC<Osc2Props> = ({ id, data }) => {
-    const updateNode = useNodeStore((state) => state.updateNode);
+    const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     const setFrequency = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +30,7 @@ const Osc2: React.FC<Osc2Props> = ({ id, data }) => {
 
     return (
         <div className='w-60 h-52 drop-shadow-lg'>
+            <Handle type="target" position={Position.Top} id='midi'/>
             <div className='flex items-center bg-pink-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Oscillator Node</p>
             </div>
@@ -60,7 +62,7 @@ const Osc2: React.FC<Osc2Props> = ({ id, data }) => {
                 </label>
             </div>
 
-            <Handle type="source" position={Position.Bottom} />
+            <Handle type="source" position={Position.Bottom} id='audio'/>
         </div>
     );
 };

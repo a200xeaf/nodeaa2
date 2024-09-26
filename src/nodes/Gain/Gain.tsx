@@ -1,7 +1,8 @@
 // ./src/nodes/Osc.tsx
-import React, { useCallback } from 'react';
-import { Handle, Position } from '@xyflow/react';
-import { useNodeStore } from '../../engine/store.ts';
+import React, {useCallback, useEffect} from 'react';
+import {Handle, Position, useHandleConnections} from '@xyflow/react';
+import {useNodeStore} from '../../engine/store.ts';
+import {useShallow} from "zustand/react/shallow";
 
 interface GainProps {
     id: string
@@ -10,8 +11,15 @@ interface GainProps {
     };
 }
 
-const Gain: React.FC<GainProps> = ({ id, data }) => {
-    const updateNode = useNodeStore((state) => state.updateNode);
+const Gain: React.FC<GainProps> = ({id, data}) => {
+    const updateNode = useNodeStore(useShallow((state) => state.updateNode));
+    const connections = useHandleConnections({type: 'target', id: 'data'})
+
+    // Update connected node IDs whenever connections change
+    useEffect(() => {
+        const nodeIds = connections.map((connection) => connection.source);
+        console.log(nodeIds)
+    }, [connections]);
 
     const gainInDecibels = data.gain_gain > 0
         ? (20 * Math.log10(data.gain_gain))
@@ -19,15 +27,17 @@ const Gain: React.FC<GainProps> = ({ id, data }) => {
 
     const setGain = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNode(id, { gain_gain: +e.target.value });
+            updateNode(id, {gain_gain: +e.target.value});
         },
         [id, updateNode]
     );
 
     return (
         <div className='w-60 h-[7rem] drop-shadow-lg'>
-            <Handle type="target" position={Position.Top} />
-
+            <div className="flex justify-evenly">
+                <Handle type="target" position={Position.Top} id='audio' style={{ left: '30%' }}/>
+                <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>
+            </div>
             <div className='flex items-center bg-green-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Gain</p>
             </div>
@@ -47,7 +57,7 @@ const Gain: React.FC<GainProps> = ({ id, data }) => {
                 <span>{gainInDecibels === -Infinity ? `${gainInDecibels.toFixed(2)} ` : gainInDecibels.toFixed(2)}dB</span>
             </div>
 
-            <Handle type="source" position={Position.Bottom} />
+            <Handle type="source" position={Position.Bottom} id='audio'/>
         </div>
     );
 };

@@ -18,10 +18,13 @@ import {
     toggleAudioEngine,
     updateAudioNode
 } from "./audio.ts";
+import {WebMidi} from "webmidi";
 
 export interface NodeStoreState {
     nodes: FlowNode[];
     edges: Edge[];
+
+    wm: typeof WebMidi;
 
     isRunning: boolean;
 
@@ -41,13 +44,16 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
     ],
     edges: [],
 
+    wm: WebMidi,
+
     isRunning: isRunningEngine(),
 
     createNode: (type) => {
-        const id = nanoid()
+        let id: string
 
         switch(type) {
             case 'osc': {
+                id = nanoid()
                 const data = { frequency: 200, type: 'sine' };
                 const position = { x: 0, y: 0 };
 
@@ -58,6 +64,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             }
 
             case 'gain': {
+                id = nanoid()
                 const data = { gain_gain: 1.0 };
                 const position = { x: 0, y: 0 };
 
@@ -68,10 +75,31 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             }
 
             case 'osc2': {
+                id = nanoid()
                 const data = { osc_frequency: 440, osc_type: 1 };
                 const position = { x: 0, y: 0 };
 
                 createAudioNode(id, type, data)
+                set({ nodes: [...get().nodes, { id, type, data, position }] })
+
+                break
+            }
+
+            case 'midiin': {
+                id = "midi-" + nanoid()
+                const data = { midiin_device: "" };
+                const position = { x: 0, y: 0 };
+
+                set({ nodes: [...get().nodes, { id, type, data, position }] })
+
+                break
+            }
+
+            case 'numberNode': {
+                id = "data-" + nanoid()
+                const data = { number_number: 0 };
+                const position = { x: 0, y: 0 };
+
                 set({ nodes: [...get().nodes, { id, type, data, position }] })
 
                 break
@@ -93,14 +121,18 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             edges: applyEdgeChanges(changes, get().edges)
         })
     },
-    addEdge: (data) => {
+    addEdge: (edge) => {
         const id = nanoid(6)
-        const edge = {id, ...data}
-        set({edges: [edge, ...get().edges]})
-        connectNodes(data.source, data.target)
+        const newEdge = {id, ...edge}
+        set({edges: [newEdge, ...get().edges]})
+        if (edge.sourceHandle === 'audio') {
+            connectNodes(edge.source, edge.target)
+        }
     },
     updateNode: (id, data) => {
-        updateAudioNode(id, data)
+        if (!(id.length > 21)) {
+            updateAudioNode(id, data)
+        }
         set({
             nodes: get().nodes.map((node) =>
                 node.id === id
@@ -111,12 +143,16 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
     },
     onNodesDelete: (nodes) => {
         for (const {id} of nodes) {
-            deleteAudioNode(id)
+            if (!(id.length > 21)) {
+                deleteAudioNode(id)
+            }
         }
     },
     onEdgesDelete: (edges) => {
         for (const edge of edges) {
-            disconnectNodes(edge.source, edge.target)
+            if (edge.sourceHandle === 'audio') {
+                disconnectNodes(edge.source, edge.target)
+            }
         }
     }
 }))

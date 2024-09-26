@@ -3,7 +3,7 @@ import {createDevice, Device} from "@rnbo/js";
 import gainPatcher from '../nodes/Gain/gain.export.json'
 import osc2Patcher from '../nodes/Osc2/osc2.export.json'
 
-const context = new AudioContext();
+export const context = new AudioContext();
 const nodes = new Map();
 
 nodes.set('output', context.destination);
@@ -60,6 +60,8 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
             console.log(`Updating parameter ${key} to ${val}`);
 
             // Find the parameter that matches the key in the node
+            //FIXME
+            // @ts-expect-error any type
             const param = node.parameters.find(p => p.name === key);
             if (param) {
                 if (typeof val === 'number') {
