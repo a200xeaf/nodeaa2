@@ -1,17 +1,16 @@
 import React, {useCallback} from 'react';
-import {Handle, Position} from '@xyflow/react';
+import {Handle, Node, NodeProps, Position} from '@xyflow/react';
 import { useNodeStore } from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 
-interface Osc2Props {
-    id: string;
-    data: {
-        osc_frequency: number;
-        osc_type: number;
-    };
-}
+type Osc2NodeData = {
+    osc_frequency: number,
+    osc_type: number
+};
 
-const Osc2: React.FC<Osc2Props> = ({ id, data }) => {
+type Osc2NodeType = Node<Osc2NodeData, 'osc2Node'>;
+
+const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data }) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     const setFrequency = useCallback(
@@ -67,4 +66,4 @@ const Osc2: React.FC<Osc2Props> = ({ id, data }) => {
     );
 };
 
-export default Osc2;
+export default Osc2Node;

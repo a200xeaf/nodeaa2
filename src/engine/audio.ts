@@ -1,7 +1,7 @@
 import {Node as FlowNode} from "@xyflow/react";
 import {createDevice, Device} from "@rnbo/js";
-import gainPatcher from '../nodes/Gain/gain.export.json'
-import osc2Patcher from '../nodes/Osc2/osc2.export.json'
+import gainPatcher from '../nodes/GainNode/gain.export.json'
+import osc2Patcher from '../nodes/Osc2Node/osc2.export.json'
 
 export const context = new AudioContext();
 const nodes = new Map();
@@ -21,7 +21,7 @@ export const createAudioNode = async (id: string, type: string, data: Partial<Fl
             break
         }
 
-        case 'gain': {
+        case 'gainNode': {
             // @ts-expect-error rainbow issue
             const node = await createDevice({context, patcher: gainPatcher})
             const gain = node.parametersById.get('gain_gain')
@@ -31,7 +31,7 @@ export const createAudioNode = async (id: string, type: string, data: Partial<Fl
             break
         }
 
-        case 'osc2': {
+        case 'osc2Node': {
             // @ts-expect-error rainbow issue
             const node = await createDevice({context, patcher: osc2Patcher})
             const frequency = node.parametersById.get('osc_frequency')
@@ -53,8 +53,6 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
     }
 
     try {
-        console.log("RNBO device detected");
-
         // Loop through each key-value pair in the data object and update the corresponding parameter
         for (const [key, val] of Object.entries(data)) {
             console.log(`Updating parameter ${key} to ${val}`);
@@ -90,11 +88,6 @@ export const deleteAudioNode = (id: string) => {
 export const connectNodes = (sourceID: string, targetID: string) => {
     const source = nodes.get(sourceID);
     const target = targetID === 'output' ? context.destination : nodes.get(targetID);
-    // console.log("average node inputs ", target.node.numberOfInputs)
-    // console.log("average node channel count ", target.node.channelCount)
-    // console.log("average node outputs ", target.node.numberOfOutputs)
-    // console.log("audio context inputs ", context.destination.numberOfInputs)
-    // console.log("audio context channel count ", context.destination.channelCount)
 
     if (!source || !target) {
         throw new Error(`Invalid node IDs: ${sourceID} or ${targetID} not found`);
@@ -102,13 +95,9 @@ export const connectNodes = (sourceID: string, targetID: string) => {
 
     try {
         if (targetID === 'output') {
-            // Connect left and right channels, if target is 'output', it's context.destination
             source.node.connect(target);
         } else {
-            // Connect left and right channels, if target is 'output', it's context.destination
             source.node.connect(target.node);
-            // source.node.connect(target.node, 0, 0); // Source left -> Target left
-            // source.node.connect(target.node, 1, 1); // Source left -> Target right
         }
         console.log(`Connected left and right channels from ${sourceID} to ${targetID}`);
     } catch (error) {

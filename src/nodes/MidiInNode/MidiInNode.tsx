@@ -3,17 +3,16 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {Input, NoteMessageEvent, WebMidi} from "webmidi";
 import {MIDIEvent} from "@rnbo/js";
 import {context} from "../../engine/audio.ts";
-import {Handle, Position} from "@xyflow/react";
+import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
 
-interface MidiInProps {
-    id: string;
-    data: {
-        midiin_device: string;
-    };
-}
+type MidiInNodeData = {
+    midiin_device: string;
+};
 
-const MidiIn: React.FC<MidiInProps> = ({id, data}) => {
+type MidiInNodeType = Node<MidiInNodeData, 'midiInNode'>;
+
+const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
     const [inputNames, setInputNames] = useState<string[]>([]);
     const [selectedName, setSelectedName] = useState<string>("");
     const [selectedMidi, setSelectedMidi] = useState<Input | null>(null);
@@ -103,4 +102,4 @@ const MidiIn: React.FC<MidiInProps> = ({id, data}) => {
         </div>
     )
 }
-export default MidiIn
+export default MidiInNode

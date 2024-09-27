@@ -6,7 +6,7 @@ import {
     OnEdgesChange,
     Connection,
     applyEdgeChanges,
-    applyNodeChanges, OnNodesDelete, OnEdgesDelete
+    applyNodeChanges, OnNodesDelete, OnEdgesDelete, OnConnect
 } from "@xyflow/react";
 import {nanoid} from "nanoid";
 import {
@@ -33,14 +33,14 @@ export interface NodeStoreState {
     onEdgesChange: OnEdgesChange;
     onNodesDelete: OnNodesDelete;
     onEdgesDelete: OnEdgesDelete;
-    addEdge: (data: Connection) => void;
+    onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode['data']>) => void;
     createNode: (type: string) => void;
 }
 
 export const useNodeStore = create<NodeStoreState>((set, get) => ({
     nodes: [
-        {id: 'output', type: 'out', data: {label: 'output'}, position: {x: 500, y: 500}}
+        {id: 'output', type: 'outNode', data: {label: 'output'}, position: {x: 500, y: 500}}
     ],
     edges: [],
 
@@ -63,7 +63,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                 break
             }
 
-            case 'gain': {
+            case 'gainNode': {
                 id = nanoid()
                 const data = { gain_gain: 1.0 };
                 const position = { x: 0, y: 0 };
@@ -74,7 +74,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                 break
             }
 
-            case 'osc2': {
+            case 'osc2Node': {
                 id = nanoid()
                 const data = { osc_frequency: 440, osc_type: 1 };
                 const position = { x: 0, y: 0 };
@@ -85,7 +85,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                 break
             }
 
-            case 'midiin': {
+            case 'midiInNode': {
                 id = "midi-" + nanoid()
                 const data = { midiin_device: "" };
                 const position = { x: 0, y: 0 };
@@ -104,6 +104,10 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
 
                 break
             }
+
+            default: {
+                throw new Error("Called device that doesn't exist")
+            }
         }
     },
     toggleAudio: () => {
@@ -121,12 +125,12 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             edges: applyEdgeChanges(changes, get().edges)
         })
     },
-    addEdge: (edge) => {
+    onConnect: (connection: Connection) => {
         const id = nanoid(6)
-        const newEdge = {id, ...edge}
+        const newEdge = {id, ...connection}
         set({edges: [newEdge, ...get().edges]})
-        if (edge.sourceHandle === 'audio') {
-            connectNodes(edge.source, edge.target)
+        if (connection.sourceHandle === 'audio') {
+            connectNodes(connection.source, connection.target)
         }
     },
     updateNode: (id, data) => {

@@ -1,17 +1,16 @@
 // ./src/nodes/Osc.tsx
 import React, {useCallback, useEffect} from 'react';
-import {Handle, Position, useHandleConnections} from '@xyflow/react';
+import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import {useNodeStore} from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 
-interface GainProps {
-    id: string
-    data: {
-        gain_gain: number
-    };
-}
+type GainNodeData = {
+    gain_gain: number
+};
 
-const Gain: React.FC<GainProps> = ({id, data}) => {
+type GainNodeType = Node<GainNodeData, 'gainNode'>;
+
+const GainNode: React.FC<NodeProps<GainNodeType>> = ({id, data}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
     const connections = useHandleConnections({type: 'target', id: 'data'})
 
@@ -62,4 +61,4 @@ const Gain: React.FC<GainProps> = ({id, data}) => {
     );
 };
 
-export default Gain;
+export default GainNode;

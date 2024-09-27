@@ -1,20 +1,19 @@
 import React, {ChangeEvent} from 'react'
 import {useNodeStore} from "../../engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
-import {Handle, Position} from "@xyflow/react";
+import {Handle, Position, Node, NodeProps} from "@xyflow/react";
 
-interface NumberProps {
-    id: string,
-    data: {
-        number_number: number,
-    }
-}
+// Define the node data structure
+type NumberNodeData = { number_number: number };
 
-const Number: React.FC<NumberProps> = ({id, data}) => {
+// Create a custom node type
+type NumberNodeType = Node<NumberNodeData, 'numberNode'>;
+
+const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({id, data}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     const handleNumber = (e: ChangeEvent<HTMLInputElement>) => {
-        updateNode(id, { number_number: +e.target.value });
+        updateNode(id, { number_number: e.target.value });
     }
 
     return (
@@ -29,4 +28,4 @@ const Number: React.FC<NumberProps> = ({id, data}) => {
         </div>
     )
 }
-export default Number
+export default NumberNode

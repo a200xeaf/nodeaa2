@@ -1,18 +1,18 @@
 import React from 'react';
 import {Background, Panel, BackgroundVariant, ReactFlow, Connection, Edge} from '@xyflow/react';
 import { useNodeStore } from './engine/store';
-import Out from './nodes/Out/Out.tsx';
-import Gain from "./nodes/Gain/Gain.tsx";
-import Osc2 from "./nodes/Osc2/Osc2.tsx";
-import MidiIn from "./nodes/MidiIn/MidiIn.tsx";
-import NumberNode from "./nodes/Number/Number.tsx";
+import OutNode from './nodes/OutNode/OutNode.tsx';
+import GainNode from "./nodes/GainNode/GainNode.tsx";
+import Osc2Node from "./nodes/Osc2Node/Osc2Node.tsx";
+import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
+import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
 import {useShallow} from "zustand/react/shallow";
 
 const nodeTypes = {
-    osc2: Osc2,
-    gain: Gain,
-    out: Out,
-    midiin: MidiIn,
+    osc2Node: Osc2Node,
+    gainNode: GainNode,
+    outNode: OutNode,
+    midiInNode: MidiInNode,
     numberNode: NumberNode,
 };
 
@@ -25,7 +25,7 @@ const App: React.FC = () => {
     const onNodesDelete = useNodeStore(useShallow((state) => state.onNodesDelete));
     const onEdgesDelete = useNodeStore(useShallow((state) => state.onEdgesDelete));
 
-    const addEdge = useNodeStore(useShallow((state) => state.addEdge));
+    const onConnect = useNodeStore(useShallow((state) => state.onConnect));
     const createNode = useNodeStore(useShallow((state) => state.createNode));
 
     const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {
@@ -49,23 +49,25 @@ const App: React.FC = () => {
 
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
-            onEdgesDelete={onEdgesDelete}
-            onConnect={addEdge}
+
             onNodesDelete={onNodesDelete}
+            onEdgesDelete={onEdgesDelete}
+
+            onConnect={onConnect}
 
             isValidConnection={isValidConnection}
         >
             <Panel position={'top-left'}>
                 <button
-                    onClick={() => createNode('gain')}
+                    onClick={() => createNode('gainNode')}
                     className='bg-white rounded-md font-bold p-2'>Add Gain
                 </button>
                 <button
-                    onClick={() => createNode('osc2')}
+                    onClick={() => createNode('osc2Node')}
                     className='bg-white rounded-md font-bold p-2'>Add Osc2
                 </button>
                 <button
-                    onClick={() => createNode('midiin')}
+                    onClick={() => createNode('midiInNode')}
                     className='bg-white rounded-md font-bold p-2'>Add Midi In
                 </button>
                 <button

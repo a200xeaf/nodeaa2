@@ -38,7 +38,7 @@
 		"style" : "",
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
-		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/Gain/gain.rnbopat",
+		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/GainNode/gain.rnbopat",
 		"boxes" : [ 			{
 				"box" : 				{
 					"id" : "obj-8",
@@ -412,7 +412,7 @@
 								"isparam" : 0,
 								"deprecated" : 0,
 								"type" : "number",
-								"label" : "MIDI Controller Number.",
+								"label" : "MIDI Controller NumberNode.",
 								"displayorder" : 16
 							}
 ,

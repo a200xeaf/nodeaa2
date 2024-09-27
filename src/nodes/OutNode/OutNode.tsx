@@ -1,13 +1,11 @@
 import React from 'react'
 import {useNodeStore} from "../../engine/store.ts";
-import {Handle, Position} from "@xyflow/react";
+import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
 
-interface OutProps {
-    id: string;
-}
+type OutNodeType = Node<Record<string, never>, 'outNode'>;
 
-const Out: React.FC<OutProps> = ({ id }) => {
+const OutNode: React.FC<NodeProps<OutNodeType>> = () => {
     const isRunning = useNodeStore(useShallow((state) => state.isRunning));
     const toggleAudio = useNodeStore(useShallow((state) => state.toggleAudio));
 
@@ -33,4 +31,4 @@ const Out: React.FC<OutProps> = ({ id }) => {
         </div>
     )
 }
-export default Out
+export default OutNode

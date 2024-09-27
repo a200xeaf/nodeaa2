@@ -38,7 +38,7 @@
 		"style" : "",
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
-		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/Osc2/osc2.rnbopat",
+		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/Osc2Node/osc2.rnbopat",
 		"boxes" : [ 			{
 				"box" : 				{
 					"id" : "obj-1",
@@ -420,7 +420,7 @@
 								"isparam" : 0,
 								"deprecated" : 0,
 								"type" : "number",
-								"label" : "MIDI Controller Number.",
+								"label" : "MIDI Controller NumberNode.",
 								"displayorder" : 16
 							}
 ,
@@ -613,7 +613,7 @@
 ,
 							"choices" : 							{
 								"attrOrProp" : 2,
-								"digest" : "Number of inputs",
+								"digest" : "NumberNode of inputs",
 								"defaultarg" : 1,
 								"isalias" : 0,
 								"aliases" : [  ],
@@ -1027,7 +1027,7 @@
 								"isparam" : 0,
 								"deprecated" : 0,
 								"type" : "number",
-								"label" : "MIDI Controller Number.",
+								"label" : "MIDI Controller NumberNode.",
 								"displayorder" : 16
 							}
 ,
