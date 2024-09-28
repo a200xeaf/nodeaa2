@@ -86,7 +86,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             }
 
             case 'midiInNode': {
-                id = "midi-" + nanoid()
+                id = "data-" + nanoid()
                 const data = { midiin_device: "" };
                 const position = { x: 0, y: 0 };
 
@@ -98,6 +98,16 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             case 'numberNode': {
                 id = "data-" + nanoid()
                 const data = { number_number: 0 };
+                const position = { x: 0, y: 0 };
+
+                set({ nodes: [...get().nodes, { id, type, data, position }] })
+
+                break
+            }
+
+            case 'viewerNode': {
+                id = "data-" + nanoid()
+                const data = { viewer_value: "" };
                 const position = { x: 0, y: 0 };
 
                 set({ nodes: [...get().nodes, { id, type, data, position }] })

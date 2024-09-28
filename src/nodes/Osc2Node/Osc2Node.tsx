@@ -29,7 +29,7 @@ const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data }) => {
 
     return (
         <div className='w-60 h-52 drop-shadow-lg'>
-            <Handle type="target" position={Position.Top} id='midi'/>
+            <Handle type="target" position={Position.Top} id='midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
             <div className='flex items-center bg-pink-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Oscillator Node</p>
             </div>

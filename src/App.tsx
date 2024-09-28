@@ -7,6 +7,7 @@ import Osc2Node from "./nodes/Osc2Node/Osc2Node.tsx";
 import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
 import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
 import {useShallow} from "zustand/react/shallow";
+import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -14,6 +15,7 @@ const nodeTypes = {
     outNode: OutNode,
     midiInNode: MidiInNode,
     numberNode: NumberNode,
+    viewerNode: ViewerNode,
 };
 
 const App: React.FC = () => {
@@ -29,12 +31,18 @@ const App: React.FC = () => {
     const createNode = useNodeStore(useShallow((state) => state.createNode));
 
     const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {
-        if (connectionOrEdge.sourceHandle === connectionOrEdge.targetHandle) {
-            return true
-        } else {
-            return false
+        const { sourceHandle, targetHandle } = connectionOrEdge;
+        if (sourceHandle === targetHandle) {
+            return true;
         }
-    }
+        if (sourceHandle?.startsWith("data-") && targetHandle?.startsWith("data")) {
+            return true;
+        }
+        if (sourceHandle?.startsWith("midi-") && targetHandle?.startsWith("midi")) {
+            return true;
+        }
+        return false;
+    };
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')
@@ -73,6 +81,10 @@ const App: React.FC = () => {
                 <button
                     onClick={() => createNode('numberNode')}
                     className='bg-white rounded-md font-bold p-2'>Add Number Node
+                </button>
+                <button
+                    onClick={() => createNode('viewerNode')}
+                    className='bg-white rounded-md font-bold p-2'>Add Viewer Node
                 </button>
             </Panel>
             <Background variant={BackgroundVariant.Lines}/>

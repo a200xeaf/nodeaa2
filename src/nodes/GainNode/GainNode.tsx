@@ -1,8 +1,9 @@
 // ./src/nodes/Osc.tsx
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import {useNodeStore} from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
+import {useEmitterSubscriptions} from "../../hooks/useEmitterSubscription.ts";
 
 type GainNodeData = {
     gain_gain: number
@@ -12,24 +13,29 @@ type GainNodeType = Node<GainNodeData, 'gainNode'>;
 
 const GainNode: React.FC<NodeProps<GainNodeType>> = ({id, data}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
-    const connections = useHandleConnections({type: 'target', id: 'data'})
-
-    // Update connected node IDs whenever connections change
-    useEffect(() => {
-        const nodeIds = connections.map((connection) => connection.source);
-        console.log(nodeIds)
-    }, [connections]);
+    const dataConnections = useHandleConnections({type: 'target', id: 'data'})
 
     const gainInDecibels = data.gain_gain > 0
         ? (20 * Math.log10(data.gain_gain))
         : -Infinity; // Handle zero gain case
 
     const setGain = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            updateNode(id, {gain_gain: +e.target.value});
+        (e: React.ChangeEvent<HTMLInputElement> | number) => {
+            // Check if the input is an event
+            if (typeof e === 'number') {
+                updateNode(id, { gain_gain: e }); // Direct number case
+            } else {
+                updateNode(id, { gain_gain: +e.target.value }); // ChangeEvent case
+            }
         },
         [id, updateNode]
     );
+
+    useEmitterSubscriptions({
+        connections: dataConnections,
+        callback: setGain,
+        data
+    })
 
     return (
         <div className='w-60 h-[7rem] drop-shadow-lg'>

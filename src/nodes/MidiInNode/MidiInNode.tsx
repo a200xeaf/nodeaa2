@@ -59,14 +59,12 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
             setSelectedMidi(currInput);
 
             currInput.addListener("noteon", "all", (e: NoteMessageEvent) => {
-                console.log(currInput.name)
                 // console.log("Note On:", e.note.number); // Logs the MIDI note number for note on events
                 const midiInfo = e.data
                 const noteOnEvent = new MIDIEvent(context.currentTime, 0, midiInfo)
             });
 
             currInput.addListener("noteoff", "all", (e: NoteMessageEvent) => {
-                console.log(currInput.name)
                 // console.log("Note Off:", e.note.number); // Logs the MIDI note number for note off events
                 const midiInfo = e.data
                 const noteOffEvent = new MIDIEvent(context.currentTime, 0, midiInfo)
@@ -83,11 +81,11 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
 
     return (
 
-        <div className='w-60 h-52 drop-shadow-lg'>
-            <div className='flex items-center bg-blue-200 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Oscillator Node</p>
+        <div className='w-60 h-[7rem] drop-shadow-lg'>
+            <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
+                <p className='font-bold text-white'>Midi In</p>
             </div>
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[11rem]'>
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[5rem]'>
                 <button onClick={handleMidi}>Check Midi</button>
                 <select onChange={handleMidiSelect}>
                     {inputNames.length > 0 && <option value="">None</option>}
@@ -98,7 +96,7 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
                     }
                 </select>
             </div>
-            <Handle type="source" position={Position.Bottom} id='midi'/>
+            <Handle type="source" position={Position.Bottom} id='midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
         </div>
     )
 }
