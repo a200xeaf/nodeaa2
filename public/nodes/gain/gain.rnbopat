@@ -38,7 +38,7 @@
 		"style" : "",
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
-		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/GainNode/gain.rnbopat",
+		"title" : "/Users/august/Downloads/Webstorm/nodeaa2/src/nodes/FaustGainNode/gain.rnbopat",
 		"boxes" : [ 			{
 				"box" : 				{
 					"id" : "obj-8",

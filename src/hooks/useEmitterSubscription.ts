@@ -19,8 +19,19 @@ export const useEmitterSubscriptions = ({connections, callback, data}: UseEmmitt
         };
 
         // Subscribe to each connection
+// Subscribe to each connection
         connections.forEach(({ source, sourceHandle }) => {
-            const emitterName = `${source}:${sourceHandle?.replace("data-", "")}`;
+            let cleanedHandle = sourceHandle;
+
+            // Check if sourceHandle starts with "data-" or "midi-" and replace
+            if (sourceHandle?.startsWith("data-")) {
+                cleanedHandle = sourceHandle.replace("data-", "");
+            } else if (sourceHandle?.startsWith("midi-")) {
+                cleanedHandle = sourceHandle.replace("midi-", "");
+            }
+
+            // Use the cleaned handle for the emitter name
+            const emitterName = `${source}:${cleanedHandle}`;
             const unsubscribe = subscribeToEmitter(emitterName);
             activeSubscriptions.push(unsubscribe);
         });

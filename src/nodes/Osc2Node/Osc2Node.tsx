@@ -1,7 +1,9 @@
 import React, {useCallback} from 'react';
-import {Handle, Node, NodeProps, Position} from '@xyflow/react';
+import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import { useNodeStore } from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
+import {useEmitterSubscriptions} from "../../hooks/useEmitterSubscription.ts";
+import {MIDIEvent} from "@rnbo/js";
 
 type Osc2NodeData = {
     osc_frequency: number,
@@ -12,6 +14,7 @@ type Osc2NodeType = Node<Osc2NodeData, 'osc2Node'>;
 
 const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data }) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
+    const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
 
     const setFrequency = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +29,16 @@ const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data }) => {
         },
         [id, updateNode]
     );
+
+    const handleMIDI = (e: MIDIEvent) => {
+        console.log(e)
+    }
+
+    useEmitterSubscriptions({
+        connections: midiConnections,
+        callback: handleMIDI,
+        data
+    })
 
     return (
         <div className='w-60 h-52 drop-shadow-lg'>

@@ -5,6 +5,7 @@ import {MIDIEvent} from "@rnbo/js";
 import {context} from "../../engine/audio.ts";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
+import {mainemitter} from "../../engine/eventbus.ts";
 
 type MidiInNodeData = {
     midiin_device: string;
@@ -62,12 +63,14 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
                 // console.log("Note On:", e.note.number); // Logs the MIDI note number for note on events
                 const midiInfo = e.data
                 const noteOnEvent = new MIDIEvent(context.currentTime, 0, midiInfo)
+                mainemitter.emit(id + ":" + "main_midi", noteOnEvent);
             });
 
             currInput.addListener("noteoff", "all", (e: NoteMessageEvent) => {
                 // console.log("Note Off:", e.note.number); // Logs the MIDI note number for note off events
                 const midiInfo = e.data
                 const noteOffEvent = new MIDIEvent(context.currentTime, 0, midiInfo)
+                mainemitter.emit(id + ":" + "main_midi", noteOffEvent);
             });
         }
 
@@ -96,7 +99,7 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
                     }
                 </select>
             </div>
-            <Handle type="source" position={Position.Bottom} id='midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
+            <Handle type="source" position={Position.Bottom} id='midi-main_midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
         </div>
     )
 }

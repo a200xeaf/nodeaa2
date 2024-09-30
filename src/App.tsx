@@ -3,6 +3,7 @@ import {Background, Panel, BackgroundVariant, ReactFlow, Connection, Edge} from 
 import { useNodeStore } from './engine/store';
 import OutNode from './nodes/OutNode/OutNode.tsx';
 import GainNode from "./nodes/GainNode/GainNode.tsx";
+import FaustGainNode from "./nodes/FaustGainNode/FaustGainNode.tsx";
 import Osc2Node from "./nodes/Osc2Node/Osc2Node.tsx";
 import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
 import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
@@ -12,6 +13,7 @@ import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
 const nodeTypes = {
     osc2Node: Osc2Node,
     gainNode: GainNode,
+    faustGainNode: FaustGainNode,
     outNode: OutNode,
     midiInNode: MidiInNode,
     numberNode: NumberNode,
@@ -69,6 +71,10 @@ const App: React.FC = () => {
                 <button
                     onClick={() => createNode('gainNode')}
                     className='bg-white rounded-md font-bold p-2'>Add Gain
+                </button>
+                <button
+                    onClick={() => createNode('faustGainNode')}
+                    className='bg-white rounded-md font-bold p-2'>Add Faust Gain
                 </button>
                 <button
                     onClick={() => createNode('osc2Node')}
