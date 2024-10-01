@@ -2,7 +2,7 @@ import {
     FaustMonoDspGenerator,
     FaustDspMeta,
     FaustMonoAudioWorkletNode,
-    FaustPolyAudioWorkletNode
+    FaustPolyAudioWorkletNode, FaustPolyDspGenerator
 } from "@grame/faustwasm";
 
 type FaustNode =
@@ -34,7 +34,18 @@ export const createFaustNode = async (
     let faustNode: FaustNode | null = null;
 
     if (voices > 0) {
-        throw new Error('Failed to create faustNode.');
+        faustDSP.mixerModule = await WebAssembly.compileStreaming(await fetch(`/nodes/${path}/mixer-module.wasm`));
+        const generator = new FaustPolyDspGenerator()
+        faustNode = await generator.createNode(
+            context,
+            voices,
+            path,
+            { module: faustDSP.dspModule, json: JSON.stringify(faustDSP.dspMeta), soundfiles: {} },
+            faustDSP.mixerModule,
+            undefined,
+            false
+        );
+
     } else {
         const generator = new FaustMonoDspGenerator()
         faustNode = await generator.createNode(

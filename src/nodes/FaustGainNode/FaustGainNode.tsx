@@ -8,7 +8,7 @@ type FaustGainNodeData = {
     faustgain_Gain: number
 };
 
-type FaustGainNodeType = Node<FaustGainNodeData, 'gainNode'>;
+type FaustGainNodeType = Node<FaustGainNodeData, 'faustGainNode'>;
 
 const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));

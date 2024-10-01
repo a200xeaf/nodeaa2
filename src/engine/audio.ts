@@ -9,12 +9,12 @@ const nodes = new Map<string, Device | FaustMonoAudioWorkletNode | FaustPolyAudi
 
 nodes.set('output-1', context.destination);
 
-export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: string, data: Partial<FlowNode['data']>) => {
+export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: string, data: Partial<FlowNode['data']>, voices: number = 0) => {
     console.log(nodes.size)
     switch (type) {
         case 'faust': {
             try {
-                const node = await createFaustNode(name, context, 0);
+                const node = await createFaustNode(name, context, voices);
 
                 // Iterate over the parameters in the node and set values from the `data` object
                 Object.entries(data).forEach(([key, value]) => {
@@ -103,6 +103,7 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
                 }
             }
         } else if (isFaust(node)) {
+            console.log(node.getParams())
             // Faust node: handle Faust-specific parameter updates
             for (const [key, val] of Object.entries(data)) {
                 // Split the key to extract device name and parameter name
@@ -203,10 +204,32 @@ export const toggleAudioEngine = () => {
     return isRunningEngine() ? context.suspend() : context.resume()
 }
 
-// export const sendMidi = (id: string, e: MIDIEvent)=> {
-//     const deviceToSend: Device = nodes.get(id)
-//     deviceToSend.scheduleEvent(e)
-// }
+export const sendMidi = (id: string, e: Uint8Array) => {
+    const deviceToSend = nodes.get(id);
+    const status = e[0];
+    const pitch = e[1];
+    const velocity = e[2];
+    const channel = status & 0x0F; // Extract the MIDI channel
+
+    if (isFaust(deviceToSend) && isPoly(deviceToSend)) {
+        if ((status & 0xF0) === 0x90 && velocity > 0) {
+            // Note On
+            deviceToSend.keyOn(channel, pitch, velocity);
+        } else if ((status & 0xF0) === 0x80 || ((status & 0xF0) === 0x90 && velocity === 0)) {
+            // Note Off
+            deviceToSend.keyOff(channel, pitch, velocity);
+        }
+    } else if (isRNBO(deviceToSend)) {
+        // Create a tuple with exactly 3 bytes for MIDIData
+        const rnboMIDIData: [number, number, number] = [e[0], e[1], e[2]];
+
+        // Schedule the MIDI event with the current audio context time
+        const rnboMIDI = new MIDIEvent(context.currentTime, 0, rnboMIDIData);
+
+        // Schedule the event
+        deviceToSend.scheduleEvent(rnboMIDI);
+    }
+};
 
 const isRNBO = (device: unknown): device is WorkletDevice => {
     return device instanceof WorkletDevice;
@@ -214,4 +237,8 @@ const isRNBO = (device: unknown): device is WorkletDevice => {
 
 const isFaust = (device: unknown): device is FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode => {
     return device instanceof FaustMonoAudioWorkletNode || device instanceof FaustPolyAudioWorkletNode
+}
+
+const isPoly = (device: FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode): device is FaustPolyAudioWorkletNode => {
+    return device instanceof FaustPolyAudioWorkletNode
 }

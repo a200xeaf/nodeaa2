@@ -52,17 +52,6 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
         let id: string
 
         switch(type) {
-            case 'gainNode': {
-                id = nanoid()
-                const data = { gain_gain: 1.0 };
-                const position = { x: 0, y: 0 };
-
-                createAudioNode(id, "rnbo", "gain", data)
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
             case 'osc2Node': {
                 id = nanoid()
                 const data = { osc_frequency: 440, osc_type: 1 };
@@ -80,6 +69,23 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                 const position = { x: 0, y: 0 };
 
                 createAudioNode(id, "faust", "faustgain", data)
+                set({ nodes: [...get().nodes, { id, type, data, position }] })
+
+                break
+            }
+
+            case 'faustPolyNode': {
+                id = nanoid()
+                const data = {
+                    faustpoly_attack: 0.1,
+                    faustpoly_decay: 0.1,
+                    faustpoly_sustain: 0.7,
+                    faustpoly_release: 0.1,
+                    faustpoly_waveformsel: 0
+                };
+                const position = { x: 0, y: 0 };
+
+                createAudioNode(id, "faust", "faustpoly", data, 16)
                 set({ nodes: [...get().nodes, { id, type, data, position }] })
 
                 break

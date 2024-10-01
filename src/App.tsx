@@ -2,18 +2,18 @@ import React from 'react';
 import {Background, Panel, BackgroundVariant, ReactFlow, Connection, Edge} from '@xyflow/react';
 import { useNodeStore } from './engine/store';
 import OutNode from './nodes/OutNode/OutNode.tsx';
-import GainNode from "./nodes/GainNode/GainNode.tsx";
 import FaustGainNode from "./nodes/FaustGainNode/FaustGainNode.tsx";
+import FaustPolyNode from "./nodes/FaustPolyNode/FaustPolyNode.tsx";
 import Osc2Node from "./nodes/Osc2Node/Osc2Node.tsx";
 import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
 import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
-import {useShallow} from "zustand/react/shallow";
 import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
+import {useShallow} from "zustand/react/shallow";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
-    gainNode: GainNode,
     faustGainNode: FaustGainNode,
+    faustPolyNode: FaustPolyNode,
     outNode: OutNode,
     midiInNode: MidiInNode,
     numberNode: NumberNode,
@@ -69,12 +69,12 @@ const App: React.FC = () => {
         >
             <Panel position={'top-left'}>
                 <button
-                    onClick={() => createNode('gainNode')}
-                    className='bg-white rounded-md font-bold p-2'>Add Gain
-                </button>
-                <button
                     onClick={() => createNode('faustGainNode')}
                     className='bg-white rounded-md font-bold p-2'>Add Faust Gain
+                </button>
+                <button
+                    onClick={() => createNode('faustPolyNode')}
+                    className='bg-white rounded-md font-bold p-2'>Add Faust Poly
                 </button>
                 <button
                     onClick={() => createNode('osc2Node')}
