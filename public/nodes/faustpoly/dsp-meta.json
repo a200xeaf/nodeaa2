@@ -21,7 +21,7 @@
         "."
     ],
     "size": 278724,
-    "code": "UD39",
+    "code": "wEH9",
     "inputs": 0,
     "outputs": 2,
     "meta": [
@@ -151,18 +151,18 @@
                     "init": 0.1,
                     "min": 0,
                     "max": 5,
-                    "step": 0
+                    "step": 0.01
                 },
                 {
                     "type": "hslider",
                     "label": "decay",
                     "shortname": "decay",
                     "address": "/faustpoly/decay",
-                    "index": 278664,
+                    "index": 278676,
                     "init": 0.1,
                     "min": 0,
                     "max": 5,
-                    "step": 0
+                    "step": 0.01
                 },
                 {
                     "type": "hslider",
@@ -202,18 +202,18 @@
                     "init": 0.1,
                     "min": 0,
                     "max": 5,
-                    "step": 0
+                    "step": 0.01
                 },
                 {
                     "type": "hslider",
                     "label": "sustain",
                     "shortname": "sustain",
                     "address": "/faustpoly/sustain",
-                    "index": 278676,
+                    "index": 278664,
                     "init": 0.7,
                     "min": 0,
                     "max": 1,
-                    "step": 0
+                    "step": 0.01
                 },
                 {
                     "type": "hslider",
