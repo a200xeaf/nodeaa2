@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import {useEmitterSubscriptions} from "../../hooks/useEmitterSubscription.ts";
 import {sendMidi} from "../../engine/audio.ts";
@@ -18,17 +18,21 @@ type FaustPolyNodeType = Node<FaustPolyNodeData, 'faustPolyNode'>;
 const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
     const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
-    const handleMIDI = (e: Uint8Array) => {
-        sendMidi(id, e)
-    }
 
-    const setWaveform = (e: ChangeEvent<HTMLSelectElement>) => {
+    // Memoize handleMIDI to avoid re-creating on every render
+    const handleMIDI = useCallback((e: Uint8Array) => {
+        sendMidi(id, e);
+    }, [id]);
+
+    // Memoize setWaveform, only recreates when id or updateNode changes
+    const setWaveform = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
         updateNode(id, { faustpoly_waveformsel: +e.target.value });
-    }
+    }, [id, updateNode]);
 
-    const setADSR = (e: ChangeEvent<HTMLInputElement>)=> {
+    // Memoize setADSR, same as setWaveform
+    const setADSR = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         updateNode(id, { [`faustpoly_${e.target.id}`]: +e.target.value });
-    }
+    }, [id, updateNode]);
 
     useEmitterSubscriptions({
         connections: midiConnections,
@@ -37,7 +41,7 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data}) => {
     })
 
     return (
-        <div className='w-60 h-[13rem] drop-shadow-lg'>
+        <div className='w-60 h-[13rem] bg-black'>
             <Handle type="target" position={Position.Top} id='midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
             <div className='flex items-center bg-amber-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Poly Node</p>
@@ -117,4 +121,4 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data}) => {
     );
 };
 
-export default FaustPolyNode;
+export default React.memo(FaustPolyNode);

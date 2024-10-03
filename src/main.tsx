@@ -10,9 +10,9 @@ const rootElement = document.getElementById('root') as HTMLElement;
 
 ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-        <div style={{ width: '100vw', height: '100vh' }}>
+        <div style={{width: '100vw', height: '100vh'}}>
             <ReactFlowProvider>
-                <App />
+                <App/>
             </ReactFlowProvider>
         </div>
     </React.StrictMode>,

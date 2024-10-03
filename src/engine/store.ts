@@ -83,7 +83,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                     faustpoly_release: 0.1,
                     faustpoly_waveformsel: 0
                 };
-                const position = { x: 0, y: 0 };
+                const position = { x: Math.random()*500, y: Math.random()*500 };
 
                 createAudioNode(id, "faust", "faustpoly", data, 16)
                 set({ nodes: [...get().nodes, { id, type, data, position }] })
@@ -142,11 +142,24 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
         })
     },
     onConnect: (connection: Connection) => {
-        const id = nanoid(6)
-        const newEdge = {id, ...connection}
-        set({edges: [newEdge, ...get().edges]})
+        const id = nanoid(6);
+
+        // Determine the edge type based on the targetHandle
+        const edgeType = connection.targetHandle?.startsWith("midi")
+            ? "solidBlueEdge"
+            : "animatedGreenDashedEdge";
+
+        const newEdge = {
+            id,
+            ...connection,
+            type: edgeType,  // Set the edge type dynamically
+        };
+
+        set({ edges: [newEdge, ...get().edges] });
+
+        // Additional logic for connecting audio nodes
         if (connection.sourceHandle === 'audio') {
-            connectNodes(connection.source, connection.target)
+            connectNodes(connection.source, connection.target);
         }
     },
     updateNode: (id, data) => {

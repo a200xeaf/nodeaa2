@@ -9,6 +9,8 @@ import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
 import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
 import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
 import {useShallow} from "zustand/react/shallow";
+import AnimatedGreenDashedEdge from "./ui/edges/AnimatedGreenDashedEdge.tsx";
+import SolidBlueEdge from "./ui/edges/SolidBlueEdge.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -18,6 +20,25 @@ const nodeTypes = {
     midiInNode: MidiInNode,
     numberNode: NumberNode,
     viewerNode: ViewerNode,
+};
+
+const edgeTypes = {
+    solidBlueEdge: SolidBlueEdge,
+    animatedGreenDashedEdge: AnimatedGreenDashedEdge,
+};
+
+const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {
+    const { sourceHandle, targetHandle } = connectionOrEdge;
+    if (sourceHandle === targetHandle) {
+        return true;
+    }
+    if (sourceHandle?.startsWith("data-") && targetHandle?.startsWith("data")) {
+        return true;
+    }
+    if (sourceHandle?.startsWith("midi-") && targetHandle?.startsWith("midi")) {
+        return true;
+    }
+    return false;
 };
 
 const App: React.FC = () => {
@@ -32,20 +53,6 @@ const App: React.FC = () => {
     const onConnect = useNodeStore(useShallow((state) => state.onConnect));
     const createNode = useNodeStore(useShallow((state) => state.createNode));
 
-    const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {
-        const { sourceHandle, targetHandle } = connectionOrEdge;
-        if (sourceHandle === targetHandle) {
-            return true;
-        }
-        if (sourceHandle?.startsWith("data-") && targetHandle?.startsWith("data")) {
-            return true;
-        }
-        if (sourceHandle?.startsWith("midi-") && targetHandle?.startsWith("midi")) {
-            return true;
-        }
-        return false;
-    };
-
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')
     // console.log(x,y,zoom)
@@ -56,6 +63,7 @@ const App: React.FC = () => {
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
 
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
