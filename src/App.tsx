@@ -1,5 +1,4 @@
-import React from 'react';
-import {Background, Panel, BackgroundVariant, ReactFlow, Connection, Edge} from '@xyflow/react';
+import {Background, BackgroundVariant, ReactFlow, Connection, Edge, useViewport} from '@xyflow/react';
 import { useNodeStore } from './engine/store';
 import OutNode from './nodes/OutNode/OutNode.tsx';
 import FaustGainNode from "./nodes/FaustGainNode/FaustGainNode.tsx";
@@ -11,6 +10,7 @@ import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
 import {useShallow} from "zustand/react/shallow";
 import AnimatedGreenDashedEdge from "./ui/edges/AnimatedGreenDashedEdge.tsx";
 import SolidBlueEdge from "./ui/edges/SolidBlueEdge.tsx";
+import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -41,6 +41,19 @@ const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {
     return false;
 };
 
+const getBackgroundVariant = (selection: string): BackgroundVariant | undefined => {
+    switch (selection) {
+        case 'lines':
+            return BackgroundVariant.Lines;
+        case 'dots':
+            return BackgroundVariant.Dots;
+        case 'crosses':
+            return BackgroundVariant.Cross;
+        default:
+            return undefined;  // Handle unexpected values
+    }
+};
+
 const App: React.FC = () => {
     const nodes = useNodeStore(useShallow((state) => state.nodes));
     const edges = useNodeStore(useShallow((state) => state.edges));
@@ -53,56 +66,41 @@ const App: React.FC = () => {
     const onConnect = useNodeStore(useShallow((state) => state.onConnect));
     const createNode = useNodeStore(useShallow((state) => state.createNode));
 
+    const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
+
+    const { x, y, zoom } = useViewport();
+
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')
     // console.log(x,y,zoom)
     // console.log(nPressed)
 
     return (
-        <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
+        <div style={{width: '100vw', height: '100vh'}}>
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
 
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
 
-            onNodesDelete={onNodesDelete}
-            onEdgesDelete={onEdgesDelete}
+                onNodesDelete={onNodesDelete}
+                onEdgesDelete={onEdgesDelete}
 
-            onConnect={onConnect}
+                onConnect={onConnect}
 
-            isValidConnection={isValidConnection}
-        >
-            <Panel position={'top-left'}>
-                <button
-                    onClick={() => createNode('faustGainNode')}
-                    className='bg-white rounded-md font-bold p-2'>Add Faust Gain
-                </button>
-                <button
-                    onClick={() => createNode('faustPolyNode')}
-                    className='bg-white rounded-md font-bold p-2'>Add Faust Poly
-                </button>
-                <button
-                    onClick={() => createNode('osc2Node')}
-                    className='bg-white rounded-md font-bold p-2'>Add Osc2
-                </button>
-                <button
-                    onClick={() => createNode('midiInNode')}
-                    className='bg-white rounded-md font-bold p-2'>Add Midi In
-                </button>
-                <button
-                    onClick={() => createNode('numberNode')}
-                    className='bg-white rounded-md font-bold p-2'>Add Number Node
-                </button>
-                <button
-                    onClick={() => createNode('viewerNode')}
-                    className='bg-white rounded-md font-bold p-2'>Add Viewer Node
-                </button>
-            </Panel>
-            <Background variant={BackgroundVariant.Lines}/>
-        </ReactFlow>
+                isValidConnection={isValidConnection}
+            >
+                <Background variant={getBackgroundVariant(graphBackground)} gap={28} />
+            </ReactFlow>
+            {/*<div className='absolute z-[9999] h-screen w-screen top-0 left-0'>*/}
+            {/*    <NodeContextMenu />*/}
+            {/*</div>*/}
+            <NodeToolbarMenu />
+            <p className='z-[9999] absolute top-0 right-0 bg-white p-2 rounded-xl drop-shadow-lg m-2'>{x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}</p>
+        </div>
     );
 };
 

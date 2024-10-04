@@ -36,6 +36,9 @@ export interface NodeStoreState {
     onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode['data']>) => void;
     createNode: (type: string) => void;
+
+    graphBackground: string
+    setGraphBackground: (selection: string) => void
 }
 
 export const useNodeStore = create<NodeStoreState>((set, get) => ({
@@ -187,5 +190,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                 disconnectNodes(edge.source, edge.target)
             }
         }
-    }
+    },
+    graphBackground: "lines",
+    setGraphBackground: (selection: string) => set({ graphBackground: selection })
 }))

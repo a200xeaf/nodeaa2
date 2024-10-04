@@ -9,12 +9,12 @@ const nodes = new Map<string, Device | FaustMonoAudioWorkletNode | FaustPolyAudi
 
 nodes.set('output-1', context.destination);
 
-export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: string, data: Partial<FlowNode['data']>, voices: number = 0) => {
+export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: string, data: Partial<FlowNode['data']>, thevoices: number = 0) => {
     console.log(nodes.size)
     switch (type) {
         case 'faust': {
             try {
-                const node = await createFaustNode(name, context, voices);
+                const node = await createFaustNode(name, context, thevoices);
 
                 // Iterate over the parameters in the node and set values from the `data` object
                 Object.entries(data).forEach(([key, value]) => {
