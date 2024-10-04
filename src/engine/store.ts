@@ -39,6 +39,10 @@ export interface NodeStoreState {
 
     graphBackground: string
     setGraphBackground: (selection: string) => void
+
+    isFullscreen: boolean;
+    toggleFullscreen: () => void;
+    setFullscreen: (state: boolean) => void;
 }
 
 export const useNodeStore = create<NodeStoreState>((set, get) => ({
@@ -192,5 +196,16 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
         }
     },
     graphBackground: "lines",
-    setGraphBackground: (selection: string) => set({ graphBackground: selection })
+    setGraphBackground: (selection: string) => set({ graphBackground: selection }),
+    isFullscreen: Boolean(document.fullscreenElement),
+    toggleFullscreen: () => {
+        if (!document.fullscreenElement) {
+            document.body.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    },
+    setFullscreen: (state: boolean) => {
+        set({isFullscreen: state});
+    }
 }))

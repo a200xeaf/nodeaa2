@@ -14,13 +14,35 @@ import {
 } from "@/components/ui/menubar.tsx";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
+import React, {useEffect} from "react";
 
 const NodeToolbarMenu = () => {
+    const createNode = useNodeStore(useShallow((state) => state.createNode));
+
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
     const setGraphBackground = useNodeStore(useShallow((state) => state.setGraphBackground));
 
+    const isFullscreen = useNodeStore(useShallow((state) => state.isFullscreen));  // Access fullscreen state
+    const setFullscreen = useNodeStore(useShallow((state) => state.setFullscreen)); // To update fullscreen state
+
+    // UseEffect to watch fullscreen change
+    useEffect(() => {
+        const onFullscreenChange = () => {
+            setFullscreen(Boolean(document.fullscreenElement));
+        };
+
+        document.addEventListener('fullscreenchange', onFullscreenChange);
+
+        // Cleanup event listener on unmount
+        return () => {
+            document.removeEventListener('fullscreenchange', onFullscreenChange);
+        };
+    }, [setFullscreen]);
+
+    const toggleFullscreen = useNodeStore(useShallow((state) => state.toggleFullscreen)); // To update fullscreen state
+
     return (
-        <div className='absolute flex gap-x-10 z-[9999] h-16 w-full top-0 left-0 pt-2 px-4'>
+        <div className='absolute flex gap-x-6 z-[9999] h-16 w-full top-0 left-0 pt-2 px-4'>
             <Menubar className='py-[1.2rem]'>
                 <MenubarMenu>
                     <MenubarTrigger>Edit</MenubarTrigger>
@@ -62,14 +84,9 @@ const NodeToolbarMenu = () => {
                             </MenubarSubContent>
                         </MenubarSub>
                         <MenubarSeparator />
-                        <MenubarItem>
-                            Reload <MenubarShortcut>⌘R</MenubarShortcut>
+                        <MenubarItem onClick={toggleFullscreen}>
+                            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'} <MenubarShortcut>F11</MenubarShortcut>
                         </MenubarItem>
-                        <MenubarItem disabled>
-                            Force Reload <MenubarShortcut>⇧⌘R</MenubarShortcut>
-                        </MenubarItem>
-                        <MenubarSeparator />
-                        <MenubarItem>Toggle Fullscreen</MenubarItem>
                         <MenubarSeparator />
                         <MenubarItem>Hide Sidebar</MenubarItem>
                     </MenubarContent>
@@ -82,8 +99,8 @@ const NodeToolbarMenu = () => {
                         <MenubarSub>
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => console.log("hello")}>Simple Poly</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustPolyNode")}>Simple Poly</MenubarItem>
+                                <MenubarItem onClick={(e) => console.log(e)}>Messages</MenubarItem>
                                 <MenubarItem>Notes</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
@@ -177,4 +194,4 @@ const NodeToolbarMenu = () => {
         </div>
     )
 }
-export default NodeToolbarMenu
+export default React.memo(NodeToolbarMenu)

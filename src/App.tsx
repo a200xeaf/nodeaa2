@@ -64,7 +64,6 @@ const App: React.FC = () => {
     const onEdgesDelete = useNodeStore(useShallow((state) => state.onEdgesDelete));
 
     const onConnect = useNodeStore(useShallow((state) => state.onConnect));
-    const createNode = useNodeStore(useShallow((state) => state.createNode));
 
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
 
@@ -99,7 +98,7 @@ const App: React.FC = () => {
             {/*    <NodeContextMenu />*/}
             {/*</div>*/}
             <NodeToolbarMenu />
-            <p className='z-[9999] absolute top-0 right-0 bg-white p-2 rounded-xl drop-shadow-lg m-2'>{x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}</p>
+            <p className='z-[9999] absolute top-0 right-0 bg-white p-2 rounded-xl drop-shadow-lg m-2 font-medium text-sm'>{x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}</p>
         </div>
     );
 };
