@@ -1,0 +1,60 @@
+{
+  "osc2Node": {
+    "idPrefix": "",
+    "realName": "Oscillator 2",
+    "defaultData": { "osc_frequency": 440, "osc_type": 1 },
+    "audioNodeParams": { "engine": "rnbo", "type": "osc2" },
+    "hasAudio": true,
+    "version": "1.0.0"
+  },
+  "faustGainNode": {
+    "idPrefix": "",
+    "realName": "Faust Gain",
+    "defaultData": { "faustgain_Gain": 1 },
+    "audioNodeParams": { "engine": "faust", "type": "faustgain" },
+    "hasAudio": true,
+    "version": "1.0.0"
+  },
+  "faustPolyNode": {
+    "idPrefix": "",
+    "realName": "Faust Polyphonic Synth",
+    "defaultData": {
+      "faustpoly_attack": 0.1,
+      "faustpoly_decay": 0.1,
+      "faustpoly_sustain": 0.7,
+      "faustpoly_release": 0.1,
+      "faustpoly_waveformsel": 0
+    },
+    "audioNodeParams": { "engine": "faust", "type": "faustpoly", "voices": 16 },
+    "hasAudio": true,
+    "version": "1.0.0"
+  },
+  "midiInNode": {
+    "idPrefix": "midi",
+    "realName": "MIDI Input",
+    "defaultData": { "midiin_device": "" },
+    "hasAudio": false,
+    "version": "1.0.0"
+  },
+  "numberNode": {
+    "idPrefix": "data",
+    "realName": "Number Input",
+    "defaultData": { "number_number": 0 },
+    "hasAudio": false,
+    "version": "1.0.0"
+  },
+  "viewerNode": {
+    "idPrefix": "data",
+    "realName": "Value Viewer",
+    "defaultData": { "viewer_value": "" },
+    "hasAudio": false,
+    "version": "1.0.0"
+  },
+  "creatorNode": {
+    "idPrefix": "data",
+    "realName": "Creator Node",
+    "defaultData": {},
+    "hasAudio": false,
+    "version": "1.0.0"
+  }
+}

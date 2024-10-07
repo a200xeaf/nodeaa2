@@ -11,6 +11,8 @@ import {useShallow} from "zustand/react/shallow";
 import AnimatedGreenDashedEdge from "./ui/edges/AnimatedGreenDashedEdge.tsx";
 import SolidBlueEdge from "./ui/edges/SolidBlueEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
+import CreatorNode from "@/nodes/CreatorNode/CreatorNode.tsx";
+import {useEffect, useState} from "react";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -20,6 +22,7 @@ const nodeTypes = {
     midiInNode: MidiInNode,
     numberNode: NumberNode,
     viewerNode: ViewerNode,
+    creatorNode: CreatorNode
 };
 
 const edgeTypes = {
@@ -58,6 +61,8 @@ const App: React.FC = () => {
     const nodes = useNodeStore(useShallow((state) => state.nodes));
     const edges = useNodeStore(useShallow((state) => state.edges));
 
+    const createNode = useNodeStore(useShallow((state) => state.createNode));
+
     const onNodesChange = useNodeStore(useShallow((state) => state.onNodesChange));
     const onEdgesChange = useNodeStore(useShallow((state) => state.onEdgesChange));
     const onNodesDelete = useNodeStore(useShallow((state) => state.onNodesDelete));
@@ -68,6 +73,32 @@ const App: React.FC = () => {
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
 
     const { x, y, zoom } = useViewport();
+    const [mousePos, setMousePos] = useState({x: 0, y: 0});
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'n') {
+                const pos = {
+                    x: (mousePos.x - 40 - x) / zoom,
+                    y: (mousePos.y - 20 - y) / zoom
+                }
+                createNode('creatorNode', pos)
+            }
+        }
+
+        const handleMouseMove = (e: MouseEvent) => {
+            setMousePos({x: e.clientX, y: e.clientY});
+        }
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('mousemove', handleMouseMove);
+
+        // Don't forget to clean up
+        return function cleanup() {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('mousemove', handleMouseMove);
+        }
+    }, [mousePos, x, y, zoom]);
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')

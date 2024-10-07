@@ -66,4 +66,4 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data}) => {
     );
 };
 
-export default FaustGainNode;
+export default React.memo(FaustGainNode);

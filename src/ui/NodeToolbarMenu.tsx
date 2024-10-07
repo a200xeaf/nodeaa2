@@ -100,7 +100,7 @@ const NodeToolbarMenu = () => {
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
                                 <MenubarItem onClick={() => createNode("faustPolyNode")}>Simple Poly</MenubarItem>
-                                <MenubarItem onClick={(e) => console.log(e)}>Messages</MenubarItem>
+                                <MenubarItem onClick={() => createNode("creatorNode")}>Creator Node</MenubarItem>
                                 <MenubarItem>Notes</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>

@@ -19,6 +19,8 @@ import {
     updateAudioNode
 } from "./audio.ts";
 import {WebMidi} from "webmidi";
+import rawNodesConfig from './nodes.json'
+import {NodesConfig} from "@/engine/types.ts";
 
 export interface NodeStoreState {
     nodes: FlowNode[];
@@ -33,9 +35,10 @@ export interface NodeStoreState {
     onEdgesChange: OnEdgesChange;
     onNodesDelete: OnNodesDelete;
     onEdgesDelete: OnEdgesDelete;
+    selfNodeDelete: (id: string) => void
     onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode['data']>) => void;
-    createNode: (type: string) => void;
+    createNode: (type: string, pos?: {x: number, y: number}) => void;
 
     graphBackground: string
     setGraphBackground: (selection: string) => void
@@ -44,6 +47,8 @@ export interface NodeStoreState {
     toggleFullscreen: () => void;
     setFullscreen: (state: boolean) => void;
 }
+
+const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
 
 export const useNodeStore = create<NodeStoreState>((set, get) => ({
     nodes: [
@@ -55,83 +60,35 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
 
     isRunning: isRunningEngine(),
 
-    createNode: (type) => {
-        let id: string
+    createNode: (type, pos = {x: 0, y: 0}) => {
+        const nodeConfig = nodesConfig[type];
 
-        switch(type) {
-            case 'osc2Node': {
-                id = nanoid()
-                const data = { osc_frequency: 440, osc_type: 1 };
-                const position = { x: 0, y: 0 };
-
-                createAudioNode(id, "rnbo", "osc2", data)
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
-            case 'faustGainNode': {
-                id = nanoid()
-                const data = { faustgain_Gain: 1 };
-                const position = { x: 0, y: 0 };
-
-                createAudioNode(id, "faust", "faustgain", data)
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
-            case 'faustPolyNode': {
-                id = nanoid()
-                const data = {
-                    faustpoly_attack: 0.1,
-                    faustpoly_decay: 0.1,
-                    faustpoly_sustain: 0.7,
-                    faustpoly_release: 0.1,
-                    faustpoly_waveformsel: 0
-                };
-                const position = { x: Math.random()*500, y: Math.random()*500 };
-
-                createAudioNode(id, "faust", "faustpoly", data, 16)
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
-            case 'midiInNode': {
-                id = "data-" + nanoid()
-                const data = { midiin_device: "" };
-                const position = { x: 0, y: 0 };
-
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
-            case 'numberNode': {
-                id = "data-" + nanoid()
-                const data = { number_number: 0 };
-                const position = { x: 0, y: 0 };
-
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
-            case 'viewerNode': {
-                id = "data-" + nanoid()
-                const data = { viewer_value: "" };
-                const position = { x: 0, y: 0 };
-
-                set({ nodes: [...get().nodes, { id, type, data, position }] })
-
-                break
-            }
-
-            default: {
-                throw new Error("Called device that doesn't exist")
-            }
+        // If the type is not found in the config, exit the function
+        if (!nodeConfig) {
+            console.error(`Node type '${type}' not found in configuration.`);
+            return;  // Early exit
         }
+
+        // Generate a unique ID for the node
+        let id: string
+        if (nodeConfig.idPrefix === "") {
+            id = nanoid()
+        } else {
+            id = `${nodeConfig.idPrefix}-${nanoid()}`
+        }
+        const data = nodeConfig.defaultData;
+        const position = { x: pos.x, y: pos.y };
+
+        // Create audio node if required
+        if (nodeConfig.hasAudio && nodeConfig.audioNodeParams) {
+            const { engine, type: audioType, voices } = nodeConfig.audioNodeParams;
+            createAudioNode(id, engine, audioType, data, voices);
+        }
+
+        // Add the new node to the store
+        set({ nodes: [...get().nodes, { id, type, data, position }] });
+
+        console.log(`Node '${nodeConfig.realName}' (ID: ${id}) created at position`, position);
     },
     toggleAudio: () => {
         toggleAudioEngine().then(() => {
@@ -194,6 +151,11 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
                 disconnectNodes(edge.source, edge.target)
             }
         }
+    },
+    selfNodeDelete: (id) => {
+        set({
+            nodes: get().nodes.filter(node => node.id !== id)  // Remove node by filtering out the one with the given id
+        });
     },
     graphBackground: "lines",
     setGraphBackground: (selection: string) => set({ graphBackground: selection }),
