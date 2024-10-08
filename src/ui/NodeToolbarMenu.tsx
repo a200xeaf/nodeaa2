@@ -42,10 +42,10 @@ const NodeToolbarMenu = () => {
     const toggleFullscreen = useNodeStore(useShallow((state) => state.toggleFullscreen)); // To update fullscreen state
 
     return (
-        <div className='absolute flex gap-x-6 z-[9999] h-16 w-full top-0 left-0 pt-2 px-4'>
+        <div className='absolute flex gap-x-6 z-[9999] h-16 w-full top-0 left-0 pt-2 px-4 pointer-events-none'>
             <Menubar className='py-[1.2rem]'>
                 <MenubarMenu>
-                    <MenubarTrigger>Edit</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Edit</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>
                             Undo <MenubarShortcut>⌘Z</MenubarShortcut>
@@ -71,7 +71,7 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger>View</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>View</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Background</MenubarSubTrigger>
@@ -94,13 +94,14 @@ const NodeToolbarMenu = () => {
             </Menubar>
             <Menubar className='py-[1.2rem]'>
                 <MenubarMenu>
-                    <MenubarTrigger>Instruments</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Instruments</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustPolyNode")}>Simple Poly</MenubarItem>
-                                <MenubarItem onClick={() => createNode("creatorNode")}>Creator Node</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Simple Poly</MenubarItem>
+                                <MenubarItem onClick={() => createNode("creatorNode", undefined, true)}>Creator Node</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain Node</MenubarItem>
                                 <MenubarItem>Notes</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
@@ -125,7 +126,7 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger>Effects</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Effects</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Instrument</MenubarSubTrigger>
@@ -147,7 +148,7 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger>Streams</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Streams</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Instrument</MenubarSubTrigger>
@@ -169,7 +170,7 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger>Events</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Events</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Instrument</MenubarSubTrigger>

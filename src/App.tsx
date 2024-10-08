@@ -72,19 +72,30 @@ const App: React.FC = () => {
 
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
 
+    const setViewport = useNodeStore(useShallow((state) => state.setViewport));
     const { x, y, zoom } = useViewport();
+    useEffect(() => {
+        // Update the Zustand store with the new viewport object
+        setViewport(x, y, zoom);
+    }, [x, y, zoom, setViewport]);
+
     const [mousePos, setMousePos] = useState({x: 0, y: 0});
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'n') {
+            // Check if the target is an input field, textarea, or content-editable element
+            const isInputFocused = document.activeElement &&
+                (document.activeElement.tagName === 'INPUT' ||
+                    document.activeElement.tagName === 'TEXTAREA');
+
+            if (e.key === 'n' && !isInputFocused) {
                 const pos = {
                     x: (mousePos.x - 40 - x) / zoom,
                     y: (mousePos.y - 20 - y) / zoom
-                }
-                createNode('creatorNode', pos)
+                };
+                createNode('creatorNode', pos);
             }
-        }
+        };
 
         const handleMouseMove = (e: MouseEvent) => {
             setMousePos({x: e.clientX, y: e.clientY});
@@ -122,6 +133,7 @@ const App: React.FC = () => {
                 onConnect={onConnect}
 
                 isValidConnection={isValidConnection}
+                onlyRenderVisibleElements={true}
             >
                 <Background variant={getBackgroundVariant(graphBackground)} gap={28} />
             </ReactFlow>
@@ -129,7 +141,11 @@ const App: React.FC = () => {
             {/*    <NodeContextMenu />*/}
             {/*</div>*/}
             <NodeToolbarMenu />
-            <p className='z-[9999] absolute top-0 right-0 bg-white p-2 rounded-xl drop-shadow-lg m-2 font-medium text-sm'>{x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}</p>
+            <p className='z-[9999] absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
+                border h-10'
+            >
+                {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}
+            </p>
         </div>
     );
 };

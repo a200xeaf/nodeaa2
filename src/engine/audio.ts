@@ -10,7 +10,6 @@ const nodes = new Map<string, Device | FaustMonoAudioWorkletNode | FaustPolyAudi
 nodes.set('output-1', context.destination);
 
 export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: string, data: Partial<FlowNode['data']>, thevoices: number = 0) => {
-    console.log(nodes.size)
     switch (type) {
         case 'faust': {
             try {
@@ -35,7 +34,7 @@ export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: 
                     } else if (typeof value === 'number') {
                         // Set the value if it's a number
                         param.setValueAtTime(value, 0);
-                        console.log(`Set parameter ${paramName} to ${value}`);
+                        // console.log(`Set parameter ${paramName} to ${value}`);
                     } else {
                         console.warn(`Value for parameter "${paramName}" must be a number. Received: ${value}`);
                     }
@@ -103,7 +102,6 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
                 }
             }
         } else if (isFaust(node)) {
-            console.log(node.getParams())
             // Faust node: handle Faust-specific parameter updates
             for (const [key, val] of Object.entries(data)) {
                 // Split the key to extract device name and parameter name
@@ -115,7 +113,7 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
                 if (param) {
                     if (typeof val === 'number') {
                         param.setValueAtTime(val, 0);
-                        console.log(`Updated ${paramName} to ${val} on Faust node`);
+                        // console.log(`Updated ${paramName} to ${val} on Faust node`);
                     } else {
                         console.error(`Invalid value for ${paramName}: Must be a number`);
                     }

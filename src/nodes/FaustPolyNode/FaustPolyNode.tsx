@@ -15,7 +15,7 @@ type FaustPolyNodeData = {
 
 type FaustPolyNodeType = Node<FaustPolyNodeData, 'faustPolyNode'>;
 
-const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data}) => {
+const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
     const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
 
@@ -41,8 +41,15 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data}) => {
     })
 
     return (
-        <div className='w-60 h-[13rem] bg-black'>
-            <Handle type="target" position={Position.Top} id='midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
+        <div
+            className="w-60 h-[13rem] bg-black relative"
+            style={{
+                boxShadow: selected
+                    ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                    : 'none',  // No shadow if not selected
+            }}
+        >
+            <Handle type="target" position={Position.Top} id='midi' style={{backgroundColor: 'rgb(59, 130, 246)'}}/>
             <div className='flex items-center bg-amber-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Poly Node</p>
             </div>

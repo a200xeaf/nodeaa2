@@ -1,6 +1,6 @@
 import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
-import {useShallow} from "zustand/react/shallow";
-import {useNodeStore} from "../../engine/store.ts";
+import { useShallow } from "zustand/react/shallow";
+import { useNodeStore } from "../../engine/store.ts";
 
 const AnimatedGreenDashedEdge = ({
                                      id,
@@ -12,6 +12,7 @@ const AnimatedGreenDashedEdge = ({
                                      targetPosition,
                                      style = {},
                                      markerEnd,
+                                     selected,
                                  }: EdgeProps) => {
     const [edgePath] = getBezierPath({
         sourceX,
@@ -29,6 +30,20 @@ const AnimatedGreenDashedEdge = ({
 
     return (
         <>
+            {/* Blue Outline when selected */}
+            {selected && (
+                <BaseEdge
+                    id={`${id}-outline`}
+                    path={edgePath}
+                    markerEnd={markerEnd}
+                    style={{
+                        ...style,
+                        stroke: 'rgba(120, 170, 255, 0.75)',  // Light blue color (RGBA for transparency)
+                        strokeWidth: 8,  // Thicker than the base edge
+                    }}
+                />
+            )}
+
             {/* Background Grey Cable */}
             <BaseEdge
                 id={`${id}-background`}
@@ -58,10 +73,10 @@ const AnimatedGreenDashedEdge = ({
 
             <style>
                 {`@keyframes dash {
-          to {
-            stroke-dashoffset: -16;  // Animation for moving the dashes
-          }
-        }`}
+                    to {
+                        stroke-dashoffset: -16;  // Animation for moving the dashes
+                    }
+                }`}
             </style>
         </>
     );

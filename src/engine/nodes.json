@@ -1,5 +1,6 @@
 {
   "osc2Node": {
+    "nodeName": "osc2Node",
     "idPrefix": "",
     "realName": "Oscillator 2",
     "defaultData": { "osc_frequency": 440, "osc_type": 1 },
@@ -8,6 +9,7 @@
     "version": "1.0.0"
   },
   "faustGainNode": {
+    "nodeName": "faustGainNode",
     "idPrefix": "",
     "realName": "Faust Gain",
     "defaultData": { "faustgain_Gain": 1 },
@@ -16,6 +18,7 @@
     "version": "1.0.0"
   },
   "faustPolyNode": {
+    "nodeName": "faustPolyNode",
     "idPrefix": "",
     "realName": "Faust Polyphonic Synth",
     "defaultData": {
@@ -30,6 +33,7 @@
     "version": "1.0.0"
   },
   "midiInNode": {
+    "nodeName": "midiInNode",
     "idPrefix": "midi",
     "realName": "MIDI Input",
     "defaultData": { "midiin_device": "" },
@@ -37,6 +41,7 @@
     "version": "1.0.0"
   },
   "numberNode": {
+    "nodeName": "numberNode",
     "idPrefix": "data",
     "realName": "Number Input",
     "defaultData": { "number_number": 0 },
@@ -44,6 +49,7 @@
     "version": "1.0.0"
   },
   "viewerNode": {
+    "nodeName": "viewerNode",
     "idPrefix": "data",
     "realName": "Value Viewer",
     "defaultData": { "viewer_value": "" },
@@ -51,6 +57,7 @@
     "version": "1.0.0"
   },
   "creatorNode": {
+    "nodeName": "creatorNode",
     "idPrefix": "data",
     "realName": "Creator Node",
     "defaultData": {},

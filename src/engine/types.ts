@@ -1,5 +1,6 @@
 // TypeScript interface that matches the expected structure of your JSON
 export interface NodeConfig {
+    nodeName: string;
     idPrefix: string;
     realName: string;
     defaultData: Record<string, unknown>;

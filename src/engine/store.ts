@@ -26,6 +26,13 @@ export interface NodeStoreState {
     nodes: FlowNode[];
     edges: Edge[];
 
+    viewport: {
+        x: number
+        y: number
+        zoom: number
+    }
+    setViewport: (x: number, y: number, zoom: number) => void
+
     wm: typeof WebMidi;
 
     isRunning: boolean;
@@ -38,7 +45,7 @@ export interface NodeStoreState {
     selfNodeDelete: (id: string) => void
     onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode['data']>) => void;
-    createNode: (type: string, pos?: {x: number, y: number}) => void;
+    createNode: (type: string, pos?: {x: number, y: number}, center?: boolean) => void;
 
     graphBackground: string
     setGraphBackground: (selection: string) => void
@@ -56,11 +63,20 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
     ],
     edges: [],
 
+    viewport: {
+        x: 0,
+        y: 0,
+        zoom: 1,
+    },
+    setViewport: (x: number, y: number, zoom: number)=> {
+        set({viewport: {x, y, zoom}});
+    },
+
     wm: WebMidi,
 
     isRunning: isRunningEngine(),
 
-    createNode: (type, pos = {x: 0, y: 0}) => {
+    createNode: (type, pos = {x: 0, y: 0}, center = false) => {
         const nodeConfig = nodesConfig[type];
 
         // If the type is not found in the config, exit the function
@@ -77,7 +93,17 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             id = `${nodeConfig.idPrefix}-${nanoid()}`
         }
         const data = nodeConfig.defaultData;
-        const position = { x: pos.x, y: pos.y };
+
+        let position
+        //FIXME Perfect this based on node size (add to json?)
+        if (center) {
+            position = {
+                x: (window.innerWidth / 2 - get().viewport.x - 150) / get().viewport.zoom,
+                y: (window.innerHeight / 2 - get().viewport.y - 100) / get().viewport.zoom,
+            }
+        } else {
+            position = { x: pos.x, y: pos.y }
+        }
 
         // Create audio node if required
         if (nodeConfig.hasAudio && nodeConfig.audioNodeParams) {
@@ -88,7 +114,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
         // Add the new node to the store
         set({ nodes: [...get().nodes, { id, type, data, position }] });
 
-        console.log(`Node '${nodeConfig.realName}' (ID: ${id}) created at position`, position);
+        // console.log(`Node '${nodeConfig.realName}' (ID: ${id}) created at position`, position);
     },
     toggleAudio: () => {
         toggleAudioEngine().then(() => {
