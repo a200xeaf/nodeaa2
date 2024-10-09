@@ -22,7 +22,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value.length <= 40) {
             setSearch(e.target.value);
-            setSelectedIndex(-1);
+            setSelectedIndex(0);
         }
     };
 
@@ -73,9 +73,6 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
             } else if (e.key === "Enter" && selectedIndex >= 0) {
                 e.preventDefault();
                 handleCreate(filteredResults[selectedIndex].nodeName)
-            } else if (e.key === "Enter" && selectedIndex === -1) {
-                e.preventDefault();
-                handleCreate(filteredResults[0].nodeName)
             }
         };
 

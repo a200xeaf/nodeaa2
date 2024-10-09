@@ -13,11 +13,14 @@ import SolidBlueEdge from "./ui/edges/SolidBlueEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
 import CreatorNode from "@/nodes/CreatorNode/CreatorNode.tsx";
 import {useEffect, useState} from "react";
+import FaustLPFNode from "@/nodes/FaustLPFNode/FaustLPFNode.tsx";
+import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
     faustGainNode: FaustGainNode,
     faustPolyNode: FaustPolyNode,
+    faustLPFNode: FaustLPFNode,
     outNode: OutNode,
     midiInNode: MidiInNode,
     numberNode: NumberNode,
@@ -73,7 +76,7 @@ const App: React.FC = () => {
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
 
     const setViewport = useNodeStore(useShallow((state) => state.setViewport));
-    const { x, y, zoom } = useViewport();
+    const {x, y, zoom} = useViewport();
     useEffect(() => {
         // Update the Zustand store with the new viewport object
         setViewport(x, y, zoom);
@@ -109,7 +112,7 @@ const App: React.FC = () => {
             document.removeEventListener('keydown', handleKeyDown);
             document.removeEventListener('mousemove', handleMouseMove);
         }
-    }, [mousePos, x, y, zoom]);
+    }, [mousePos, x, y, zoom, createNode]);
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')
@@ -133,19 +136,19 @@ const App: React.FC = () => {
                 onConnect={onConnect}
 
                 isValidConnection={isValidConnection}
-                onlyRenderVisibleElements={true}
             >
-                <Background variant={getBackgroundVariant(graphBackground)} gap={28} />
+                <Background variant={getBackgroundVariant(graphBackground)} gap={28}/>
             </ReactFlow>
             {/*<div className='absolute z-[9999] h-screen w-screen top-0 left-0'>*/}
             {/*    <NodeContextMenu />*/}
             {/*</div>*/}
-            <NodeToolbarMenu />
-            <p className='z-[9999] absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
+            <NodeToolbarMenu/>
+            <p className='z-[9998] absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
                 border h-10'
             >
                 {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}
             </p>
+            <NodeaaWelcome />
         </div>
     );
 };

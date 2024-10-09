@@ -17,6 +17,15 @@
     "hasAudio": true,
     "version": "1.0.0"
   },
+  "faustLPFNode": {
+    "nodeName": "faustLPFNode",
+    "idPrefix": "",
+    "realName": "Faust Lowpass Filter",
+    "defaultData": { "faustLPF_frequency": 2000, "faustLPF_frequencyNormalized_data": 0.44, "faustLPF_quality": 0.1 },
+    "audioNodeParams": { "engine": "faust", "type": "faustLPF" },
+    "hasAudio": true,
+    "version": "1.0.0"
+  },
   "faustPolyNode": {
     "nodeName": "faustPolyNode",
     "idPrefix": "",

@@ -100,27 +100,21 @@ const NodeToolbarMenu = () => {
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
                                 <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Simple Poly</MenubarItem>
-                                <MenubarItem onClick={() => createNode("creatorNode", undefined, true)}>Creator Node</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain Node</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
+                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>Simple Oscillator Node</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                         <MenubarSeparator />
                         <MenubarSub>
-                            <MenubarSubTrigger>Models</MenubarSubTrigger>
+                            <MenubarSubTrigger>Physical Instruments</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
+                                <MenubarItem>Nothing yet!</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                         <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>Samplers</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
+                                <MenubarItem>Nothing yet!</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                     </MenubarContent>
@@ -129,20 +123,10 @@ const NodeToolbarMenu = () => {
                     <MenubarTrigger className='pointer-events-auto'>Effects</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
-                            <MenubarSubTrigger>Instrument</MenubarSubTrigger>
+                            <MenubarSubTrigger>Basic Effects</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
-                        <MenubarSeparator />
-                        <MenubarSub>
-                            <MenubarSubTrigger>Effects</MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain (Volume)</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass Filter</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                     </MenubarContent>
@@ -150,45 +134,13 @@ const NodeToolbarMenu = () => {
                 <MenubarMenu>
                     <MenubarTrigger className='pointer-events-auto'>Streams</MenubarTrigger>
                     <MenubarContent>
-                        <MenubarSub>
-                            <MenubarSubTrigger>Instrument</MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
-                        <MenubarSeparator />
-                        <MenubarSub>
-                            <MenubarSubTrigger>Effects</MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
+                        <MenubarItem>Nothing yet!</MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
                     <MenubarTrigger className='pointer-events-auto'>Events</MenubarTrigger>
                     <MenubarContent>
-                        <MenubarSub>
-                            <MenubarSubTrigger>Instrument</MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
-                        <MenubarSeparator />
-                        <MenubarSub>
-                            <MenubarSubTrigger>Effects</MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem>Email link</MenubarItem>
-                                <MenubarItem>Messages</MenubarItem>
-                                <MenubarItem>Notes</MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
+                        <MenubarItem>Nothing yet!</MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>

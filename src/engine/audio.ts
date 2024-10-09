@@ -18,7 +18,11 @@ export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: 
                 // Iterate over the parameters in the node and set values from the `data` object
                 Object.entries(data).forEach(([key, value]) => {
                     // Split the key to extract the device name and the actual parameter name
-                    const [deviceName, paramName] = key.split('_');
+                    const [deviceName, paramName, cancel] = key.split('_');
+
+                    if (cancel !== undefined) {
+                        return
+                    }
 
                     // Ensure the extracted device name matches the current device name
                     if (deviceName !== name) {
