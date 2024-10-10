@@ -144,6 +144,20 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
+            <Menubar className='py-[1.2rem]'>
+                <MenubarMenu>
+                    <MenubarTrigger className='pointer-events-auto'>Feedback</MenubarTrigger>
+                    <MenubarContent>
+                        <MenubarItem>
+                            <a href='https://forms.gle/SSrYo6Weiristi5f6' target='_blank'>Bug Report Feedback</a>
+                        </MenubarItem>
+                        <MenubarSeparator />
+                        <MenubarItem>
+                            <a href='https://forms.gle/DG422ScARNp9SUJq5' target='_blank'>Feature Request Feedback</a>
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarMenu>
+            </Menubar>
         </div>
     )
 }
