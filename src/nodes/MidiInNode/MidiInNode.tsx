@@ -11,7 +11,7 @@ type MidiInNodeData = {
 
 type MidiInNodeType = Node<MidiInNodeData, 'midiInNode'>;
 
-const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
+const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
     const [inputNames, setInputNames] = useState<string[]>([]);
     const [selectedName, setSelectedName] = useState<string>("");
     const [selectedMidi, setSelectedMidi] = useState<Input | null>(null);
@@ -80,7 +80,13 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id }) => {
 
     return (
 
-        <div className='w-60 h-[7rem] drop-shadow-lg'>
+        <div className='w-60 h-[7rem] drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Midi In</p>
             </div>

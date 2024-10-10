@@ -11,7 +11,7 @@ type FaustLPFNodeData = {
 
 type FaustLPFNodeType = Node<FaustLPFNodeData, 'faustLPFNode'>;
 
-const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data}) => {
+const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     const setParams = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +35,13 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data}) => {
     }, []);
 
     return (
-        <div className='w-60 h-[13rem] drop-shadow-lg'>
+        <div className='w-60 h-[13rem] drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <div className="flex justify-evenly">
                 <Handle type="target" position={Position.Top} id='audio' style={{ left: '30%' }}/>
                 <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>

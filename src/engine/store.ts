@@ -59,8 +59,7 @@ const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
 
 export const useNodeStore = create<NodeStoreState>((set, get) => ({
     nodes: [
-        {id: 'output-1', type: 'outNode', data: {label: 'output'}, position: {x: 800, y: 500}},
-        {id: 'midi-1', type: 'midiInNode', data: {label: 'midiIn'}, position: {x: 400, y: 200}}
+        {id: 'output-1', type: 'outNode', data: {label: 'output'}, position: {x: 800, y: 500}}
     ],
     edges: [],
 

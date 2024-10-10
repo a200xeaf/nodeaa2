@@ -5,12 +5,18 @@ import {useShallow} from "zustand/react/shallow";
 
 type OutNodeType = Node<Record<string, never>, 'outNode'>;
 
-const OutNode: React.FC<NodeProps<OutNodeType>> = () => {
+const OutNode: React.FC<NodeProps<OutNodeType>> = ({selected}) => {
     const isRunning = useNodeStore(useShallow((state) => state.isRunning));
     const toggleAudio = useNodeStore(useShallow((state) => state.toggleAudio));
 
     return (
-        <div className='w-28 h-[6rem] drop-shadow-lg'>
+        <div className='w-28 h-[6rem] drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <Handle type="target" position={Position.Top} id="audio"/>
             <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Audio Out</p>

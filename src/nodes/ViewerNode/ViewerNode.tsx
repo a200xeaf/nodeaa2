@@ -10,7 +10,7 @@ type ViewerNodeData = { viewer_value: never };
 // Create a custom node type
 type ViewerNodeType = Node<ViewerNodeData, 'viewerNode'>;
 
-const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data}) => {
+const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) => {
     const dataConnections = useHandleConnections({type: 'target', id: 'data'})
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
@@ -25,7 +25,13 @@ const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data}) => {
     })
 
     return (
-        <div className='w-60 h-[6rem] drop-shadow-lg'>
+        <div className='w-60 h-[6rem] drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <Handle type='target' position={Position.Top} id='data' style={{ backgroundColor: 'grey' }}/>
             <div className='flex items-center bg-gray-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Viewer</p>

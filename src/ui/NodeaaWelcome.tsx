@@ -67,9 +67,28 @@ const NodeaaWelcome = () => {
                                     </p>
                                 </div>
                             </CarouselItem>
-                            {/* Other Slides */}
-                            <CarouselItem className="h-full">Slide 2 content...</CarouselItem>
-                            <CarouselItem className="h-full">Slide 3 content...</CarouselItem>
+                            <CarouselItem className="h-full flex flex-col md:flex-row items-center">
+                                <div className="w-full md:w-1/3 text-left p-4">
+                                    <h3 className="text-2xl font-semibold select-none">Help Make Nodeaa Better</h3>
+                                    <p className="text-md text-gray-600 mt-2 select-none">
+                                        Nodeaa is still in its early development, so you may encounter incomplete
+                                        functionality. Use the <em><strong>Feedback</strong></em> button in the top
+                                        menu to report bugs or suggest new features.
+                                    </p>
+                                </div>
+                                <div className="w-full md:w-2/3 flex items-center justify-center p-10">
+                                    <video
+                                        className="w-full h-auto max-w-[1136px] max-h-[720px] object-cover rounded-lg shadow-lg"
+                                        autoPlay
+                                        loop
+                                        muted
+                                        playsInline
+                                    >
+                                        <source src="/assets/videos/welcome/slide3.webm" type="video/webm"/>
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </CarouselItem>
                         </CarouselContent>
                         <CarouselPrevious/>
                         <CarouselNext/>

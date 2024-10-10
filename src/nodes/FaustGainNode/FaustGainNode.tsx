@@ -10,7 +10,7 @@ type FaustGainNodeData = {
 
 type FaustGainNodeType = Node<FaustGainNodeData, 'faustGainNode'>;
 
-const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data}) => {
+const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
     const dataConnections = useHandleConnections({type: 'target', id: 'data'})
 
@@ -37,7 +37,13 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data}) => {
     })
 
     return (
-        <div className='w-60 h-[7rem] drop-shadow-lg'>
+        <div className='w-60 h-[7rem] drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <div className="flex justify-evenly">
                 <Handle type="target" position={Position.Top} id='audio' style={{ left: '30%' }}/>
                 <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>

@@ -47,27 +47,28 @@ const NodeToolbarMenu = () => {
                 <MenubarMenu>
                     <MenubarTrigger className='pointer-events-auto'>Edit</MenubarTrigger>
                     <MenubarContent>
-                        <MenubarItem>
-                            Undo <MenubarShortcut>⌘Z</MenubarShortcut>
-                        </MenubarItem>
-                        <MenubarItem>
-                            Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
-                        </MenubarItem>
-                        <MenubarSeparator />
-                        <MenubarSub>
-                            <MenubarSubTrigger>Find</MenubarSubTrigger>
-                            <MenubarSubContent>
-                                <MenubarItem>Search the web</MenubarItem>
-                                <MenubarSeparator />
-                                <MenubarItem>Find...</MenubarItem>
-                                <MenubarItem>Find Next</MenubarItem>
-                                <MenubarItem>Find Previous</MenubarItem>
-                            </MenubarSubContent>
-                        </MenubarSub>
-                        <MenubarSeparator />
-                        <MenubarItem>Cut</MenubarItem>
-                        <MenubarItem>Copy</MenubarItem>
-                        <MenubarItem>Paste</MenubarItem>
+                        <MenubarItem>Nothing yet!</MenubarItem>
+                        {/*<MenubarItem>*/}
+                        {/*    Undo <MenubarShortcut>⌘Z</MenubarShortcut>*/}
+                        {/*</MenubarItem>*/}
+                        {/*<MenubarItem>*/}
+                        {/*    Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>*/}
+                        {/*</MenubarItem>*/}
+                        {/*<MenubarSeparator />*/}
+                        {/*<MenubarSub>*/}
+                        {/*    <MenubarSubTrigger>Find</MenubarSubTrigger>*/}
+                        {/*    <MenubarSubContent>*/}
+                        {/*        <MenubarItem>Search the web</MenubarItem>*/}
+                        {/*        <MenubarSeparator />*/}
+                        {/*        <MenubarItem>Find...</MenubarItem>*/}
+                        {/*        <MenubarItem>Find Next</MenubarItem>*/}
+                        {/*        <MenubarItem>Find Previous</MenubarItem>*/}
+                        {/*    </MenubarSubContent>*/}
+                        {/*</MenubarSub>*/}
+                        {/*<MenubarSeparator />*/}
+                        {/*<MenubarItem>Cut</MenubarItem>*/}
+                        {/*<MenubarItem>Copy</MenubarItem>*/}
+                        {/*<MenubarItem>Paste</MenubarItem>*/}
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
@@ -80,6 +81,7 @@ const NodeToolbarMenu = () => {
                                     <MenubarRadioItem value="lines">Lines</MenubarRadioItem>
                                     <MenubarRadioItem value="dots">Dots</MenubarRadioItem>
                                     <MenubarRadioItem value="crosses">Crosses</MenubarRadioItem>
+                                    <MenubarRadioItem value="none">None</MenubarRadioItem>
                                 </MenubarRadioGroup>
                             </MenubarSubContent>
                         </MenubarSub>
@@ -87,8 +89,6 @@ const NodeToolbarMenu = () => {
                         <MenubarItem onClick={toggleFullscreen}>
                             {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'} <MenubarShortcut>F11</MenubarShortcut>
                         </MenubarItem>
-                        <MenubarSeparator />
-                        <MenubarItem>Hide Sidebar</MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>

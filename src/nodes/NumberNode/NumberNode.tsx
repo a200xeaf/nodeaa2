@@ -10,7 +10,7 @@ type NumberNodeData = { number_number: number };
 // Create a custom node type
 type NumberNodeType = Node<NumberNodeData, 'numberNode'>;
 
-const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({id, data}) => {
+const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     const handleNumber = (e: ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,13 @@ const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({id, data}) => {
     };
 
     return (
-        <div className='w-60 h-[5rem] drop-shadow-lg'>
+        <div className='w-60 h-[5rem] drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <div className='flex items-center bg-gray-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Number</p>
             </div>

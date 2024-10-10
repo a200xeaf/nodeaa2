@@ -1,9 +1,7 @@
 import React, {useCallback} from 'react';
-import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
+import {Handle, Node, NodeProps, Position} from '@xyflow/react';
 import { useNodeStore } from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
-import {useEmitterSubscriptions} from "../../hooks/useEmitterSubscription.ts";
-import {MIDIEvent} from "@rnbo/js";
 
 type Osc2NodeData = {
     osc_frequency: number,
@@ -12,9 +10,8 @@ type Osc2NodeData = {
 
 type Osc2NodeType = Node<Osc2NodeData, 'osc2Node'>;
 
-const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data }) => {
+const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data, selected }) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
-    const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
 
     const setFrequency = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,19 +27,14 @@ const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data }) => {
         [id, updateNode]
     );
 
-    const handleMIDI = (e: MIDIEvent) => {
-        console.log(e)
-    }
-
-    useEmitterSubscriptions({
-        connections: midiConnections,
-        callback: handleMIDI,
-        data
-    })
-
     return (
-        <div className='w-60 h-52 drop-shadow-lg'>
-            <Handle type="target" position={Position.Top} id='midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
+        <div className='w-60 h-52 drop-shadow-lg'
+             style={{
+                 boxShadow: selected
+                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
+                     : 'none',  // No shadow if not selected
+             }}
+        >
             <div className='flex items-center bg-pink-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Oscillator Node</p>
             </div>

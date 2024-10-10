@@ -118,6 +118,7 @@ const App: React.FC = () => {
     // const nPressed = useKeyPress('n')
     // console.log(x,y,zoom)
     // console.log(nPressed)
+    console.log(graphBackground)
 
     return (
         <div style={{width: '100vw', height: '100vh'}}>
@@ -137,7 +138,7 @@ const App: React.FC = () => {
 
                 isValidConnection={isValidConnection}
             >
-                <Background variant={getBackgroundVariant(graphBackground)} gap={28}/>
+                {graphBackground === 'none' ? null : <Background variant={getBackgroundVariant(graphBackground)} gap={28}/>}
             </ReactFlow>
             {/*<div className='absolute z-[9999] h-screen w-screen top-0 left-0'>*/}
             {/*    <NodeContextMenu />*/}
