@@ -5,7 +5,7 @@ import {useShallow} from "zustand/react/shallow";
 
 type FaustLPFNodeData = {
     faustLPF_frequency: number
-    faustLPF_frequencyNormalized: number
+    faustLPF_frequencyVisible_data: number
     faustLPF_quality: number
 };
 
@@ -19,7 +19,7 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data, selected
             const normalizedValue = +e.target.value
             const logFrequency = normalizedToLogFrequency(normalizedValue)
             updateNode(id, { [`faustLPF_${e.target.id}`]: logFrequency });
-            updateNode(id, { [`faustLPF_${e.target.id}Normalized`]: normalizedValue });
+            updateNode(id, { [`faustLPF_${e.target.id}Visible_data`]: normalizedValue });
         } else {
             updateNode(id, { [`faustLPF_${e.target.id}`]: +e.target.value })
         }
@@ -47,7 +47,7 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data, selected
                 <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>
             </div>
             <div className='flex items-center bg-purple-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Faust Lowpass Filter</p>
+                <p className='font-bold text-white'>Lowpass Filter</p>
             </div>
             <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[11rem]'>
                 <label>
@@ -59,7 +59,7 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data, selected
                         min="0"
                         max="1.0"
                         step="0.001"
-                        value={data.faustLPF_frequencyNormalized}
+                        value={data.faustLPF_frequencyVisible_data}
                         onChange={setParams}
                     />
                 </label>

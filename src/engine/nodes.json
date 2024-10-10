@@ -11,7 +11,7 @@
   "faustGainNode": {
     "nodeName": "faustGainNode",
     "idPrefix": "",
-    "realName": "Faust Gain",
+    "realName": "Gain",
     "defaultData": { "faustgain_Gain": 1 },
     "audioNodeParams": { "engine": "faust", "type": "faustgain" },
     "hasAudio": true,
@@ -20,16 +20,25 @@
   "faustLPFNode": {
     "nodeName": "faustLPFNode",
     "idPrefix": "",
-    "realName": "Faust Lowpass Filter",
-    "defaultData": { "faustLPF_frequency": 2000, "faustLPF_frequencyNormalized_data": 0.44, "faustLPF_quality": 0.1 },
+    "realName": "Lowpass Filter",
+    "defaultData": { "faustLPF_frequencyVisible_data": 0.44, "faustLPF_frequency": 2000, "faustLPF_quality": 0.1 },
     "audioNodeParams": { "engine": "faust", "type": "faustLPF" },
+    "hasAudio": true,
+    "version": "1.0.0"
+  },
+  "faustDelayNode": {
+    "nodeName": "faustDelayNode",
+    "idPrefix": "",
+    "realName": "Delay",
+    "defaultData": { "faustDelay_duration": 500, "faustDelay_feedback": 0.5, "faustDelay_wet": 0.5 },
+    "audioNodeParams": { "engine": "faust", "type": "faustDelay" },
     "hasAudio": true,
     "version": "1.0.0"
   },
   "faustPolyNode": {
     "nodeName": "faustPolyNode",
     "idPrefix": "",
-    "realName": "Faust Polyphonic Synth",
+    "realName": "Polyphonic Synth",
     "defaultData": {
       "faustpoly_attack": 0.1,
       "faustpoly_decay": 0.1,

@@ -15,12 +15,14 @@ import CreatorNode from "@/nodes/CreatorNode/CreatorNode.tsx";
 import {useEffect, useState} from "react";
 import FaustLPFNode from "@/nodes/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
+import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
     faustGainNode: FaustGainNode,
     faustPolyNode: FaustPolyNode,
     faustLPFNode: FaustLPFNode,
+    faustDelayNode: FaustDelayNode,
     outNode: OutNode,
     midiInNode: MidiInNode,
     numberNode: NumberNode,
@@ -118,7 +120,6 @@ const App: React.FC = () => {
     // const nPressed = useKeyPress('n')
     // console.log(x,y,zoom)
     // console.log(nPressed)
-    console.log(graphBackground)
 
     return (
         <div style={{width: '100vw', height: '100vh'}}>

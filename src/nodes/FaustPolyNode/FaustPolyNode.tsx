@@ -42,7 +42,7 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, select
 
     return (
         <div
-            className="w-60 h-[13rem] bg-black relative"
+            className="w-60 h-[13rem] drop-shadow-lg"
             style={{
                 boxShadow: selected
                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
@@ -51,7 +51,7 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, select
         >
             <Handle type="target" position={Position.Top} id='midi' style={{backgroundColor: 'rgb(59, 130, 246)'}}/>
             <div className='flex items-center bg-amber-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Poly Node</p>
+                <p className='font-bold text-white'>Polyphonic Synth</p>
             </div>
             <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[11rem]'>
                 <div className="flex justify-between h-[8rem] px-4">

@@ -109,7 +109,11 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
             // Faust node: handle Faust-specific parameter updates
             for (const [key, val] of Object.entries(data)) {
                 // Split the key to extract device name and parameter name
-                const [deviceName, paramName] = key.split('_');
+                const [deviceName, paramName, skip] = key.split('_');
+
+                if (skip) {
+                    return
+                }
 
                 // Try to get the parameter from the node's AudioParams using the correct format
                 const param = node.parameters.get(`/${deviceName}/${paramName}`);
@@ -122,7 +126,7 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
                         console.error(`Invalid value for ${paramName}: Must be a number`);
                     }
                 } else {
-                    console.error(`Parameter ${paramName} not found on Faust node`);
+                    console.error(`Parameter /${deviceName}/${paramName} not found on Faust node`);
                 }
             }
         } else if (node instanceof AudioNode) {

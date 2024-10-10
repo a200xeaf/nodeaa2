@@ -49,7 +49,7 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data, select
                 <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>
             </div>
             <div className='flex items-center bg-purple-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Faust Gain</p>
+                <p className='font-bold text-white'>Gain</p>
             </div>
             <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[5rem]'>
                 <label>
