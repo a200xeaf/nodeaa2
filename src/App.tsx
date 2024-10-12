@@ -16,6 +16,7 @@ import {useEffect, useState} from "react";
 import FaustLPFNode from "@/nodes/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
+import MidiKeyboardNode from "@/nodes/MidiKeyboardNode/MidiKeyboardNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -25,6 +26,7 @@ const nodeTypes = {
     faustDelayNode: FaustDelayNode,
     outNode: OutNode,
     midiInNode: MidiInNode,
+    midiKeyboardNode: MidiKeyboardNode,
     numberNode: NumberNode,
     viewerNode: ViewerNode,
     creatorNode: CreatorNode
