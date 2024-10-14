@@ -1,6 +1,6 @@
 import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
 
-const SolidBlueEdge = ({
+const MidiEdge = ({
                            id,
                            sourceX,
                            sourceY,
@@ -34,4 +34,4 @@ const SolidBlueEdge = ({
     );
 };
 
-export default SolidBlueEdge;
+export default MidiEdge;

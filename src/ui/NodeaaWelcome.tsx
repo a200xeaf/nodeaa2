@@ -13,8 +13,12 @@ const NodeaaWelcome = () => {
             <AlertDialogContent
                 className="absolute z-[9999] w-[90%] h-auto max-w-[1200px] max-h-[1080px] min-w-[300px] min-h-[400px]"
             >
-                <AlertDialogHeader>
-                    <AlertDialogTitle className="text-4xl text-center select-none">Welcome to Nodeaa</AlertDialogTitle>
+                <AlertDialogHeader className='items-center'>
+                    <AlertDialogTitle className="inline-block w-fit text-4xl font-bold text-center select-none
+                    bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent animate-gradient bg-[length:150%_150%]"
+                    >
+                        Welcome to Nodeaa
+                    </AlertDialogTitle>
                     <AlertDialogDescription className="text-center select-none">Get started with this quick guide</AlertDialogDescription>
 
                     {/* Carousel dynamically adjusts width */}

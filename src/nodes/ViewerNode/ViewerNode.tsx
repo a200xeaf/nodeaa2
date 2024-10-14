@@ -2,7 +2,7 @@ import React from 'react'
 import {useNodeStore} from "../../engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {Handle, Position, Node, NodeProps, useHandleConnections} from "@xyflow/react";
-import {useEmitterSubscriptions} from "../../hooks/useEmitterSubscription.ts";
+import {useEmitterSubscriptions} from "@/utils/hooks/useEmitterSubscription.ts";
 
 // Define the node data structure
 type ViewerNodeData = { viewer_value: never };

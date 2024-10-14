@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import {useNodeStore} from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
-import {useEmitterSubscriptions} from "../../hooks/useEmitterSubscription.ts";
+import {useEmitterSubscriptions} from "@/utils/hooks/useEmitterSubscription.ts";
 
 type FaustGainNodeData = {
     faustgain_Gain: number

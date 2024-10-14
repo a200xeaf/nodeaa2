@@ -2,7 +2,7 @@ import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
 import { useShallow } from "zustand/react/shallow";
 import { useNodeStore } from "../../engine/store.ts";
 
-const AnimatedGreenDashedEdge = ({
+const AudioEdge = ({
                                      id,
                                      sourceX,
                                      sourceY,
@@ -82,4 +82,4 @@ const AnimatedGreenDashedEdge = ({
     );
 };
 
-export default AnimatedGreenDashedEdge;
+export default AudioEdge;

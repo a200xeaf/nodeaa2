@@ -8,8 +8,8 @@ import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
 import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
 import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
 import {useShallow} from "zustand/react/shallow";
-import AnimatedGreenDashedEdge from "./ui/edges/AnimatedGreenDashedEdge.tsx";
-import SolidBlueEdge from "./ui/edges/SolidBlueEdge.tsx";
+import AudioEdge from "./ui/edges/AudioEdge.tsx";
+import MidiEdge from "./ui/edges/MidiEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
 import CreatorNode from "@/nodes/CreatorNode/CreatorNode.tsx";
 import {useEffect, useState} from "react";
@@ -33,8 +33,8 @@ const nodeTypes = {
 };
 
 const edgeTypes = {
-    solidBlueEdge: SolidBlueEdge,
-    animatedGreenDashedEdge: AnimatedGreenDashedEdge,
+    solidBlueEdge: MidiEdge,
+    animatedGreenDashedEdge: AudioEdge,
 };
 
 const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {

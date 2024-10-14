@@ -1,7 +1,9 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import {useCallback, FC, memo} from 'react';
 import {Handle, Node, NodeProps, Position} from '@xyflow/react';
-import {useNodeStore} from '../../engine/store.ts';
+import {useNodeStore} from '@/engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
+import Knob from "@/ui/inputs/Knob.tsx";
+import {amountFormat, timeFormat} from "@/utils/data/number-formats.ts";
 
 type FaustDelayNodeData = {
     faustDelay_duration: number
@@ -11,15 +13,15 @@ type FaustDelayNodeData = {
 
 type FaustDelayNodeType = Node<FaustDelayNodeData, 'faustDelayNode'>;
 
-const FaustDelayNode: React.FC<NodeProps<FaustDelayNodeType>> = ({id, data, selected}) => {
+const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
-    const setParams = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        updateNode(id, { [`faustDelay_${e.target.id}`]: +e.target.value })
-    }, [id, updateNode]);
+    const newSetParams = useCallback((name: string, value: number) => {
+        updateNode(id, { [`faustDelay_${name}`]: value})
+    }, [id, updateNode])
 
     return (
-        <div className='w-60 h-[18rem] drop-shadow-lg'
+        <div className='w-60 h-[9rem] drop-shadow-lg'
              style={{
                  boxShadow: selected
                      ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
@@ -32,49 +34,25 @@ const FaustDelayNode: React.FC<NodeProps<FaustDelayNodeType>> = ({id, data, sele
             <div className='flex items-center bg-purple-500 h-[2rem] px-1'>
                 <p className='font-bold text-white'>Delay</p>
             </div>
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[16rem]'>
-                <label>
-                    <span>Delay:</span>
-                    <input
-                        id='duration'
-                        className="nodrag"
-                        type="range"
-                        min="1"
-                        max="2000.0"
-                        step="0.1"
-                        value={data.faustDelay_duration}
-                        onChange={setParams}
-                    />
-                </label>
-                <span>{data.faustDelay_duration}ms</span>
-                <label>
-                    <span>Feedback:</span>
-                    <input
-                        id="feedback"
-                        className="nodrag"
-                        type="range"
-                        min="0.0"
-                        max="0.99"
-                        step="0.001"
-                        value={data.faustDelay_feedback}
-                        onChange={setParams}
-                    />
-                </label>
-                <span>{(data.faustDelay_feedback * 100).toFixed(1)}%</span>
-                <label>
-                    <span>Dry/Wet:</span>
-                    <input
-                        id="wet"
-                        className="nodrag"
-                        type="range"
-                        min="0.0"
-                        max="1.0"
-                        step="0.001"
-                        value={data.faustDelay_wet}
-                        onChange={setParams}
-                    />
-                </label>
-                <span>{(data.faustDelay_wet * 100).toFixed(1)}%</span>
+            <div className='flex justify-between nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[7rem]'>
+                <div className='flex flex-col items-center'>
+                    <span>Duration</span>
+                    <Knob value={data.faustDelay_duration} default_value={500} id='duration' max_value={2000}
+                          min_value={1} callback={newSetParams}/>
+                    <span>{timeFormat(data.faustDelay_duration)}</span>
+                </div>
+                <div className='flex flex-col items-center'>
+                    <span>Feedback</span>
+                    <Knob value={data.faustDelay_feedback} default_value={0.5} id='feedback' max_value={0.99}
+                          min_value={0.0} callback={newSetParams}/>
+                    <span>{amountFormat(data.faustDelay_feedback * 100)}</span>
+                </div>
+                <div className='flex flex-col items-center'>
+                    <span>Dry/Wet</span>
+                    <Knob value={data.faustDelay_wet} default_value={0.5} id='wet' max_value={1}
+                          min_value={0} callback={newSetParams}/>
+                    <span>{amountFormat(data.faustDelay_wet * 100)}</span>
+                </div>
             </div>
 
             <Handle type="source" position={Position.Bottom} id='audio'/>
@@ -82,4 +60,4 @@ const FaustDelayNode: React.FC<NodeProps<FaustDelayNodeType>> = ({id, data, sele
     );
 };
 
-export default React.memo(FaustDelayNode);
+export default memo(FaustDelayNode);
