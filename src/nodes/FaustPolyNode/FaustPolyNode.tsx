@@ -1,9 +1,12 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import {useEmitterSubscriptions} from "@/utils/hooks/useEmitterSubscription.ts";
-import {sendMidi} from "../../engine/audio.ts";
-import {useNodeStore} from "../../engine/store.ts";
+import {sendMidi} from "@/engine/audio.ts";
+import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
+import NodeaaBody from "@/ui/nodes-ui/NodeaaBody.tsx";
 
 type FaustPolyNodeData = {
     faustpoly_attack: number
@@ -41,19 +44,10 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, select
     })
 
     return (
-        <div
-            className="w-60 h-[13rem] drop-shadow-lg"
-            style={{
-                boxShadow: selected
-                    ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                    : 'none',  // No shadow if not selected
-            }}
-        >
+        <NodeaaContainer selected={selected} size={13}>
             <Handle type="target" position={Position.Top} id='midi' style={{backgroundColor: 'rgb(59, 130, 246)'}}/>
-            <div className='flex items-center bg-amber-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Polyphonic Synth</p>
-            </div>
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[11rem]'>
+            <NodeaaHeader nodeName='Polyphonic Synth' headerColor='bg-amber-500' />
+            <NodeaaBody size={11}>
                 <div className="flex justify-between h-[8rem] px-4">
                     <label className="flex flex-col items-center w-6">
                         <span className="mb-8 text-sm">Attack</span>
@@ -121,10 +115,9 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, select
                         <option value={4}>noise</option>
                     </select>
                 </label>
-            </div>
-
+            </NodeaaBody>
             <Handle type="source" position={Position.Bottom} id='audio'/>
-        </div>
+        </NodeaaContainer>
     );
 };
 

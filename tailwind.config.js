@@ -14,7 +14,7 @@ export default {
 			  }
 		  },
 		animation: {
-			  gradient: 'gradientMove 5s ease infinite'
+			  gradient: 'gradientMove 3s ease infinite'
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
