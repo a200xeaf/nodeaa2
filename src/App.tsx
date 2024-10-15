@@ -17,6 +17,7 @@ import FaustLPFNode from "@/nodes/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
 import MidiKeyboardNode from "@/nodes/MidiKeyboardNode/MidiKeyboardNode.tsx";
+import {mainemitter} from "@/engine/utils/eventbus.ts";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -87,6 +88,8 @@ const App: React.FC = () => {
     }, [x, y, zoom, setViewport]);
 
     const [mousePos, setMousePos] = useState({x: 0, y: 0});
+    const [draggingKnobId, setDraggingKnobId] = useState<string | null>(null);
+    const [initialMouseY, setInitialMouseY] = useState<number>(0);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -104,19 +107,75 @@ const App: React.FC = () => {
             }
         };
 
+        const handleMouseDown = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (target && target.id && target.id.startsWith('controller-')) {
+                const canvasID = target.id;
+
+                // Start dragging
+                setDraggingKnobId(canvasID);
+                setInitialMouseY(e.clientY);
+
+                // Emit 'mousedown' event to the knob
+                mainemitter.emit(canvasID, {
+                    type: 'mousedown',
+                });
+            }
+        };
         const handleMouseMove = (e: MouseEvent) => {
             setMousePos({x: e.clientX, y: e.clientY});
-        }
+            if (draggingKnobId) {
+                const deltaY = e.clientY - initialMouseY;
+                setInitialMouseY(e.clientY); // Update for next move
+
+                // Emit 'mousemove' event to the knob
+                mainemitter.emit(draggingKnobId, {
+                    type: 'mousemove',
+                    deltaY: deltaY,
+                    shiftKey: e.shiftKey,
+                });
+            }
+        };
+
+        const handleMouseUp = () => {
+            if (draggingKnobId) {
+                // Emit 'mouseup' event to the knob
+                mainemitter.emit(draggingKnobId, {
+                    type: 'mouseup',
+                });
+                setDraggingKnobId(null);
+            }
+        };
+
+        const handleDoubleClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (target && target.id && target.id.startsWith('controller-')) {
+                const canvasID = target.id;
+
+                // Emit 'doubleclick' event to the knob
+                mainemitter.emit(canvasID, {
+                    type: 'doubleclick',
+                });
+            }
+        };
 
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mousedown', handleMouseDown);
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('dblclick', handleDoubleClick);
 
         // Don't forget to clean up
         return function cleanup() {
             document.removeEventListener('keydown', handleKeyDown);
             document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mousedown', handleMouseDown);
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('dblclick', handleDoubleClick);
         }
-    }, [mousePos, x, y, zoom, createNode]);
+    }, [mousePos, x, y, zoom, createNode, draggingKnobId, initialMouseY]);
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')

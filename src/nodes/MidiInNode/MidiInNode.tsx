@@ -3,7 +3,7 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {Input, NoteMessageEvent, WebMidi} from "webmidi";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
-import {mainemitter} from "../../engine/eventbus.ts";
+import {mainemitter} from "../../engine/utils/eventbus.ts";
 
 type MidiInNodeData = {
     midiin_device: string;

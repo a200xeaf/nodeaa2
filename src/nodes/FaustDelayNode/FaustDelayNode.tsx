@@ -3,7 +3,7 @@ import {Handle, Node, NodeProps, Position} from '@xyflow/react';
 import {useNodeStore} from '@/engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 import Knob from "@/ui/inputs/Knob.tsx";
-import {amountFormat, timeFormat} from "@/utils/data/number-formats.ts";
+import {amountFormat, timeFormat} from "@/engine/utils/number-formats.ts";
 
 type FaustDelayNodeData = {
     faustDelay_duration: number

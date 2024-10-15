@@ -2,7 +2,7 @@ import React, {ChangeEvent} from 'react'
 import {useNodeStore} from "../../engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {Handle, Position, Node, NodeProps} from "@xyflow/react";
-import {mainemitter} from "../../engine/eventbus.ts";
+import {mainemitter} from "../../engine/utils/eventbus.ts";
 
 // Define the node data structure
 type NumberNodeData = { number_number: number };

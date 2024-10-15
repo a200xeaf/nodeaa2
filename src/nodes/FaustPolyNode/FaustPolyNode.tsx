@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useCallback} from 'react';
 import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
-import {useEmitterSubscriptions} from "@/utils/hooks/useEmitterSubscription.ts";
+import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
 import {sendMidi} from "@/engine/audio.ts";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";

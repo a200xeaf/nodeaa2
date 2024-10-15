@@ -1,6 +1,6 @@
 import {Connection} from "@xyflow/react";
 import {useEffect} from "react";
-import {mainemitter} from "../../engine/eventbus.ts";
+import {mainemitter} from "../eventbus.ts";
 
 type UseEmmitterSubscriptionsProps = {
     connections: Connection[]

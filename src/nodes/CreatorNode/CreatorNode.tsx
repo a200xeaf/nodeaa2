@@ -2,7 +2,7 @@ import {Node, NodeProps} from "@xyflow/react";
 import React, {ChangeEvent, useState, useRef, useEffect, useCallback, useMemo} from "react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
-import {NodesConfig} from "@/engine/types.ts";
+import {NodesConfig} from "@/engine/types/nodetypes.ts";
 import rawNodesConfig from "@/engine/nodes.json";
 
 type CreatorNodeData = Record<string, never>;

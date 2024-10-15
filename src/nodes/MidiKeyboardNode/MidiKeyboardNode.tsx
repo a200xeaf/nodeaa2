@@ -3,7 +3,7 @@ import {midiKeyMap, noteNames, octaveKeyMap, velocityKeyMap} from "@/nodes/MidiK
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
-import {mainemitter} from "@/engine/eventbus.ts";
+import {mainemitter} from "@/engine/utils/eventbus.ts";
 
 type MidiKeyboardNodeData = {
     midikeyboard_octave: number;

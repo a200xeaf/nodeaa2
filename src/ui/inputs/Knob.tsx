@@ -1,6 +1,9 @@
 import {useEffect, useRef, memo, FC, useMemo} from "react";
 import p5 from "p5";
-import {scaleExp} from "@/utils/data/number-operations.ts";
+import {scaleExp} from "@/engine/utils/number-operations.ts";
+import {nanoid} from "nanoid";
+import {mainemitter} from "@/engine/utils/eventbus.ts";
+import {BaseUIEvent} from "@/engine/types/uitypes.ts";
 
 interface KnobProps {
     id: string
@@ -40,26 +43,23 @@ const Knob: FC<KnobProps> = ({
         };
     }, [min_value, max_value, startAngle, endAngle, scale_exponent]);
 
-    const p5InstanceRef = useRef<p5 | null>(null);
+    const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null);
 
     useEffect(() => {
-        const sketch = (p: p5 & { updateAngle?: (newAngle: number) => void }) => {
+        const controllerId = nanoid()
+        let angle = valueToAngle(value);
+        let isDragging: boolean = false;
+        const sensitivity = 0.06;
+
+        const sketch = (p: p5) => {
             const size = 50;
             const radius = size / 2.5;
             const strokeSize = size / 14;
             const needleLength = radius * 0.7;
 
-            let angle = valueToAngle(value); // Initialize angle based on value
-
-            let needleX: number, needleY: number;
-            let startY: number | null;
-
-            let isDragging: boolean = false;
-
-            const sensitivity = 0.06;
-
             p.setup = () => {
-                p.createCanvas(size, size);
+                const canvas = p.createCanvas(size, size);
+                canvas.id("controller-" + controllerId)
                 p.smooth();
                 p.pixelDensity(2);
                 p.clear();
@@ -93,89 +93,79 @@ const Knob: FC<KnobProps> = ({
                     angle
                 );
 
-                // Compute needle position
-                needleX = p.width / 2 + needleLength * p.cos(angle);
-                needleY = p.height / 2 + needleLength * p.sin(angle);
+                const needleX = p.width / 2 + needleLength * p.cos(angle);
+                const needleY = p.height / 2 + needleLength * p.sin(angle);
 
                 p.stroke(200);
                 p.line(p.width / 2, p.height / 2, needleX, needleY);
             };
-
-            p.mousePressed = () => {
-                if (
-                    p.mouseX >= 0 &&
-                    p.mouseX <= p.width &&
-                    p.mouseY >= 0 &&
-                    p.mouseY <= p.height
-                ) {
-                    startY = p.mouseY;
-                    isDragging = true;
-                }
-            };
-
-            p.mouseReleased = () => {
-                isDragging = false;
-                startY = null;
-                p.noLoop();
-            };
-
-            p.doubleClicked = () => {
-                if (
-                    p.mouseX >= 0 &&
-                    p.mouseX <= p.width &&
-                    p.mouseY >= 0 &&
-                    p.mouseY <= p.height
-                ) {
-                    angle = valueToAngle(default_value);
-                    p.redraw();
-                    // Update value and call callback
-                    const newValue = angleToValue(angle);
-                    callback(id, newValue);
-                }
-            };
-
-            p.mouseDragged = () => {
-                if (isDragging && startY !== null) {
-                    p.loop();
-                    const deltaY = p.mouseY - startY;
-
-                    const currSens = p.keyIsDown(p.SHIFT) ? sensitivity / 4 : sensitivity;
-
-                    if (deltaY < 0) {
-                        angle += currSens * Math.abs(deltaY / 2);
-                    } else if (deltaY > 0) {
-                        angle -= currSens * Math.abs(deltaY / 2);
-                    }
-
-                    angle = p.constrain(angle, startAngle, endAngle); // Ensure the angle is within range
-                    calculateNeedlePosition();
-                    startY = p.mouseY;
-
-                    // Update the value based on the angle and call the callback
-                    const newValue = angleToValue(angle);
-                    callback(id, newValue);
-                }
-            };
-
-            const calculateNeedlePosition = () => {
-                needleX = p.width / 2 + needleLength * p.cos(angle);
-                needleY = p.height / 2 + needleLength * p.sin(angle);
-            };
-
-            // Expose method to update angle from outside the sketch
-            p.updateAngle = (newAngle: number) => {
-                angle = newAngle;
-                p.redraw();
-            };
         };
 
-        p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLElement);
+        // Expose method to update angle from outside the sketch
+        const updateAngle = (newAngle: number) => {
+            angle = newAngle;
+            p5InstanceRef.current?.redraw();
+        }
+
+        // Handle events from app.tsx
+        const handleKnobEvent = (event: BaseUIEvent) => {
+            if (!p5InstanceRef.current) return;
+
+            const p = p5InstanceRef.current;
+
+            switch (event.type) {
+                case 'mousedown':
+                    isDragging = true;
+                    break;
+                case 'mousemove':
+                    if (isDragging) {
+                        p.loop();
+
+                        const deltaY = event.deltaY;
+                        const currSens = event.shiftKey ? sensitivity / 4 : sensitivity;
+
+                        if (deltaY < 0) {
+                            angle += currSens * Math.abs(deltaY / 2);
+                        } else if (deltaY > 0) {
+                            angle -= currSens * Math.abs(deltaY / 2);
+                        }
+
+                        angle = p.constrain(angle, startAngle, endAngle);
+
+                        // Update the knob display
+                        p.redraw();
+
+                        // Update value and call callback
+                        const newValue = angleToValue(angle);
+                        callback(id, newValue);
+                    }
+                    break;
+                case 'mouseup':
+                    isDragging = false;
+                    p.noLoop();
+                    break;
+                case 'doubleclick':
+                    { angle = valueToAngle(default_value);
+                    p.redraw();
+                    const newValue = angleToValue(angle);
+                    callback(id, newValue);
+                    break; }
+                default:
+                    break;
+            }
+        };
+
+        p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLElement) as P5InstanceWithUpdate;
+        p5InstanceRef.current.updateAngle = updateAngle
+
+        mainemitter.on("controller-" + controllerId, handleKnobEvent)
 
         return () => {
             p5InstanceRef.current?.remove();
             p5InstanceRef.current = null;
+            mainemitter.off(controllerId, handleKnobEvent)
         };
-    }, [min_value, max_value]);
+    }, [min_value, max_value, valueToAngle, angleToValue, default_value, id, callback]);
 
     // Update the knob when the value prop changes
     useEffect(() => {

@@ -1,5 +1,8 @@
 import {useEffect, useRef, FC, memo} from "react";
 import p5 from "p5";
+import {mainemitter} from "@/engine/utils/eventbus.ts";
+import {nanoid} from "nanoid";
+import {BaseUIEvent} from "@/engine/types/uitypes.ts";
 
 interface NumboxProps {
     id: string
@@ -17,6 +20,8 @@ const Numbox1: FC<NumboxProps> = ({id, value, min_value, max_value, default_valu
     const p5InstanceRef = useRef<p5 | null>(null);
 
     useEffect(() => {
+        const controllerId = nanoid()
+
         const sketch = (p: p5 & { updateValue? : (newValue: number) => void}) => {
             const size: number = 50
 
@@ -147,11 +152,18 @@ const Numbox1: FC<NumboxProps> = ({id, value, min_value, max_value, default_valu
             }
         }
 
+        const handleNumboxEvent = (e: BaseUIEvent) => {
+            console.log(e)
+        }
+
         p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLElement);
+
+        mainemitter.on("controller-" + controllerId, handleNumboxEvent)
 
         return () => {
             p5InstanceRef.current?.remove();
             p5InstanceRef.current = null;
+            mainemitter.off(controllerId, handleNumboxEvent)
         };
     }, [])
 
