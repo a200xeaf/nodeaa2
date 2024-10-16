@@ -4,6 +4,7 @@ import {useNodeStore} from '@/engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 import Knob from "@/ui/inputs/Knob.tsx";
 import {amountFormat, timeFormat} from "@/engine/utils/number-formats.ts";
+import Numbox from "@/ui/inputs/Numbox.tsx";
 
 type FaustDelayNodeData = {
     faustDelay_duration: number
@@ -49,8 +50,8 @@ const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({id, data, selected})
                 </div>
                 <div className='flex flex-col items-center'>
                     <span>Dry/Wet</span>
-                    <Knob value={data.faustDelay_wet} default_value={0.5} id='wet' max_value={1}
-                          min_value={0} callback={newSetParams}/>
+                    <Numbox value={data.faustDelay_wet} default_value={0.5} id='wet' max_value={1}
+                          min_value={0} callback={newSetParams} float={true}/>
                     <span>{amountFormat(data.faustDelay_wet * 100)}</span>
                 </div>
             </div>

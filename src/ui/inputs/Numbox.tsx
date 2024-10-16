@@ -10,74 +10,30 @@ interface NumboxProps {
     min_value: number
     max_value: number
     default_value: number
+    float: boolean
     callback: (id: string, value: number) => void
 }
 
 type P5InstanceWithUpdate = p5 & { updateValue: (newAngle: number) => void };
 
-const Numbox1: FC<NumboxProps> = ({id, value, min_value, max_value, default_value, callback}) => {
+const Numbox: FC<NumboxProps> = ({id, value, min_value, max_value, default_value, float, callback}) => {
     const sketchRef = useRef<HTMLDivElement>(null);
-    const p5InstanceRef = useRef<p5 | null>(null);
+    const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null);
 
     useEffect(() => {
         const controllerId = nanoid()
+        let currVal: number = value
+        let isDragging: boolean = false
+        const sensitivity: number = 0.01
+        const maxDigits = 5
+        const currFloat = float
 
         const sketch = (p: p5 & { updateValue? : (newValue: number) => void}) => {
             const size: number = 50
 
-            let isDragging: boolean = false
-            let prevY: number | null = null
-            let tempVal: number = value
-            const sensitivity: number = 1
-
-            const maxDigits = 5
-            const float = false
-
-            const formatNumber = (formatMe: number) => {
-                let final: string;
-
-                // Round the number appropriately
-                formatMe = float ? parseFloat(formatMe.toFixed(2)) : Math.floor(formatMe);
-                const isNegative = formatMe < 0;
-
-                // Handle absolute value
-                let absValue = Math.abs(formatMe).toString();
-
-                // Ensure that floating numbers have exactly two decimal places
-                if (float) {
-                    if (!absValue.includes('.')) {
-                        absValue += '.00';
-                    } else {
-                        const parts = absValue.split('.');
-                        let decimalPart = parts[1];
-                        if (decimalPart.length === 1) {
-                            decimalPart += '0';
-                        } else if (decimalPart.length > 2) {
-                            decimalPart = decimalPart.slice(0, 2);
-                        }
-                        absValue = parts[0] + '.' + decimalPart;
-                    }
-                }
-
-                // Construct the full formatted string including the negative sign if necessary
-                final = isNegative ? `\u2212${absValue}` : absValue;
-
-                // If the length (including negative sign) exceeds maxDigits, truncate and add ellipsis
-                if (final.length > maxDigits) {
-                    final = final.slice(0, maxDigits - 1) + '\u2025'; // Add ellipsis character
-                }
-
-                // Pad the number with figure spaces to ensure alignment
-                const totalPadding = maxDigits - final.length;
-                if (totalPadding > 0) {
-                    final = final.padStart(final.length + totalPadding, '\u2007');
-                }
-
-                return final;
-            };
-
             p.setup = () => {
-                p.createCanvas(size, size / 2)
+                const canvas = p.createCanvas(size, size / 2)
+                canvas.id("controller-" + controllerId)
                 p.smooth();
                 p.pixelDensity(2);
                 p.noLoop();
@@ -93,70 +49,104 @@ const Numbox1: FC<NumboxProps> = ({id, value, min_value, max_value, default_valu
                 p.fill(0)
                 p.textFont("Arial")
                 p.textSize(size * 0.3)
-                p.text(formatNumber(tempVal), p.width * 0.1, p.height * 0.72)
+                p.text(formatNumber(currVal), p.width * 0.1, p.height * 0.72)
             }
+        }
 
-            p.mousePressed = () => {
-                if (
-                    p.mouseX >= 0 &&
-                    p.mouseX <= p.width &&
-                    p.mouseY >= 0 &&
-                    p.mouseY <= p.height
-                ) {
-                    isDragging = true;
-                    prevY = p.mouseY;
-                }
-            }
+        const formatNumber = (formatMe: number) => {
+            let final: string;
 
-            p.mouseReleased = () => {
-                isDragging = false;
-                prevY = null
-            }
+            // Round the number appropriately
+            formatMe = currFloat ? parseFloat(formatMe.toFixed(2)) : Math.floor(formatMe);
+            const isNegative = formatMe < 0;
 
-            p.mouseDragged = () => {
-                if (isDragging && prevY !== null) {
-                    const deltaY = p.mouseY - prevY;
+            // Handle absolute value
+            let absValue = Math.abs(formatMe).toString();
 
-                    const currSens = p.keyIsDown(p.SHIFT) ? sensitivity / 4 : sensitivity
-
-                    if (deltaY < 0) {
-                        tempVal += currSens * Math.abs(deltaY / 2);
-                    } else if (deltaY > 0) {
-                        tempVal -= currSens * Math.abs(deltaY / 2);
+            // Ensure that floating numbers have exactly two decimal places
+            if (currFloat) {
+                if (!absValue.includes('.')) {
+                    absValue += '.00';
+                } else {
+                    const parts = absValue.split('.');
+                    let decimalPart = parts[1];
+                    if (decimalPart.length === 1) {
+                        decimalPart += '0';
+                    } else if (decimalPart.length > 2) {
+                        decimalPart = decimalPart.slice(0, 2);
                     }
-
-                    tempVal = p.constrain(tempVal, min_value, max_value)
-
-                    prevY = p.mouseY;
-
-                    callback(id, tempVal);
-                    p.redraw()
+                    absValue = parts[0] + '.' + decimalPart;
                 }
             }
 
-            p.doubleClicked = () => {
-                if (
-                    p.mouseX >= 0 &&
-                    p.mouseX <= p.width &&
-                    p.mouseY >= 0 &&
-                    p.mouseY <= p.height
-                ) {
-                    tempVal = default_value;
-                    callback(id, tempVal);
-                }
+            // Construct the full formatted string including the negative sign if necessary
+            final = isNegative ? `\u2212${absValue}` : absValue;
+
+            // If the length (including negative sign) exceeds maxDigits, truncate and add ellipsis
+            if (final.length > maxDigits) {
+                final = final.slice(0, maxDigits - 1) + '\u2025'; // Add ellipsis character
             }
 
-            p.updateValue = (newValue: number) => {
-                tempVal = newValue
-                p.redraw()
+            // Pad the number with figure spaces to ensure alignment
+            const totalPadding = maxDigits - final.length;
+            if (totalPadding > 0) {
+                final = final.padStart(final.length + totalPadding, '\u2007');
+            }
+
+            return final;
+        };
+
+        const updateValue = (newValue: number) => {
+            currVal = newValue
+            p5InstanceRef.current?.redraw()
+        }
+
+        const handleNumboxEvent = (event: BaseUIEvent) => {
+            console.log("numbox")
+            if (!p5InstanceRef.current) return;
+
+            const p = p5InstanceRef.current;
+
+            switch (event.type) {
+                case 'mousedown':
+                    isDragging = true;
+                    break;
+                case 'mousemove':
+                    if (isDragging) {
+                        p.loop();
+
+                        const deltaY = event.deltaY;
+                        const currSens = event.shiftKey ? sensitivity / 4 : sensitivity;
+
+                        if (deltaY < 0) {
+                            currVal += currSens * Math.abs(deltaY / 2);
+                        } else if (deltaY > 0) {
+                            currVal -= currSens * Math.abs(deltaY / 2);
+                        }
+
+                        currVal = p.constrain(currVal, min_value, max_value)
+
+                        // Update the knob display
+                        p.redraw();
+
+                        callback(id, currVal);
+                    }
+                    break;
+                case 'mouseup':
+                    isDragging = false;
+                    p.noLoop();
+                    break;
+                case 'doubleclick':
+                    currVal = default_value
+                    callback(id, default_value)
+                    break;
+                default:
+                    break;
             }
         }
 
-        const handleNumboxEvent = (e: BaseUIEvent) => {
-            console.log(e)
-        }
-
-        p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLElement);
+        p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLElement) as P5InstanceWithUpdate;
+        p5InstanceRef.current.updateValue = updateValue
 
         mainemitter.on("controller-" + controllerId, handleNumboxEvent)
 
@@ -165,7 +155,7 @@ const Numbox1: FC<NumboxProps> = ({id, value, min_value, max_value, default_valu
             p5InstanceRef.current = null;
             mainemitter.off(controllerId, handleNumboxEvent)
         };
-    }, [])
+    }, [callback, default_value, id, max_value, min_value])
 
     useEffect(() => {
         if (p5InstanceRef.current) {
@@ -179,4 +169,4 @@ const Numbox1: FC<NumboxProps> = ({id, value, min_value, max_value, default_valu
         </div>
     )
 }
-export default memo(Numbox1)
+export default memo(Numbox)

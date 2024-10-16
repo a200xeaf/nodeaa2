@@ -26,11 +26,15 @@ const Knob: FC<KnobProps> = ({
                                         callback,
                                         scale_exponent = 1,
                                     }) => {
-    const sketchRef = useRef<HTMLDivElement>(null);
+    //Refs for p5 canvas
+    const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null) //This one holds the p5 instance
+    const sketchRef = useRef<HTMLDivElement>(null) //This one is just for the <div> ref
 
-    const startAngle = Math.PI / 2 + 0.785398165; // Equivalent to p.HALF_PI + 0.785398165
-    const endAngle = 2 * Math.PI + 0.785398165; // Equivalent to p.TWO_PI + 0.785398165
+    //Angles for knob. Start is left/end is right
+    const startAngle = Math.PI / 2 + 0.785398165
+    const endAngle = 2 * Math.PI + 0.785398165
 
+    //Helper functions for angle to value conversion
     const valueToAngle = useMemo(() => {
         return (value: number): number => {
             return scaleExp(value, min_value, max_value, startAngle, endAngle, scale_exponent);
@@ -43,8 +47,8 @@ const Knob: FC<KnobProps> = ({
         };
     }, [min_value, max_value, startAngle, endAngle, scale_exponent]);
 
-    const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null);
-
+    //First useEffect. ONLY runs once per mount to create Knob/ID and store the instance inside the ref
+    //Also instantiates values that will be in sketch scope when it initializes
     useEffect(() => {
         const controllerId = nanoid()
         let angle = valueToAngle(value);
@@ -155,7 +159,8 @@ const Knob: FC<KnobProps> = ({
             }
         };
 
-        p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLElement) as P5InstanceWithUpdate;
+        //INITIALIZE CANVAS: p5 instance created and stored as p5InstanceRef
+        p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLDivElement) as P5InstanceWithUpdate;
         p5InstanceRef.current.updateAngle = updateAngle
 
         mainemitter.on("controller-" + controllerId, handleKnobEvent)
