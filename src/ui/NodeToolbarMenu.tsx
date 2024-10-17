@@ -127,6 +127,7 @@ const NodeToolbarMenu = () => {
                             <MenubarSubContent>
                                 <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain (Volume)</MenubarItem>
                                 <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass Filter</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>Delay Node</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                     </MenubarContent>

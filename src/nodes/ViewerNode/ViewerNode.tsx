@@ -3,6 +3,8 @@ import {useNodeStore} from "../../engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {Handle, Position, Node, NodeProps, useHandleConnections} from "@xyflow/react";
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 // Define the node data structure
 type ViewerNodeData = { viewer_value: never };
@@ -25,18 +27,10 @@ const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) =
     })
 
     return (
-        <div className='w-60 h-[6rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
+        <NodeaaContainer selected={selected} width={15} height={6}>
             <Handle type='target' position={Position.Top} id='data' style={{ backgroundColor: 'grey' }}/>
-            <div className='flex items-center bg-gray-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Viewer</p>
-            </div>
-            <div className='flex flex-col w-full h-[4rem] bg-white justify-center items-center px-2'>
+            <NodeaaHeader nodeName='Viewer' headerColor='bg-gray-500' />
+            <div className='flex flex-col w-full h-[4rem] bg-white justify-center items-center px-2 rounded-b-xl'>
                 <div
                     className='w-full overflow-x-auto whitespace-nowrap'
                     style={{maxHeight: '3rem', overflowY: 'hidden'}}
@@ -45,7 +39,7 @@ const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) =
                 </div>
                 <p className='text-xs'>ID: {id}</p>
             </div>
-        </div>
+        </NodeaaContainer>
     )
 }
 export default NumberNode

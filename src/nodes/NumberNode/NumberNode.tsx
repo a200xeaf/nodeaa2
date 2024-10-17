@@ -3,6 +3,8 @@ import {useNodeStore} from "../../engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {Handle, Position, Node, NodeProps} from "@xyflow/react";
 import {mainemitter} from "../../engine/utils/eventbus.ts";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 // Define the node data structure
 type NumberNodeData = { number_number: number };
@@ -31,21 +33,13 @@ const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({id, data, selected}) =
     };
 
     return (
-        <div className='w-60 h-[5rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
-            <div className='flex items-center bg-gray-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Number</p>
-            </div>
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[3rem]'>
+        <NodeaaContainer selected={selected} width={15} height={5}>
+            <NodeaaHeader nodeName='Number' headerColor='bg-gray-500' />
+            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[3rem] rounded-b-xl'>
                 <input type='number' min="0" max="1" step={0.01} value={data.number_number} onChange={handleNumber} className='bg-gray-200'/>
             </div>
             <Handle type="source" position={Position.Bottom} id='data-number_number' style={{ backgroundColor: 'grey' }} />
-        </div>
+        </NodeaaContainer>
     )
 }
 export default NumberNode

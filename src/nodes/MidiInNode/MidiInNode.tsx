@@ -4,6 +4,8 @@ import {Input, NoteMessageEvent, WebMidi} from "webmidi";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
 import {mainemitter} from "../../engine/utils/eventbus.ts";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type MidiInNodeData = {
     midiin_device: string;
@@ -82,18 +84,9 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
     }, [selectedName, selectedMidi]);
 
     return (
-
-        <div className='w-60 h-[7rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
-            <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Midi In</p>
-            </div>
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[5rem]'>
+        <NodeaaContainer selected={selected} width={15} height={7}>
+            <NodeaaHeader nodeName='Midi In' headerColor='bg-blue-500' />
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[5rem] rounded-b-xl'>
                 <button onClick={handleMidi}>Check Midi</button>
                 <select onChange={handleMidiSelect}>
                     {inputNames.length > 0 && <option value="">None</option>}
@@ -105,7 +98,7 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
                 </select>
             </div>
             <Handle type="source" position={Position.Bottom} id='midi-main_midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
-        </div>
+        </NodeaaContainer>
     )
 }
 export default MidiInNode

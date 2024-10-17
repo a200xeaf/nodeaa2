@@ -4,6 +4,8 @@ import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type MidiKeyboardNodeData = {
     midikeyboard_octave: number;
@@ -97,17 +99,9 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
     }, [pressedKeys, midiKeyMap, data]);
 
     return (
-        <div className='w-80 h-[8rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
-            <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Midi Keyboard</p>
-            </div>
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[6rem]'>
+        <NodeaaContainer selected={selected} width={20} height={8}>
+            <NodeaaHeader nodeName='Midi Keyboard' headerColor='bg-blue-500' />
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[6rem] rounded-b-xl'>
                 <div className='flex justify-center'>
                     <button
                         onClick={handleActive}
@@ -124,7 +118,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 <p>Octave: {data.midikeyboard_octave >= 0 ? `+${data.midikeyboard_octave / 12}` : `${data.midikeyboard_octave / 12}`}</p>
             </div>
             <Handle type="source" position={Position.Bottom} id='midi-main_midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
-        </div>
+        </NodeaaContainer>
     );
 };
 

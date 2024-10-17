@@ -3,6 +3,8 @@ import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/r
 import {useNodeStore} from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type FaustGainNodeData = {
     faustgain_Gain: number
@@ -37,21 +39,13 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data, select
     })
 
     return (
-        <div className='w-60 h-[7rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
+        <NodeaaContainer selected={selected} width={15} height={7}>
             <div className="flex justify-evenly">
                 <Handle type="target" position={Position.Top} id='audio' style={{ left: '30%' }}/>
                 <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>
             </div>
-            <div className='flex items-center bg-purple-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Gain</p>
-            </div>
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[5rem]'>
+            <NodeaaHeader nodeName='Gain' headerColor='bg-purple-500' />
+            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[5rem] rounded-b-xl'>
                 <label>
                     <span>Gain:</span>
                     <input
@@ -68,7 +62,7 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data, select
             </div>
 
             <Handle type="source" position={Position.Bottom} id='audio'/>
-        </div>
+        </NodeaaContainer>
     );
 };
 

@@ -2,6 +2,8 @@ import React from 'react'
 import {useNodeStore} from "../../engine/store.ts";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type OutNodeType = Node<Record<string, never>, 'outNode'>;
 
@@ -10,18 +12,10 @@ const OutNode: React.FC<NodeProps<OutNodeType>> = ({selected}) => {
     const toggleAudio = useNodeStore(useShallow((state) => state.toggleAudio));
 
     return (
-        <div className='w-28 h-[6rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
+        <NodeaaContainer selected={selected} width={7} height={6}>
             <Handle type="target" position={Position.Top} id="audio"/>
-            <div className='flex items-center bg-blue-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Audio Out</p>
-            </div>
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[4rem] justify-center items-center'>
+            <NodeaaHeader nodeName='Audio Out' headerColor='bg-blue-500' />
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[4rem] justify-center items-center rounded-b-xl'>
                 <label>
                     <button
                         onClick={toggleAudio}
@@ -34,7 +28,7 @@ const OutNode: React.FC<NodeProps<OutNodeType>> = ({selected}) => {
                     </button>
                 </label>
             </div>
-        </div>
+        </NodeaaContainer>
     )
 }
 export default OutNode

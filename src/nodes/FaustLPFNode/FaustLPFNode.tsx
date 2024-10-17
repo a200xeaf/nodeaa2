@@ -2,6 +2,8 @@ import React, {ChangeEvent, useCallback} from 'react';
 import {Handle, Node, NodeProps, Position} from '@xyflow/react';
 import {useNodeStore} from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type FaustLPFNodeData = {
     faustLPF_frequency: number
@@ -35,21 +37,13 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data, selected
     }, []);
 
     return (
-        <div className='w-60 h-[13rem] drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
+        <NodeaaContainer selected={selected} width={15} height={13}>
             <div className="flex justify-evenly">
                 <Handle type="target" position={Position.Top} id='audio' style={{ left: '30%' }}/>
                 <Handle type="target" position={Position.Top} id='data' style={{ left: '70%', backgroundColor: 'grey' }}/>
             </div>
-            <div className='flex items-center bg-purple-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Lowpass Filter</p>
-            </div>
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[11rem]'>
+            <NodeaaHeader nodeName='Lowpass Filter' headerColor='bg-purple-500' />
+            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[11rem] rounded-b-xl'>
                 <label>
                     <span>Frequency:</span>
                     <input
@@ -81,7 +75,7 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({id, data, selected
             </div>
 
             <Handle type="source" position={Position.Bottom} id='audio'/>
-        </div>
+        </NodeaaContainer>
     );
 };
 

@@ -2,6 +2,8 @@ import React, {useCallback} from 'react';
 import {Handle, Node, NodeProps, Position} from '@xyflow/react';
 import { useNodeStore } from '../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type Osc2NodeData = {
     osc_frequency: number,
@@ -28,17 +30,9 @@ const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data, selected }) => 
     );
 
     return (
-        <div className='w-60 h-52 drop-shadow-lg'
-             style={{
-                 boxShadow: selected
-                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                     : 'none',  // No shadow if not selected
-             }}
-        >
-            <div className='flex items-center bg-pink-500 h-[2rem] px-1'>
-                <p className='font-bold text-white'>Oscillator Node</p>
-            </div>
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[11rem]'>
+        <NodeaaContainer selected={selected} width={15} height={13}>
+            <NodeaaHeader nodeName='Oscillator Node' headerColor='bg-pink-500' />
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[11rem] rounded-b-xl'>
                 <label>
                     <span>Frequency:</span>
                     <input
@@ -67,7 +61,7 @@ const Osc2Node: React.FC<NodeProps<Osc2NodeType>> = ({ id, data, selected }) => 
             </div>
 
             <Handle type="source" position={Position.Bottom} id='audio'/>
-        </div>
+        </NodeaaContainer>
     );
 };
 
