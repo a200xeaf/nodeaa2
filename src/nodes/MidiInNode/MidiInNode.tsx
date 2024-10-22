@@ -60,6 +60,7 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
             setSelectedMidi(currInput);
             console.log("hello")
 
+            //@ts-expect-error bug with midi library
             currInput.addListener("noteon", "all", (e: NoteMessageEvent) => {
                 // console.log("Note On:", e.note.number); // Logs the MIDI note number for note on events
                 const midiInfo = e.data
@@ -67,6 +68,7 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
                 mainemitter.emit(id + ":" + "main_midi", midiInfo);
             });
 
+            //@ts-expect-error bug with midi library
             currInput.addListener("noteoff", "all",(e: NoteMessageEvent) => {
                 // console.log("Note Off:", e.note.number); // Logs the MIDI note number for note off events
                 const midiInfo = e.data

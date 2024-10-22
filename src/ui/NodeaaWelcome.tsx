@@ -29,10 +29,17 @@ const NodeaaWelcome = () => {
                                 <div className="w-full md:w-1/3 text-left p-4">
                                     <h3 className="text-2xl font-semibold select-none">Creating Nodes</h3>
                                     <p className="text-md text-gray-600 mt-2 select-none">
-                                        Pressing the <em><strong>N</strong></em> key on the grid will bring up the Node search box.
+                                        Pressing the <em><strong>N</strong></em> key on the grid will bring up the Node
+                                        search box.
                                         Type in the name of the node to create and either select one of the options
                                         or press enter to get the top selected option. Nodes can be dragged by the
                                         title bar at their tops. Nodes can be selected by clicking anywhere on them.
+                                        <br/>
+                                        <br/>
+                                        If you don't have an external MIDI keyboard you can still play with your
+                                        computer keyboard! Try creating the "MIDI Keyboard" node and a "Polyphonic
+                                        Synth"
+                                        node to get started.
                                     </p>
                                 </div>
                                 <div className="w-full md:w-2/3 flex items-center justify-center p-10">
