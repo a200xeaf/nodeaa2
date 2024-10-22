@@ -211,6 +211,9 @@ const App: React.FC = () => {
             >
                 {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}
             </p>
+            <p className='absolute bottom-0 right-[3.6rem] text-[0.66rem] text-gray-400 p-[0.06rem]'>
+                Nodeaa v0.0.1 +
+            </p>
             <NodeaaWelcome />
         </div>
     );
