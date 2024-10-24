@@ -37,7 +37,7 @@ const NodeaaWelcome = () => {
                                 </div>
                                 <div className="w-full md:w-2/3 flex items-center justify-center p-4 md:p-10">
                                     <video
-                                        className="w-full h-auto max-w-[800px] max-h-[500px] object-cover rounded-lg shadow-lg"
+                                        className="w-full h-auto max-w-[800px] lg:max-h-[500px] object-cover rounded-lg shadow-lg"
                                         autoPlay
                                         loop
                                         muted
