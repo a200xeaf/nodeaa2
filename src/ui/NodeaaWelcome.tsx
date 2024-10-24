@@ -11,7 +11,7 @@ const NodeaaWelcome = () => {
     return (
         <AlertDialog defaultOpen={true}>
             <AlertDialogContent
-                className="absolute z-[9999] w-[90%] h-auto max-w-[1200px] max-h-[1080px] min-w-[300px] min-h-[400px]"
+                className="absolute z-[9999] w-[90%] max-w-[1200px] max-h-[90vh] min-w-[300px] min-h-[400px]"
             >
                 <AlertDialogHeader className='items-center'>
                     <AlertDialogTitle className="inline-block w-fit text-4xl font-bold text-center select-none
@@ -21,28 +21,21 @@ const NodeaaWelcome = () => {
                     </AlertDialogTitle>
                     <AlertDialogDescription className="text-center select-none">Get started with this quick guide</AlertDialogDescription>
 
-                    {/* Carousel dynamically adjusts width */}
+                    {/* Responsive Carousel */}
                     <Carousel className="w-full h-full">
                         <CarouselContent>
-                            {/* First Slide with Video and Text */}
+                            {/* First Slide */}
                             <CarouselItem className="h-full flex flex-col md:flex-row items-center">
                                 <div className="w-full md:w-1/3 text-left p-4">
                                     <h3 className="text-2xl font-semibold select-none">Creating Nodes</h3>
                                     <p className="text-md text-gray-600 mt-2 select-none">
-                                        Pressing the <em><strong>N</strong></em> key on the grid will bring up the Node
-                                        search box.
+                                        Pressing the <em><strong>N</strong></em> key on the grid will bring up the Node search box.
                                         Type in the name of the node to create and either select one of the options
                                         or press enter to get the top selected option. Nodes can be dragged by the
                                         title bar at their tops. Nodes can be selected by clicking anywhere on them.
-                                        <br/>
-                                        <br/>
-                                        If you don't have an external MIDI keyboard you can still play with your
-                                        computer keyboard! Try creating the "MIDI Keyboard" node and a "Polyphonic
-                                        Synth"
-                                        node to get started.
                                     </p>
                                 </div>
-                                <div className="w-full md:w-2/3 flex items-center justify-center p-10">
+                                <div className="w-full md:w-2/3 flex items-center justify-center p-4 md:p-10">
                                     <video
                                         className="w-full h-auto max-w-[800px] max-h-[500px] object-cover rounded-lg shadow-lg"
                                         autoPlay
@@ -55,10 +48,12 @@ const NodeaaWelcome = () => {
                                     </video>
                                 </div>
                             </CarouselItem>
+
+                            {/* Second Slide */}
                             <CarouselItem className="h-full flex flex-col md:flex-row items-center">
-                                <div className="w-full md:w-2/3 flex items-center justify-center p-10">
+                                <div className="w-full md:w-2/3 flex items-center justify-center p-4 md:p-10">
                                     <video
-                                        className="w-full h-auto max-w-[1136px] max-h-[720px] object-cover rounded-lg shadow-lg"
+                                        className="w-full h-auto max-w-[800px] md:max-w-[1136px] max-h-[500px] md:max-h-[720px] object-cover rounded-lg shadow-lg"
                                         autoPlay
                                         loop
                                         muted
@@ -78,6 +73,8 @@ const NodeaaWelcome = () => {
                                     </p>
                                 </div>
                             </CarouselItem>
+
+                            {/* Third Slide */}
                             <CarouselItem className="h-full flex flex-col md:flex-row items-center">
                                 <div className="w-full md:w-1/3 text-left p-4">
                                     <h3 className="text-2xl font-semibold select-none">Help Make Nodeaa Better</h3>
@@ -87,9 +84,9 @@ const NodeaaWelcome = () => {
                                         menu to report bugs or suggest new features.
                                     </p>
                                 </div>
-                                <div className="w-full md:w-2/3 flex items-center justify-center p-10">
+                                <div className="w-full md:w-2/3 flex items-center justify-center p-4 md:p-10">
                                     <video
-                                        className="w-full h-auto max-w-[1136px] max-h-[720px] object-cover rounded-lg shadow-lg"
+                                        className="w-full h-auto max-w-[800px] md:max-w-[1136px] max-h-[500px] md:max-h-[720px] object-cover rounded-lg shadow-lg"
                                         autoPlay
                                         loop
                                         muted
@@ -113,4 +110,5 @@ const NodeaaWelcome = () => {
         </AlertDialog>
     )
 }
-export default NodeaaWelcome
+
+export default NodeaaWelcome;
