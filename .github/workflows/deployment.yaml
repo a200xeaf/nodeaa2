@@ -9,9 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      # Run your project's build step
-      # - name: Build
-      #   run: npm install && npm run build
+      - name: Build
+        run: npm install && npm run build
       - name: Publish
         uses: cloudflare/pages-action@v1
         with:
