@@ -27,3 +27,7 @@ export const scaleExp = (
     }
     return outLow - outRange * Math.pow(-normalizedValue, exp);
 };
+
+export const clamp = (value: number, min: number, max: number) => {
+    return Math.max(min, Math.min(value, max));
+}

@@ -5,6 +5,7 @@ import {useShallow} from "zustand/react/shallow";
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
+import {clamp} from "@/engine/utils/number-operations.ts";
 
 type FaustGainNodeData = {
     faustgain_Gain: number
@@ -24,9 +25,11 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data, select
         (e: React.ChangeEvent<HTMLInputElement> | number) => {
             // Check if the input is an event
             if (typeof e === 'number') {
-                updateNode(id, { faustgain_Gain: e }); // Direct number case
+                const final: number = clamp(e, 0, 1)
+                updateNode(id, { faustgain_Gain: final }); // Direct number case
             } else {
-                updateNode(id, { faustgain_Gain: +e.target.value }); // ChangeEvent case
+                const final: number = clamp(+e, 0, 1)
+                updateNode(id, { faustgain_Gain: final }); // ChangeEvent case
             }
         },
         [id, updateNode]
