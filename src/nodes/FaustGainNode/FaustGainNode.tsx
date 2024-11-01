@@ -22,15 +22,10 @@ const FaustGainNode: React.FC<NodeProps<FaustGainNodeType>> = ({id, data, select
         : -Infinity; // Handle zero gain case
 
     const setGain = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement> | number) => {
+        (e: React.ChangeEvent<HTMLInputElement>) => {
             // Check if the input is an event
-            if (typeof e === 'number') {
-                const final: number = clamp(e, 0, 1)
-                updateNode(id, { faustgain_Gain: final }); // Direct number case
-            } else {
-                const final: number = clamp(+e, 0, 1)
-                updateNode(id, { faustgain_Gain: final }); // ChangeEvent case
-            }
+            const final: number = clamp(e.target.valueAsNumber, 0, 1)
+            updateNode(id, { faustgain_Gain: final }); // Direct number case
         },
         [id, updateNode]
     );
