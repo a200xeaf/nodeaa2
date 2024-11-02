@@ -18,6 +18,8 @@ import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
 import MidiKeyboardNode from "@/nodes/MidiKeyboardNode/MidiKeyboardNode.tsx";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
+import {infoMap, InfoObject} from "@/engine/types/info-map.ts";
+import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -90,6 +92,7 @@ const App: React.FC = () => {
     const [mousePos, setMousePos] = useState({x: 0, y: 0});
     const [draggingKnobId, setDraggingKnobId] = useState<string | null>(null);
     const [initialMouseY, setInitialMouseY] = useState<number>(0);
+    const [infoPanelID, setInfoPanelID] = useState<InfoObject | null>(null);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -122,8 +125,24 @@ const App: React.FC = () => {
                 });
             }
         };
+
         const handleMouseMove = (e: MouseEvent) => {
             setMousePos({x: e.clientX, y: e.clientY});
+
+            if (e.target !== null && draggingKnobId === null) {
+                const target = e.target as HTMLElement;
+
+                const closestInfoPanel = target.closest("[data-info-panel-id]");
+                const infoPanelID = closestInfoPanel?.getAttribute("data-info-panel-id");
+
+                if (infoPanelID) {
+                    const infoText = infoMap.get(infoPanelID)
+                    setInfoPanelID(infoText || null)
+                }else {
+                    setInfoPanelID(null)
+                }
+            }
+
             if (draggingKnobId) {
                 const deltaY = e.clientY - initialMouseY;
                 setInitialMouseY(e.clientY); // Update for next move
@@ -212,9 +231,10 @@ const App: React.FC = () => {
                 {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}
             </p>
             <p className='absolute bottom-0 right-[3.3rem] text-[0.66rem] text-gray-400 p-[0.06rem]'>
-                Nodeaa v0.0.1 +
+                Nodeaa v0.0.12 +
             </p>
             <NodeaaWelcome />
+            <NodeaaInfoPanel idInfo={infoPanelID} />
         </div>
     );
 };

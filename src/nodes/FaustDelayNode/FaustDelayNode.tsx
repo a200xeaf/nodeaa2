@@ -24,23 +24,23 @@ const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({id, data, selected})
     }, [id, updateNode])
 
     return (
-        <NodeaaContainer selected={selected} width={15} height={9}>
+        <NodeaaContainer selected={selected} width={15} height={9} infoID='faustDelayNode'>
             <Handle type="target" position={Position.Top} id='audio'/>
             <NodeaaHeader nodeName="Delay" headerColor='bg-purple-500' />
             <div className='flex justify-between nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[7rem] rounded-b-xl'>
-                <div className='flex flex-col items-center'>
+                <div className='flex flex-col items-center' data-info-panel-id="faustDelayNode-duration">
                     <span>Duration</span>
                     <Knob value={data.faustDelay_duration} default_value={500} id='duration' max_value={2000}
                           min_value={1} callback={newSetParams}/>
                     <span>{timeFormat(data.faustDelay_duration)}</span>
                 </div>
-                <div className='flex flex-col items-center'>
+                <div className='flex flex-col items-center' data-info-panel-id="faustDelayNode-feedback">
                     <span>Feedback</span>
                     <Knob value={data.faustDelay_feedback} default_value={0.5} id='feedback' max_value={0.99}
                           min_value={0.0} callback={newSetParams}/>
                     <span>{amountFormat(data.faustDelay_feedback * 100)}</span>
                 </div>
-                <div className='flex flex-col items-center'>
+                <div className='flex flex-col items-center' data-info-panel-id="faustDelayNode-wet">
                     <span>Dry/Wet</span>
                     <Numbox value={data.faustDelay_wet} default_value={0.5} id='wet' max_value={1}
                           min_value={0} callback={newSetParams} float={true}/>

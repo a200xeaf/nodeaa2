@@ -1,7 +1,7 @@
 import {Node as FlowNode} from "@xyflow/react";
 import {createDevice, Device, IPatcher, MIDIEvent, Parameter, WorkletDevice} from "@rnbo/js";
 import {FaustMonoAudioWorkletNode, FaustPolyAudioWorkletNode} from "@grame/faustwasm";
-import {createFaustNode} from "./utils/createfaustnode.ts";
+import {createFaustNode} from "./utils/create-faust-node.ts";
 
 export const context = new AudioContext({latencyHint: 1});
 console.log(context.baseLatency.toString())

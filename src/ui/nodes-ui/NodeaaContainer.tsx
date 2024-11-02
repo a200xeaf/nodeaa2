@@ -5,9 +5,10 @@ interface NodeContainerProps {
     children: ReactNode;
     height: number;
     width: number;
+    infoID?: string;
 }
 
-const NodeaaContainer: FC<NodeContainerProps> = ({ selected, children, width, height }) => {
+const NodeaaContainer: FC<NodeContainerProps> = ({ selected, children, width, height, infoID }) => {
     return (
         <div
             className="drop-shadow-lg rounded-xl"
@@ -18,6 +19,7 @@ const NodeaaContainer: FC<NodeContainerProps> = ({ selected, children, width, he
                     ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
                     : 'none',  // No shadow if not selected
             }}
+            data-info-panel-id={infoID}
         >
             {children}
         </div>
