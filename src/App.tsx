@@ -12,7 +12,7 @@ import AudioEdge from "./ui/edges/AudioEdge.tsx";
 import MidiEdge from "./ui/edges/MidiEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
 import CreatorNode from "@/nodes/CreatorNode/CreatorNode.tsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import FaustLPFNode from "@/nodes/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
@@ -20,6 +20,8 @@ import MidiKeyboardNode from "@/nodes/MidiKeyboardNode/MidiKeyboardNode.tsx";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
 import {infoMap, InfoObject} from "@/engine/types/info-map.ts";
 import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
+import {CSSTransition} from "react-transition-group";
+import './animations.css'
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -92,7 +94,10 @@ const App: React.FC = () => {
     const [mousePos, setMousePos] = useState({x: 0, y: 0});
     const [draggingKnobId, setDraggingKnobId] = useState<string | null>(null);
     const [initialMouseY, setInitialMouseY] = useState<number>(0);
+
+    const infoPanelRef = useRef<HTMLDivElement>(null)
     const [infoPanelID, setInfoPanelID] = useState<InfoObject | null>(null);
+    const [showInfoPanel, setShowInfoPanel] = useState<boolean>(true);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -107,6 +112,10 @@ const App: React.FC = () => {
                     y: (mousePos.y - 20 - y) / zoom
                 };
                 createNode('creatorNode', pos);
+            }
+
+            if (e.key.toLowerCase() === 'i') {
+                setShowInfoPanel((prev) => !prev);
             }
         };
 
@@ -234,7 +243,17 @@ const App: React.FC = () => {
                 Nodeaa v0.0.12 +
             </p>
             <NodeaaWelcome />
-            <NodeaaInfoPanel idInfo={infoPanelID} />
+            <CSSTransition
+                in={showInfoPanel}
+                timeout={100}  // Duration of the transition
+                classNames="fade" // Base name for transition classes
+                nodeRef={infoPanelRef} // Pass the ref to manage DOM nodes
+                unmountOnExit
+            >
+                <div ref={infoPanelRef}>
+                    <NodeaaInfoPanel idInfo={infoPanelID} />
+                </div>
+            </CSSTransition>
         </div>
     );
 };

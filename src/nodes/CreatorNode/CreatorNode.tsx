@@ -93,7 +93,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
     }, [id, selfNodeDelete]);
 
     return (
-        <div className='bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag' ref={nodeRef}>
+        <div className='bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-[99999]' ref={nodeRef}>
             <input
                 type='text'
                 value={search}
