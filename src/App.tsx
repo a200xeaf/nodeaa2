@@ -22,6 +22,7 @@ import {infoMap, InfoObject} from "@/engine/types/info-map.ts";
 import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
 import {CSSTransition} from "react-transition-group";
 import './animations.css'
+import {NODEAACONFIG} from "@/engine/constants.ts";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -240,7 +241,7 @@ const App: React.FC = () => {
                 {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}
             </p>
             <p className='absolute bottom-0 right-[3.3rem] text-[0.66rem] text-gray-400 p-[0.06rem]'>
-                Nodeaa v0.0.12 +
+                {`Nodeaa v${NODEAACONFIG.VERSION} +`}
             </p>
             <NodeaaWelcome />
             <CSSTransition

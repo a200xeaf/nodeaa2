@@ -6,6 +6,7 @@ import {useShallow} from "zustand/react/shallow";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
+import PianoKeyboard from "@/ui/inputs/PianoKeyboard.tsx";
 
 type MidiKeyboardNodeData = {
     midikeyboard_octave: number;
@@ -17,6 +18,7 @@ type MidiKeyboardNodeType = Node<MidiKeyboardNodeData, 'midiKeyboardNode'>;
 
 const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, selected}) => {
     const [pressedKeys, setPressedKeys] = useState(new Set<string>());
+    const [pressedMidiNotes, setPressedMidiNotes] = useState<number[]>([]);
     const [lastKey, setLastKey] = useState<[number | undefined, number | undefined]>([undefined, undefined]);
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
@@ -44,10 +46,12 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 const midiNote = midiKeyMap.get(e.key)
                 if (midiNote !== undefined) {
                     console.log("MIDI Note Pressed:", midiNote + data.midikeyboard_octave, "at velocity", data.midikeyboard_velocity)
+                    const midiNoteWithOctave = midiNote + data.midikeyboard_octave;
                     const midiMessage: Uint8Array = new Uint8Array([144, midiNote + data.midikeyboard_octave, data.midikeyboard_velocity]);
                     mainemitter.emit(id + ":" + "main_midi", midiMessage);
                     setLastKey([midiNote + data.midikeyboard_octave, data.midikeyboard_velocity])
                     setPressedKeys((prev) => new Set(prev).add(e.key))
+                    setPressedMidiNotes((prev) => [...prev, midiNoteWithOctave]);
                 }
             }
             if (octaveKeyMap.has(e.key)) {
@@ -78,6 +82,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 const midiNote = midiKeyMap.get(e.key)
                 if (midiNote !== undefined) {
                     console.log("MIDI Note Released:", midiNote + data.midikeyboard_octave);
+                    const midiNoteWithOctave = midiNote + data.midikeyboard_octave;
                     const midiMessage: Uint8Array = new Uint8Array([128, midiNote + data.midikeyboard_octave, 0]);
                     mainemitter.emit(id + ":" + "main_midi", midiMessage);
                     setPressedKeys((prev) => {
@@ -85,6 +90,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                         updatedKeys.delete(e.key);
                         return updatedKeys;
                     });
+                    setPressedMidiNotes((prev) => prev.filter(note => note !== midiNoteWithOctave));
                 }
             }
         };
@@ -99,9 +105,9 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
     }, [pressedKeys, midiKeyMap, data]);
 
     return (
-        <NodeaaContainer selected={selected} width={20} height={8}>
+        <NodeaaContainer selected={selected} width={27} height={12}>
             <NodeaaHeader nodeName='Midi Keyboard' headerColor='bg-blue-500' />
-            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[6rem] rounded-b-xl'>
+            <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[10rem] rounded-b-xl'>
                 <div className='flex justify-center'>
                     <button
                         onClick={handleActive}
@@ -116,6 +122,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 <p>Last key: {midiNumberToNote(lastKey[0])} with
                     velocity {lastKey[1] === undefined ? "nothing" : lastKey[1]}</p>
                 <p>Octave: {data.midikeyboard_octave >= 0 ? `+${data.midikeyboard_octave / 12}` : `${data.midikeyboard_octave / 12}`}</p>
+                <PianoKeyboard keyHeight={70} keyWidth={46} numKeys={16} startNote={48 + data.midikeyboard_octave} heldNotes={pressedMidiNotes} />
             </div>
             <Handle type="source" position={Position.Bottom} id='midi-main_midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
         </NodeaaContainer>
