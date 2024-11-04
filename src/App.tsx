@@ -106,7 +106,7 @@ const App: React.FC = () => {
                 (document.activeElement.tagName === 'INPUT' ||
                     document.activeElement.tagName === 'TEXTAREA');
 
-            if (e.key === 'n' && !isInputFocused) {
+            if (e.key.toLowerCase() === 'n' && !isInputFocused) {
                 const pos = {
                     x: (mousePos.x - 40 - x) / zoom,
                     y: (mousePos.y - 20 - y) / zoom
@@ -114,7 +114,7 @@ const App: React.FC = () => {
                 createNode('creatorNode', pos);
             }
 
-            if (e.key.toLowerCase() === 'i') {
+            if (e.key.toLowerCase() === 'i' && !isInputFocused) {
                 setShowInfoPanel((prev) => !prev);
             }
         };
