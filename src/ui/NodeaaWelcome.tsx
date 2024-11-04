@@ -6,10 +6,16 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog.tsx";
 import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel.tsx";
+import {useNodeStore} from "@/engine/store.ts";
+import {useShallow} from "zustand/react/shallow";
+import {memo} from "react";
 
 const NodeaaWelcome = () => {
+    const welcomeDialog = useNodeStore(useShallow((state) => state.welcomeDialog));
+    const setWelcomeDialog = useNodeStore(useShallow((state) => state.setWelcomeDialog));
+    console.log(welcomeDialog);
     return (
-        <AlertDialog defaultOpen={true}>
+        <AlertDialog defaultOpen={true} open={welcomeDialog} onOpenChange={setWelcomeDialog}>
             <AlertDialogContent
                 className="absolute z-[9999] w-[90%] max-w-[1200px] max-h-[90vh] min-w-[300px] min-h-[400px]"
             >
@@ -111,4 +117,4 @@ const NodeaaWelcome = () => {
     )
 }
 
-export default NodeaaWelcome;
+export default memo(NodeaaWelcome);

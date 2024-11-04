@@ -53,6 +53,8 @@ export interface NodeStoreState {
     isFullscreen: boolean;
     toggleFullscreen: () => void;
     setFullscreen: (state: boolean) => void;
+    welcomeDialog: boolean;
+    setWelcomeDialog: (state: boolean) => void;
 }
 
 const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
@@ -195,5 +197,9 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
     },
     setFullscreen: (state: boolean) => {
         set({isFullscreen: state});
+    },
+    welcomeDialog: true,
+    setWelcomeDialog: (state: boolean) => {
+        set({welcomeDialog: state});
     }
 }))

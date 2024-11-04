@@ -25,6 +25,8 @@ const NodeToolbarMenu = () => {
     const isFullscreen = useNodeStore(useShallow((state) => state.isFullscreen));  // Access fullscreen state
     const setFullscreen = useNodeStore(useShallow((state) => state.setFullscreen)); // To update fullscreen state
 
+    const setWelcomeDialog = useNodeStore(useShallow((state) => state.setWelcomeDialog));
+
     // UseEffect to watch fullscreen change
     useEffect(() => {
         const onFullscreenChange = () => {
@@ -155,6 +157,14 @@ const NodeToolbarMenu = () => {
                         <MenubarSeparator />
                         <MenubarItem>
                             <a href='https://forms.gle/DG422ScARNp9SUJq5' target='_blank'>Feature Request Feedback</a>
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarMenu>
+                <MenubarMenu>
+                    <MenubarTrigger className='pointer-events-auto'>Help</MenubarTrigger>
+                    <MenubarContent>
+                        <MenubarItem>
+                            <button onClick={() => setWelcomeDialog(true)}>Open Welcome Dialog</button>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
