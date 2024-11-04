@@ -15,6 +15,7 @@ import {
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import React, {useEffect} from "react";
+import { saveAs } from "file-saver";
 
 const NodeToolbarMenu = () => {
     const createNode = useNodeStore(useShallow((state) => state.createNode));
@@ -42,6 +43,20 @@ const NodeToolbarMenu = () => {
     }, [setFullscreen]);
 
     const toggleFullscreen = useNodeStore(useShallow((state) => state.toggleFullscreen)); // To update fullscreen state
+
+    const testingSave = () => {
+        const storeState  = useNodeStore.getState()
+
+        const savedProject = JSON.stringify({
+            nodes: storeState.nodes,
+            edges: storeState.edges,
+            viewport: storeState.viewport,
+            graphBackground: storeState.graphBackground,
+        })
+
+        const savedProjectBlob = new Blob([savedProject], { type: 'application/json' });
+        saveAs(savedProjectBlob, 'NewProject.nodeaa');
+    }
 
     return (
         <div className='absolute flex gap-x-6 z-[9999] h-16 w-full top-0 left-0 pt-2 px-4 pointer-events-none'>
@@ -165,6 +180,9 @@ const NodeToolbarMenu = () => {
                     <MenubarContent>
                         <MenubarItem>
                             <button onClick={() => setWelcomeDialog(true)}>Open Welcome Dialog</button>
+                        </MenubarItem>
+                        <MenubarItem>
+                            <button onClick={testingSave}>Save</button>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>

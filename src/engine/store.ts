@@ -168,7 +168,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
     },
     onNodesDelete: (nodes) => {
         for (const {id} of nodes) {
-            if (!(id.length > 21)) {
+            if (!(id.length > 21) && !(id.includes("output"))) {
                 deleteAudioNode(id)
             }
         }
