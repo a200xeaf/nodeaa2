@@ -17,7 +17,7 @@ const NodeaaWelcome = () => {
     return (
         <AlertDialog defaultOpen={true} open={welcomeDialog} onOpenChange={setWelcomeDialog}>
             <AlertDialogContent
-                className="absolute z-[9999] w-[90%] max-w-[1200px] max-h-[90vh] min-w-[300px] min-h-[400px]"
+                className="absolute z-[9999] w-[90%] max-w-[1000px] max-h-[90vh] min-w-[100px] min-h-[20px]"
             >
                 <AlertDialogHeader className='items-center'>
                     <AlertDialogTitle className="inline-block w-fit text-4xl font-bold text-center select-none
