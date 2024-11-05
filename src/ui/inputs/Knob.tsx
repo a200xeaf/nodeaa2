@@ -3,7 +3,7 @@ import p5 from "p5";
 import {scaleExp} from "@/engine/utils/number-operations.ts";
 import {nanoid} from "nanoid";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
-import {BaseUIEvent} from "@/engine/types/uitypes.ts";
+import {BaseUIEvent} from "@/engine/types/ui-types.ts";
 
 interface KnobProps {
     id: string

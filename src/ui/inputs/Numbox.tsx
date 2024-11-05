@@ -2,7 +2,7 @@ import {useEffect, useRef, FC, memo} from "react";
 import p5 from "p5";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
 import {nanoid} from "nanoid";
-import {BaseUIEvent} from "@/engine/types/uitypes.ts";
+import {BaseUIEvent} from "@/engine/types/ui-types.ts";
 
 interface NumboxProps {
     id: string

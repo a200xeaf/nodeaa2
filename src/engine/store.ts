@@ -20,7 +20,7 @@ import {
 } from "./audio.ts";
 import {WebMidi} from "webmidi";
 import rawNodesConfig from './nodes.json'
-import {NodesConfig} from "@/engine/types/nodetypes.ts";
+import {NodesConfig} from "@/engine/types/node-types.ts";
 
 export interface NodeStoreState {
     nodes: FlowNode[];
