@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/menubar.tsx";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
-import React, {useEffect} from "react";
+import React, {ChangeEvent, useEffect, useRef} from "react";
 import { saveAs } from "file-saver";
 
 const NodeToolbarMenu = () => {
@@ -56,6 +56,43 @@ const NodeToolbarMenu = () => {
 
         const savedProjectBlob = new Blob([savedProject], { type: 'application/json' });
         saveAs(savedProjectBlob, 'NewProject.nodeaa');
+    }
+
+    const testingLoad = (savedProject: string) => {
+        try {
+            const { nodes, edges, viewport, graphBackground } = JSON.parse(savedProject);
+
+            useNodeStore.setState({
+                nodes: nodes || [],
+                edges: edges || [],
+                viewport: viewport || { x: 0, y: 0, zoom: 1},
+                graphBackground: graphBackground || 'lines'
+            })
+        } catch (e) {
+            console.log("Failed to load project:", e);
+        }
+    }
+
+    const projectInputRef = useRef<HTMLInputElement | null>(null);
+
+    const testingFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const project = e.target.files?.[0]
+        if (project) {
+            const reader = new FileReader();
+            reader.onload = (file) => {
+                const text = file.target?.result
+                if (typeof text === "string") {
+                    testingLoad(text)
+                }
+            }
+            reader.readAsText(project)
+        }
+    }
+
+    const activateFileDialog = () => {
+        if (projectInputRef.current) {
+            projectInputRef.current.click()
+        }
     }
 
     return (
@@ -102,9 +139,10 @@ const NodeToolbarMenu = () => {
                                 </MenubarRadioGroup>
                             </MenubarSubContent>
                         </MenubarSub>
-                        <MenubarSeparator />
+                        <MenubarSeparator/>
                         <MenubarItem onClick={toggleFullscreen}>
-                            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'} <MenubarShortcut>F11</MenubarShortcut>
+                            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+                            <MenubarShortcut>F11</MenubarShortcut>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
@@ -116,18 +154,20 @@ const NodeToolbarMenu = () => {
                         <MenubarSub>
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Simple Poly</MenubarItem>
-                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>Simple Oscillator Node</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Simple
+                                    Poly</MenubarItem>
+                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>Simple Oscillator
+                                    Node</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
-                        <MenubarSeparator />
+                        <MenubarSeparator/>
                         <MenubarSub>
                             <MenubarSubTrigger>Physical Instruments</MenubarSubTrigger>
                             <MenubarSubContent>
                                 <MenubarItem>Nothing yet!</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
-                        <MenubarSeparator />
+                        <MenubarSeparator/>
                         <MenubarSub>
                             <MenubarSubTrigger>Samplers</MenubarSubTrigger>
                             <MenubarSubContent>
@@ -142,9 +182,12 @@ const NodeToolbarMenu = () => {
                         <MenubarSub>
                             <MenubarSubTrigger>Basic Effects</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain (Volume)</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass Filter</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>Delay Node</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain
+                                    (Volume)</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass
+                                    Filter</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>Delay
+                                    Node</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                     </MenubarContent>
@@ -169,7 +212,7 @@ const NodeToolbarMenu = () => {
                         <MenubarItem>
                             <a href='https://forms.gle/SSrYo6Weiristi5f6' target='_blank'>Bug Report Feedback</a>
                         </MenubarItem>
-                        <MenubarSeparator />
+                        <MenubarSeparator/>
                         <MenubarItem>
                             <a href='https://forms.gle/DG422ScARNp9SUJq5' target='_blank'>Feature Request Feedback</a>
                         </MenubarItem>
@@ -184,9 +227,13 @@ const NodeToolbarMenu = () => {
                         <MenubarItem>
                             <button onClick={testingSave}>Save</button>
                         </MenubarItem>
+                        <MenubarItem>
+                            <button onClick={activateFileDialog}>Load</button>
+                        </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
+            <input type='file' onChange={testingFile} className='hidden' ref={projectInputRef} multiple={false} accept=".nodeaa" />
         </div>
     )
 }
