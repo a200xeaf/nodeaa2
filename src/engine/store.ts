@@ -45,7 +45,9 @@ export interface NodeStoreState {
     selfNodeDelete: (id: string) => void
     onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode['data']>) => void;
-    createNode: (type: string, pos?: {x: number, y: number}, center?: boolean) => void;
+    createNode: (type: string, pos?: {x: number, y: number}, center?: boolean, useId?: string) => Promise<void>;
+
+    clearProject: () => void;
 
     graphBackground: string
     setGraphBackground: (selection: string) => void
@@ -53,6 +55,7 @@ export interface NodeStoreState {
     isFullscreen: boolean;
     toggleFullscreen: () => void;
     setFullscreen: (state: boolean) => void;
+
     welcomeDialog: boolean;
     setWelcomeDialog: (state: boolean) => void;
 }
@@ -78,21 +81,25 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
 
     isRunning: isRunningEngine(),
 
-    createNode: (type, pos = {x: 0, y: 0}, center = false) => {
+    createNode: async(type, pos = {x: 0, y: 0}, center = false, useId = undefined) => {
         const nodeConfig = nodesConfig[type];
 
         // If the type is not found in the config, exit the function
         if (!nodeConfig) {
             console.error(`Node type '${type}' not found in configuration.`);
-            return;  // Early exit
+            return Promise.reject(new Error(`Node type '${type}' not found in configuration.`));
         }
 
         // Generate a unique ID for the node
         let id: string
-        if (nodeConfig.idPrefix === "") {
-            id = nanoid()
+        if (useId) {
+            id = useId
         } else {
-            id = `${nodeConfig.idPrefix}-${nanoid()}`
+            if (nodeConfig.idPrefix === "") {
+                id = nanoid()
+            } else {
+                id = `${nodeConfig.idPrefix}-${nanoid()}`
+            }
         }
         const data = nodeConfig.defaultData;
 
@@ -107,14 +114,14 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             position = { x: pos.x, y: pos.y }
         }
 
+        // Add the new node to the store
+        set({ nodes: [...get().nodes, { id, type, data, position }] });
+
         // Create audio node if required
         if (nodeConfig.hasAudio && nodeConfig.audioNodeParams) {
             const { engine, type: audioType, voices } = nodeConfig.audioNodeParams;
-            createAudioNode(id, engine, audioType, data, voices);
+            await createAudioNode(id, engine, audioType, data, voices);
         }
-
-        // Add the new node to the store
-        set({ nodes: [...get().nodes, { id, type, data, position }] });
 
         // console.log(`Node '${nodeConfig.realName}' (ID: ${id}) created at position`, position);
     },
@@ -185,8 +192,20 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
             nodes: get().nodes.filter(node => node.id !== id)  // Remove node by filtering out the one with the given id
         });
     },
+
+    clearProject: () => {
+        get().nodes.forEach((node) => {
+            if (!(node.id.length > 21) && !node.id.includes("output")) {
+                deleteAudioNode(node.id);
+            }
+        });
+
+        set({ nodes: [], edges: [] });
+    },
+
     graphBackground: "lines",
     setGraphBackground: (selection: string) => set({ graphBackground: selection }),
+
     isFullscreen: Boolean(document.fullscreenElement),
     toggleFullscreen: () => {
         if (!document.fullscreenElement) {
@@ -198,6 +217,7 @@ export const useNodeStore = create<NodeStoreState>((set, get) => ({
     setFullscreen: (state: boolean) => {
         set({isFullscreen: state});
     },
+
     welcomeDialog: true,
     setWelcomeDialog: (state: boolean) => {
         set({welcomeDialog: state});

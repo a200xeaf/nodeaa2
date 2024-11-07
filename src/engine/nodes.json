@@ -1,4 +1,12 @@
 {
+  "outNode": {
+    "nodeName": "outNode",
+    "idPrefix": "output",
+    "realName": "Output",
+    "defaultData": {},
+    "hasAudio": false,
+    "version": "1.0.0"
+  },
   "osc2Node": {
     "nodeName": "osc2Node",
     "idPrefix": "",

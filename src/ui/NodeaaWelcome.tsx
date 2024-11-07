@@ -13,7 +13,6 @@ import {memo} from "react";
 const NodeaaWelcome = () => {
     const welcomeDialog = useNodeStore(useShallow((state) => state.welcomeDialog));
     const setWelcomeDialog = useNodeStore(useShallow((state) => state.setWelcomeDialog));
-    console.log(welcomeDialog);
     return (
         <AlertDialog defaultOpen={true} open={welcomeDialog} onOpenChange={setWelcomeDialog}>
             <AlertDialogContent

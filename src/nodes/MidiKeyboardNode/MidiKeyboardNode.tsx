@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {memo, useEffect, useState} from "react";
 import {midiKeyMap, noteNames, octaveKeyMap, velocityKeyMap} from "@/nodes/MidiKeyboardNode/MidiTypes.ts";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useNodeStore} from "@/engine/store.ts";
@@ -45,7 +45,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
             if (!pressedKeys.has(e.key) && midiKeyMap.has(e.key)) {
                 const midiNote = midiKeyMap.get(e.key)
                 if (midiNote !== undefined) {
-                    console.log("MIDI Note Pressed:", midiNote + data.midikeyboard_octave, "at velocity", data.midikeyboard_velocity)
+                    // console.log("MIDI Note Pressed:", midiNote + data.midikeyboard_octave, "at velocity", data.midikeyboard_velocity)
                     const midiNoteWithOctave = midiNote + data.midikeyboard_octave;
                     const midiMessage: Uint8Array = new Uint8Array([144, midiNote + data.midikeyboard_octave, data.midikeyboard_velocity]);
                     mainemitter.emit(id + ":" + "main_midi", midiMessage);
@@ -58,7 +58,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 const octaveChange = octaveKeyMap.get(e.key)
                 if (octaveChange !== undefined) {
                     const newOctave = Math.max(Math.min((data.midikeyboard_octave + octaveChange), 48), -48)
-                    console.log("Octave is now", newOctave)
+                    // console.log("Octave is now", newOctave)
                     updateNode(id, {midikeyboard_octave: newOctave})
                 }
             }
@@ -71,7 +71,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                     } else {
                         newVelocity = Math.max(Math.min((data.midikeyboard_velocity + velocityChange), 127), 0)
                     }
-                    console.log("Velocity is now", newVelocity)
+                    // console.log("Velocity is now", newVelocity)
                     updateNode(id, {midikeyboard_velocity: newVelocity})
                 }
             }
@@ -129,4 +129,4 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
     );
 };
 
-export default React.memo(MidiKeyboardNode);
+export default memo(MidiKeyboardNode);

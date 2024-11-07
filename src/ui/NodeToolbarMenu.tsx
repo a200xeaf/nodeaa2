@@ -15,9 +15,12 @@ import {
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import React, {ChangeEvent, useEffect, useRef} from "react";
-import { saveAs } from "file-saver";
+import {useReactFlow} from "@xyflow/react";
+import {projectLoad, projectNew, projectSave} from "@/engine/utils/save-load.ts";
 
 const NodeToolbarMenu = () => {
+    const { setViewport } = useReactFlow();
+
     const createNode = useNodeStore(useShallow((state) => state.createNode));
 
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
@@ -44,55 +47,39 @@ const NodeToolbarMenu = () => {
 
     const toggleFullscreen = useNodeStore(useShallow((state) => state.toggleFullscreen)); // To update fullscreen state
 
-    const testingSave = () => {
-        const storeState  = useNodeStore.getState()
-
-        const savedProject = JSON.stringify({
-            nodes: storeState.nodes,
-            edges: storeState.edges,
-            viewport: storeState.viewport,
-            graphBackground: storeState.graphBackground,
-        })
-
-        const savedProjectBlob = new Blob([savedProject], { type: 'application/json' });
-        saveAs(savedProjectBlob, 'NewProject.nodeaa');
-    }
-
-    const testingLoad = (savedProject: string) => {
-        try {
-            const { nodes, edges, viewport, graphBackground } = JSON.parse(savedProject);
-
-            useNodeStore.setState({
-                nodes: nodes || [],
-                edges: edges || [],
-                viewport: viewport || { x: 0, y: 0, zoom: 1},
-                graphBackground: graphBackground || 'lines'
-            })
-        } catch (e) {
-            console.log("Failed to load project:", e);
-        }
-    }
-
     const projectInputRef = useRef<HTMLInputElement | null>(null);
 
-    const testingFile = (e: ChangeEvent<HTMLInputElement>) => {
-        const project = e.target.files?.[0]
-        if (project) {
-            const reader = new FileReader();
-            reader.onload = (file) => {
-                const text = file.target?.result
-                if (typeof text === "string") {
-                    testingLoad(text)
-                }
-            }
-            reader.readAsText(project)
-        }
-    }
+    const loadProjectFromFile = async(e: ChangeEvent<HTMLInputElement>) => {
+        const projectFile = e.target.files?.[0];
 
-    const activateFileDialog = () => {
+        if (projectFile) {
+            const reader = new FileReader();
+            reader.onload = async (fileEvent) => {
+                const projectText = fileEvent.target?.result;
+
+                if (typeof projectText === "string") {
+                    const { success, viewport } = await projectLoad(projectText);
+
+                    if (success && viewport) {
+                        await setViewport(viewport, { duration: 500 });
+                    } else {
+                        console.log("Failed to load project: Check the project file structure.");
+                    }
+                }
+            };
+            reader.readAsText(projectFile);
+        }
+    };
+
+    const handleLoadProject = () => {
         if (projectInputRef.current) {
             projectInputRef.current.click()
         }
+    }
+
+    const handleNewProject = () => {
+        projectNew()
+        setViewport({ x: 0, y: 0, zoom: 1 }, { duration: 500 });
     }
 
     return (
@@ -221,19 +208,22 @@ const NodeToolbarMenu = () => {
                 <MenubarMenu>
                     <MenubarTrigger className='pointer-events-auto'>Help</MenubarTrigger>
                     <MenubarContent>
-                        <MenubarItem>
-                            <button onClick={() => setWelcomeDialog(true)}>Open Welcome Dialog</button>
+                        <MenubarItem onClick={() => setWelcomeDialog(true)} className='cursor-pointer'>
+                            Open Welcome Dialog
                         </MenubarItem>
-                        <MenubarItem>
-                            <button onClick={testingSave}>Save</button>
+                        <MenubarItem onClick={handleNewProject} className='cursor-pointer'>
+                            New
                         </MenubarItem>
-                        <MenubarItem>
-                            <button onClick={activateFileDialog}>Load</button>
+                        <MenubarItem onClick={projectSave} className='cursor-pointer'>
+                            Save
+                        </MenubarItem>
+                        <MenubarItem onClick={handleLoadProject} className='cursor-pointer'>
+                            Load
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
-            <input type='file' onChange={testingFile} className='hidden' ref={projectInputRef} multiple={false} accept=".nodeaa" />
+            <input type='file' onChange={loadProjectFromFile} className='hidden' ref={projectInputRef} multiple={false} accept=".nodeaa" />
         </div>
     )
 }

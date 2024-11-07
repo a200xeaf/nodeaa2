@@ -86,6 +86,10 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
         throw new Error(`Node with ID ${id} not found`);
     }
 
+    if (id.includes("output")) {
+        return
+    }
+
     try {
         // Determine the type of node (RNBO, Faust, or other) before entering the loop
         if (isRNBO(node)) {
