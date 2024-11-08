@@ -1,4 +1,4 @@
-const fixedMax = (x: number, max: number): string => {
+export const fixedMax = (x: number, max: number): string => {
     let final: string
     const length: number = Math.floor(Math.abs(x)).toString().length
 

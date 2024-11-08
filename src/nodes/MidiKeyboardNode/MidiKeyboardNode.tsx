@@ -81,7 +81,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
             if (pressedKeys.has(e.key) && midiKeyMap.has(e.key)) {
                 const midiNote = midiKeyMap.get(e.key)
                 if (midiNote !== undefined) {
-                    console.log("MIDI Note Released:", midiNote + data.midikeyboard_octave);
+                    // console.log("MIDI Note Released:", midiNote + data.midikeyboard_octave);
                     const midiNoteWithOctave = midiNote + data.midikeyboard_octave;
                     const midiMessage: Uint8Array = new Uint8Array([128, midiNote + data.midikeyboard_octave, 0]);
                     mainemitter.emit(id + ":" + "main_midi", midiMessage);
@@ -105,7 +105,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
     }, [pressedKeys, midiKeyMap, data]);
 
     return (
-        <NodeaaContainer selected={selected} width={27} height={12}>
+        <NodeaaContainer selected={selected} width={23} height={12}>
             <NodeaaHeader nodeName='Midi Keyboard' headerColor='bg-blue-500' />
             <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[10rem] rounded-b-xl'>
                 <div className='flex justify-center'>
@@ -122,7 +122,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 <p>Last key: {midiNumberToNote(lastKey[0])} with
                     velocity {lastKey[1] === undefined ? "nothing" : lastKey[1]}</p>
                 <p>Octave: {data.midikeyboard_octave >= 0 ? `+${data.midikeyboard_octave / 12}` : `${data.midikeyboard_octave / 12}`}</p>
-                <PianoKeyboard keyHeight={70} keyWidth={46} numKeys={16} startNote={48 + data.midikeyboard_octave} heldNotes={pressedMidiNotes} />
+                <PianoKeyboard keyHeight={70} keyWidth={39} numKeys={16} startNote={48 + data.midikeyboard_octave} heldNotes={pressedMidiNotes} />
             </div>
             <Handle type="source" position={Position.Bottom} id='midi-main_midi' style={{ backgroundColor: 'rgb(59, 130, 246)' }}/>
         </NodeaaContainer>
