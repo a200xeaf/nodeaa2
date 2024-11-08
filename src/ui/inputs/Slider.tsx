@@ -38,13 +38,13 @@ const Slider: FC<SliderProps> = ({
     // Memoized functions to convert between value and position
     const valueToPosition = useMemo(() => {
         return (value: number): number => {
-            return scaleExp(value, min_value, max_value, 0, 1, scale_exponent);
+            return scaleExp(value, min_value, max_value, 0, 1, scale_exponent, false);
         };
     }, [min_value, max_value, scale_exponent]);
 
     const positionToValue = useMemo(() => {
         return (position: number): number => {
-            return scaleExp(position, 0, 1, min_value, max_value, scale_exponent);
+            return scaleExp(position, min_value, max_value, 0, 1, scale_exponent, true);
         };
     }, [min_value, max_value, scale_exponent]);
 

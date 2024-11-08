@@ -5,6 +5,7 @@ import {useShallow} from "zustand/react/shallow";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 import Slider from "@/ui/inputs/Slider.tsx";
+import {dbFormat} from "@/engine/utils/number-formats.ts";
 
 type FaustGainNodeData = {
     faustgain_Gain: number
@@ -23,8 +24,11 @@ const FaustGainNode: FC<NodeProps<FaustGainNodeType>> = ({id, data, selected}) =
         <NodeaaContainer selected={selected} width={15} height={7}>
             <Handle type="target" position={Position.Top} id='audio'/>
             <NodeaaHeader nodeName='Gain' headerColor='bg-purple-500' />
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[5rem] rounded-b-xl'>
-                <Slider id='Gain' callback={setParams} value={data.faustgain_Gain} min_value={0} max_value={1} default_value={1} filled={true} orientation='horizontal' />
+            <div className='flex flex-col justify-center items-start nodrag cursor-default bg-white p-2 h-[5rem] rounded-b-xl'>
+                <span>Gain</span>
+                <Slider id='Gain' callback={setParams} value={data.faustgain_Gain} min_value={0} max_value={1}
+                        default_value={1} filled={true} orientation='horizontal' scale_exponent={1.4}/>
+                <span>{dbFormat(20 * Math.log10(data.faustgain_Gain))}</span>
             </div>
 
             <Handle type="source" position={Position.Bottom} id='audio'/>
