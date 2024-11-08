@@ -29,7 +29,7 @@
     "nodeName": "faustLPFNode",
     "idPrefix": "",
     "realName": "Lowpass Filter",
-    "defaultData": { "faustLPF_frequencyVisible_data": 0.44, "faustLPF_frequency": 2000, "faustLPF_quality": 0.1 },
+    "defaultData": { "faustLPF_frequency": 2000, "faustLPF_quality": 0.1 },
     "audioNodeParams": { "engine": "faust", "type": "faustLPF" },
     "hasAudio": true,
     "version": "1.0.0"

@@ -55,5 +55,20 @@ export const infoMap = new Map<string, InfoObject>([
         parent: "Lowpass Filter",
         type: "Effects",
         description: "Adjusts the resonance of the filter at the cutoff frequency. Higher values create a sharper, more pronounced effect."
-    }]
+    }],
+
+    // Gain Node
+    ["faustGainNode", {
+        name: "Gain",
+        parent: null,
+        type: "Effects",
+        description: "Controls the volume of the audio signal. Use this to make the sound louder or quieter before it goes to other effects or the output."
+    }],
+    // Gain Node - Gain Control
+    ["faustGainNode-gain", {
+        name: "Gain",
+        parent: "Gain",
+        type: "Effects",
+        description: "Sets how loud or soft the audio is. Moving this control up increases the volume, while moving it down lowers it. The volume change is measured in decibels (dB)."
+    }],
 ]);

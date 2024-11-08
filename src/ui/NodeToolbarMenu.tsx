@@ -141,10 +141,8 @@ const NodeToolbarMenu = () => {
                         <MenubarSub>
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Simple
-                                    Poly</MenubarItem>
-                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>Simple Oscillator
-                                    Node</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Midi Synth</MenubarItem>
+                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>Simple Oscillator</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                         <MenubarSeparator/>
@@ -169,12 +167,9 @@ const NodeToolbarMenu = () => {
                         <MenubarSub>
                             <MenubarSubTrigger>Basic Effects</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain
-                                    (Volume)</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass
-                                    Filter</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>Delay
-                                    Node</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>Delay</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass Filter</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                     </MenubarContent>
