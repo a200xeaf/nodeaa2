@@ -53,7 +53,7 @@ const Knob: FC<KnobProps> = ({
         const controllerId = nanoid()
         let angle = valueToAngle(value);
         let isDragging: boolean = false;
-        const sensitivity = 0.06;
+        const sensitivity = 0.08;
 
         const sketch = (p: p5) => {
             const size = 50;

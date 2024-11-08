@@ -94,6 +94,7 @@ const App: React.FC = () => {
 
     const [mousePos, setMousePos] = useState({x: 0, y: 0});
     const [draggingKnobId, setDraggingKnobId] = useState<string | null>(null);
+    const [initialMouseX, setInitialMouseX] = useState<number>(0);
     const [initialMouseY, setInitialMouseY] = useState<number>(0);
 
     const infoPanelRef = useRef<HTMLDivElement>(null)
@@ -127,6 +128,7 @@ const App: React.FC = () => {
 
                 // Start dragging
                 setDraggingKnobId(canvasID);
+                setInitialMouseX(e.clientX);
                 setInitialMouseY(e.clientY);
 
                 // Emit 'mousedown' event to the knob
@@ -137,7 +139,7 @@ const App: React.FC = () => {
         };
 
         const handleMouseMove = (e: MouseEvent) => {
-            setMousePos({x: e.clientX, y: e.clientY});
+            setMousePos({ x: e.clientX, y: e.clientY });
 
             if (e.target !== null && draggingKnobId === null) {
                 const target = e.target as HTMLElement;
@@ -146,20 +148,25 @@ const App: React.FC = () => {
                 const infoPanelID = closestInfoPanel?.getAttribute("data-info-panel-id");
 
                 if (infoPanelID) {
-                    const infoText = infoMap.get(infoPanelID)
-                    setInfoPanelID(infoText || null)
-                }else {
-                    setInfoPanelID(null)
+                    const infoText = infoMap.get(infoPanelID);
+                    setInfoPanelID(infoText || null);
+                } else {
+                    setInfoPanelID(null);
                 }
             }
 
             if (draggingKnobId) {
+                const deltaX = e.clientX - initialMouseX;
                 const deltaY = e.clientY - initialMouseY;
-                setInitialMouseY(e.clientY); // Update for next move
+
+                // Update initial positions for the next move
+                setInitialMouseX(e.clientX);
+                setInitialMouseY(e.clientY);
 
                 // Emit 'mousemove' event to the knob
                 mainemitter.emit(draggingKnobId, {
                     type: 'mousemove',
+                    deltaX: deltaX,
                     deltaY: deltaY,
                     shiftKey: e.shiftKey,
                 });
@@ -204,7 +211,7 @@ const App: React.FC = () => {
             document.removeEventListener('mouseup', handleMouseUp);
             document.removeEventListener('dblclick', handleDoubleClick);
         }
-    }, [mousePos, x, y, zoom, createNode, draggingKnobId, initialMouseY]);
+    }, [mousePos, x, y, zoom, createNode, draggingKnobId, initialMouseY, initialMouseX]);
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')
