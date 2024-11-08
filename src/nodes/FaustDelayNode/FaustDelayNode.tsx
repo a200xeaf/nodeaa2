@@ -30,7 +30,7 @@ const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({id, data, selected})
                 <div className='flex flex-col items-center' data-info-panel-id="faustDelayNode-duration">
                     <span>Duration</span>
                     <Knob value={data.faustDelay_duration} default_value={500} id='duration' max_value={2000}
-                          min_value={1} callback={setParams}/>
+                          min_value={1} scale_exponent={0.5} callback={setParams}/>
                     <span>{timeFormat(data.faustDelay_duration)}</span>
                 </div>
                 <div className='flex flex-col items-center' data-info-panel-id="faustDelayNode-feedback">

@@ -23,6 +23,7 @@ import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
 import {CSSTransition} from "react-transition-group";
 import './animations.css'
 import {NODEAACONFIG} from "@/engine/constants.ts";
+import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -252,6 +253,7 @@ const App: React.FC = () => {
                 {`Nodeaa v${NODEAACONFIG.VERSION} +`}
             </p>
             <NodeaaWelcome />
+            <NodeaaLoading />
             <CSSTransition
                 in={showInfoPanel}
                 timeout={100}  // Duration of the transition

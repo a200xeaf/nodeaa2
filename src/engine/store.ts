@@ -59,6 +59,11 @@ export interface NodeStoreState {
 
     welcomeDialog: boolean;
     setWelcomeDialog: (state: boolean) => void;
+
+    loadingProgress: number;
+    loadingMessage: string;
+    loadingStatus: boolean;
+    setLoadingStatus: (state: boolean) => void;
 }
 
 const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
@@ -224,7 +229,14 @@ export const useNodeStore = create<NodeStoreState>()(
             welcomeDialog: true,
             setWelcomeDialog: (state: boolean) => {
                 set({welcomeDialog: state});
-            }
+            },
+
+            loadingProgress: 0,
+            loadingMessage: "Starting..",
+            loadingStatus: false,
+            setLoadingStatus: (state: boolean) => {
+                set({loadingStatus: state});
+            },
         }),
         {
             name: "nodeaa-store",
