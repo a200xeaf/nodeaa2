@@ -31,21 +31,17 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
         return `${noteFinal}${octaveFinal}`; // Return the note name with octave
     }
 
-    const handleActive = (update: boolean) => {
-        if (data.midikeyboard_active) {
-            useNodeStore.getState().removeArmed(id)
-        } else {
+    const handleActive = () => {
+        const curr = !data.midikeyboard_active;
+        console.log(curr)
+        updateNode(id, { midikeyboard_active: !data.midikeyboard_active });
+        if (curr) {
             useNodeStore.getState().addArmed(id, true)
-        }
-        if (update) {
-            updateNode(id, { midikeyboard_active: !data.midikeyboard_active });
+            console.log(useNodeStore.getState().currentlyArmed.size)
+        } else {
+            useNodeStore.getState().removeArmed(id)
         }
     }
-
-    useEffect(() => {
-        console.log("called midi")
-        handleActive(false);
-    }, [data.midikeyboard_active, handleActive]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -110,9 +106,14 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
         return () => {
             mainemitter.off("keydownarmed", handleKeyDown);
             mainemitter.off("keyuparmed", handleKeyUp);
-            useNodeStore.getState().removeArmed(id)
         };
     }, [pressedKeys, midiKeyMap, data]);
+
+    useEffect(() => {
+        return () => {
+            useNodeStore.getState().removeArmed(id)
+        }
+    }, []);
 
     return (
         <NodeaaContainer selected={selected} width={23} height={12}>
@@ -120,7 +121,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
             <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[10rem] rounded-b-xl'>
                 <div className='flex justify-center'>
                     <button
-                        onClick={() => handleActive(true)}
+                        onClick={() => handleActive()}
                         className={`font-bold text-center p-1 text-sm w-40 ${data.midikeyboard_active ? 'bg-green-500' : 'bg-red-500'}`}>
                         {data.midikeyboard_active ? (
                             <span className='text-white'>On</span>

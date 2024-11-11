@@ -109,6 +109,7 @@ const App: React.FC = () => {
                 mainemitter.emit("keydownarmed", e)
                 return
             }
+
             const isInputFocused = document.activeElement &&
                 (document.activeElement.tagName === 'INPUT' ||
                     document.activeElement.tagName === 'TEXTAREA');
