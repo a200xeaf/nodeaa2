@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback} from 'react';
 import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
 import {sendMidi} from "@/engine/audio.ts";
@@ -35,6 +35,12 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, select
     const setADSR = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         updateNode(id, { [`faustpoly_${e.target.id}`]: +e.target.value });
     }, [id, updateNode]);
+
+    const waveformOnKeyDown = (e: KeyboardEvent<HTMLSelectElement>) => {
+        if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
+            e.preventDefault();
+        }
+    }
 
     useEmitterSubscriptions({
         connections: midiConnections,
@@ -108,7 +114,7 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, select
 
                 <label className='flex flex-col'>
                     <span>Waveform:</span>
-                    <select className="nodrag" value={data.faustpoly_waveformsel} onChange={setWaveform}>
+                    <select className="nodrag" value={data.faustpoly_waveformsel} onChange={setWaveform} onKeyDown={waveformOnKeyDown}>
                         <option value={0}>sine</option>
                         <option value={1}>square</option>
                         <option value={2}>sawtooth</option>
