@@ -31,16 +31,26 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
         return `${noteFinal}${octaveFinal}`; // Return the note name with octave
     }
 
-    const handleActive = () => {
-        updateNode(id, { midikeyboard_active: !data.midikeyboard_active });
+    const handleActive = (update: boolean) => {
+        if (data.midikeyboard_active) {
+            useNodeStore.getState().removeArmed(id)
+        } else {
+            useNodeStore.getState().addArmed(id, true)
+        }
+        if (update) {
+            updateNode(id, { midikeyboard_active: !data.midikeyboard_active });
+        }
     }
+
+    useEffect(() => {
+        console.log("called midi")
+        handleActive(false);
+    }, [data.midikeyboard_active, handleActive]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (!data.midikeyboard_active) {
                 return
-            } else {
-                e.stopImmediatePropagation()
             }
             if (!pressedKeys.has(e.key) && midiKeyMap.has(e.key)) {
                 const midiNote = midiKeyMap.get(e.key)
@@ -95,12 +105,12 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
             }
         };
 
-        document.addEventListener("keydown", handleKeyDown);
-        document.addEventListener("keyup", handleKeyUp);
-
+        mainemitter.on("keydownarmed", handleKeyDown);
+        mainemitter.on("keyuparmed", handleKeyUp);
         return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-            document.removeEventListener("keyup", handleKeyUp);
+            mainemitter.off("keydownarmed", handleKeyDown);
+            mainemitter.off("keyuparmed", handleKeyUp);
+            useNodeStore.getState().removeArmed(id)
         };
     }, [pressedKeys, midiKeyMap, data]);
 
@@ -110,7 +120,7 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
             <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[10rem] rounded-b-xl'>
                 <div className='flex justify-center'>
                     <button
-                        onClick={handleActive}
+                        onClick={() => handleActive(true)}
                         className={`font-bold text-center p-1 text-sm w-40 ${data.midikeyboard_active ? 'bg-green-500' : 'bg-red-500'}`}>
                         {data.midikeyboard_active ? (
                             <span className='text-white'>On</span>

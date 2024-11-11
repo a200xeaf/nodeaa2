@@ -64,6 +64,10 @@ export interface NodeStoreState {
     loadingMessage: string;
     loadingStatus: boolean;
     setLoadingStatus: (state: boolean) => void;
+
+    currentlyArmed: Map<string, boolean>;
+    addArmed: (key: string, value: boolean) => void;
+    removeArmed: (key: string) => void;
 }
 
 const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
@@ -237,6 +241,18 @@ export const useNodeStore = create<NodeStoreState>()(
             setLoadingStatus: (state: boolean) => {
                 set({loadingStatus: state});
             },
+
+            currentlyArmed: new Map<string, boolean>(),
+            addArmed: (key: string, value: boolean) => set((state) => {
+                const newItems = new Map(state.currentlyArmed);
+                newItems.set(key, value);
+                return {currentlyArmed: newItems};
+            }),
+            removeArmed: (key: string) => set((state) => {
+                const newItems = new Map(state.currentlyArmed);
+                newItems.delete(key)
+                return {currentlyArmed: newItems};
+            }),
         }),
         {
             name: "nodeaa-store",

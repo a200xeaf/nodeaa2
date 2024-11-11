@@ -105,6 +105,10 @@ const App: React.FC = () => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Check if the target is an input field, textarea, or content-editable element
+            if (!(useNodeStore.getState().currentlyArmed.size === 0)) {
+                mainemitter.emit("keydownarmed", e)
+                return
+            }
             const isInputFocused = document.activeElement &&
                 (document.activeElement.tagName === 'INPUT' ||
                     document.activeElement.tagName === 'TEXTAREA');
@@ -121,6 +125,14 @@ const App: React.FC = () => {
                 setShowInfoPanel((prev) => !prev);
             }
         };
+
+        const handleKeyUp = (e: KeyboardEvent) => {
+            if (useNodeStore.getState().currentlyArmed.size === 0) {
+                return
+            } else {
+                mainemitter.emit("keyuparmed", e)
+            }
+        }
 
         const handleMouseDown = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
@@ -197,6 +209,7 @@ const App: React.FC = () => {
         };
 
         document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mousedown', handleMouseDown);
         document.addEventListener('mousemove', handleMouseMove);
@@ -206,6 +219,7 @@ const App: React.FC = () => {
         // Don't forget to clean up
         return function cleanup() {
             document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keyup', handleKeyUp);
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mousedown', handleMouseDown);
             document.removeEventListener('mousemove', handleMouseMove);

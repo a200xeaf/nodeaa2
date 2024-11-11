@@ -16,6 +16,7 @@ export const midiKeyMap = new Map([
     ['t', 54], // F#3
     ['y', 56], // G#3
     ['u', 58], // A#3
+    ['o', 61], // C#4
 ]);
 
 export const octaveKeyMap = new Map([
