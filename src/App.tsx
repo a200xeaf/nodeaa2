@@ -24,6 +24,7 @@ import {CSSTransition} from "react-transition-group";
 import './animations.css'
 import {NODEAACONFIG} from "@/engine/constants.ts";
 import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
+import FaustKarplusNode from "@/nodes/FaustKarplusNode/FaustKarplusNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -31,6 +32,7 @@ const nodeTypes = {
     faustPolyNode: FaustPolyNode,
     faustLPFNode: FaustLPFNode,
     faustDelayNode: FaustDelayNode,
+    faustKarplusNode: FaustKarplusNode,
     outNode: OutNode,
     midiInNode: MidiInNode,
     midiKeyboardNode: MidiKeyboardNode,

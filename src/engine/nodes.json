@@ -58,6 +58,17 @@
     "hasAudio": true,
     "version": "1.0.0"
   },
+  "faustKarplusNode": {
+    "nodeName": "faustKarplusNode",
+    "idPrefix": "",
+    "realName": "Karplus Synth",
+    "defaultData": {
+      "faustKarplus_damping": 0.1
+    },
+    "audioNodeParams": { "engine": "faust", "type": "faustKarplus", "voices": 16 },
+    "hasAudio": true,
+    "version": "1.0.0"
+  },
   "midiInNode": {
     "nodeName": "midiInNode",
     "idPrefix": "midi",
