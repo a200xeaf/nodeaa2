@@ -31,16 +31,10 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
         return `${noteFinal}${octaveFinal}`; // Return the note name with octave
     }
 
-    const handleActive = () => {
+    const toggleActive = () => {
         const curr = !data.midikeyboard_active;
         console.log(curr)
         updateNode(id, { midikeyboard_active: !data.midikeyboard_active });
-        if (curr) {
-            useNodeStore.getState().addArmed(id, true)
-            console.log(useNodeStore.getState().currentlyArmed.size)
-        } else {
-            useNodeStore.getState().removeArmed(id)
-        }
     }
 
     useEffect(() => {
@@ -115,13 +109,22 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
         }
     }, []);
 
+    useEffect(() => {
+        if (data.midikeyboard_active) {
+            useNodeStore.getState().addArmed(id, true)
+            console.log(useNodeStore.getState().currentlyArmed.size)
+        } else {
+            useNodeStore.getState().removeArmed(id)
+        }
+    }, [data, id]);
+
     return (
         <NodeaaContainer selected={selected} width={23} height={12}>
             <NodeaaHeader nodeName='Midi Keyboard' headerColor='bg-blue-500' />
             <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[10rem] rounded-b-xl'>
                 <div className='flex justify-center'>
                     <button
-                        onClick={() => handleActive()}
+                        onClick={() => toggleActive()}
                         className={`font-bold text-center p-1 text-sm w-40 ${data.midikeyboard_active ? 'bg-green-500' : 'bg-red-500'}`}>
                         {data.midikeyboard_active ? (
                             <span className='text-white'>On</span>
