@@ -1,9 +1,9 @@
 import {Node, NodeProps} from "@xyflow/react";
-import React, {ChangeEvent, useState, useRef, useEffect, useCallback, useMemo} from "react";
+import {ChangeEvent, useState, useRef, useEffect, useCallback, useMemo, memo} from "react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {NodesConfig} from "@/engine/types/node-types.ts";
-import rawNodesConfig from "@/engine/nodes.json";
+import rawNodesConfig from "@/engine/data/nodes.json";
 
 type CreatorNodeData = Record<string, never>;
 
@@ -169,4 +169,4 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
     );
 };
 
-export default React.memo(CreatorNode);
+export default memo(CreatorNode);

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import {FC, memo, ReactNode} from "react";
 
 interface NodeContainerProps {
     selected: boolean | undefined;
@@ -26,4 +26,4 @@ const NodeaaContainer: FC<NodeContainerProps> = ({ selected, children, width, he
     );
 };
 
-export default NodeaaContainer;
+export default memo(NodeaaContainer);

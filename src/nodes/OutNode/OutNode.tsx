@@ -1,5 +1,5 @@
-import React from 'react'
-import {useNodeStore} from "../../engine/store.ts";
+import {FC, memo} from 'react'
+import {useNodeStore} from "@/engine/store.ts";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
@@ -7,7 +7,7 @@ import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type OutNodeType = Node<Record<string, never>, 'outNode'>;
 
-const OutNode: React.FC<NodeProps<OutNodeType>> = ({selected}) => {
+const OutNode: FC<NodeProps<OutNodeType>> = ({selected}) => {
     const isRunning = useNodeStore(useShallow((state) => state.isRunning));
     const toggleAudio = useNodeStore(useShallow((state) => state.toggleAudio));
 
@@ -31,4 +31,4 @@ const OutNode: React.FC<NodeProps<OutNodeType>> = ({selected}) => {
         </NodeaaContainer>
     )
 }
-export default OutNode
+export default memo(OutNode)

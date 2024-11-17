@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
-import { useNodeStore } from "../../engine/store.ts";
+import {ChangeEvent, useState, useEffect, FC, memo} from 'react';
+import { useNodeStore } from "@/engine/store.ts";
 import { useShallow } from "zustand/react/shallow";
 import { Handle, Position, Node, NodeProps } from "@xyflow/react";
-import { mainemitter } from "../../engine/utils/eventbus.ts";
+import { mainemitter } from "@/engine/utils/eventbus.ts";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
@@ -12,7 +12,7 @@ type NumberNodeData = { number_number: number };
 // Create a custom node type
 type NumberNodeType = Node<NumberNodeData, 'numberNode'>;
 
-const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({ id, data, selected }) => {
+const NumberNode: FC<NodeProps<NumberNodeType>> = ({ id, data, selected }) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     // Local state to manage input value
@@ -64,4 +64,4 @@ const NumberNode: React.FC<NodeProps<NumberNodeType>> = ({ id, data, selected })
     );
 };
 
-export default NumberNode;
+export default memo(NumberNode);

@@ -1,5 +1,5 @@
-import { FC } from "react";
-import {InfoObject} from "@/engine/types/info-map.ts";
+import {FC, memo} from "react";
+import {InfoObject} from "@/engine/data/info-map.ts";
 
 interface NodeaaInfoPanelProps {
     idInfo: InfoObject | null;
@@ -31,4 +31,4 @@ const NodeaaInfoPanel: FC<NodeaaInfoPanelProps> = ({ idInfo }) => {
     );
 };
 
-export default NodeaaInfoPanel;
+export default memo(NodeaaInfoPanel);

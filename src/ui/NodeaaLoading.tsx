@@ -7,6 +7,7 @@ import {
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {Progress} from "@/components/ui/progress.tsx";
+import {memo} from "react";
 
 const NodeaaLoading = () => {
     const loadingStatus = useNodeStore(useShallow((state) => state.loadingStatus));
@@ -28,4 +29,4 @@ const NodeaaLoading = () => {
         </AlertDialog>
     )
 }
-export default NodeaaLoading
+export default memo(NodeaaLoading)

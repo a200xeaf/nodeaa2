@@ -18,11 +18,11 @@ import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
 import MidiKeyboardNode from "@/nodes/MidiKeyboardNode/MidiKeyboardNode.tsx";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
-import {infoMap, InfoObject} from "@/engine/types/info-map.ts";
+import {infoMap, InfoObject} from "@/engine/data/info-map.ts";
 import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
 import {CSSTransition} from "react-transition-group";
 import './animations.css'
-import {NODEAACONFIG} from "@/engine/constants.ts";
+import {NODEAACONFIG} from "@/engine/data/constants.ts";
 import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
 import FaustKarplusNode from "@/nodes/FaustKarplusNode/FaustKarplusNode.tsx";
 

@@ -1,5 +1,5 @@
-import React from 'react'
-import {useNodeStore} from "../../engine/store.ts";
+import {FC, memo} from 'react'
+import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {Handle, Position, Node, NodeProps, useHandleConnections} from "@xyflow/react";
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
@@ -12,7 +12,7 @@ type ViewerNodeData = { viewer_value: never };
 // Create a custom node type
 type ViewerNodeType = Node<ViewerNodeData, 'viewerNode'>;
 
-const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) => {
+const NumberNode: FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) => {
     const dataConnections = useHandleConnections({type: 'target', id: 'data'})
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
@@ -42,4 +42,4 @@ const NumberNode: React.FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) =
         </NodeaaContainer>
     )
 }
-export default NumberNode
+export default memo(NumberNode)

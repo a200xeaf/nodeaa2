@@ -1,6 +1,7 @@
 import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
 import { useShallow } from "zustand/react/shallow";
-import { useNodeStore } from "../../engine/store.ts";
+import { useNodeStore } from "@/engine/store.ts";
+import {memo} from "react";
 
 const AudioEdge = ({
                                      id,
@@ -82,4 +83,4 @@ const AudioEdge = ({
     );
 };
 
-export default AudioEdge;
+export default memo(AudioEdge);

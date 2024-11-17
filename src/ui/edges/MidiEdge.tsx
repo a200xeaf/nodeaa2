@@ -1,4 +1,5 @@
 import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
+import {memo} from "react";
 
 const MidiEdge = ({
                            id,
@@ -34,4 +35,4 @@ const MidiEdge = ({
     );
 };
 
-export default MidiEdge;
+export default memo(MidiEdge);

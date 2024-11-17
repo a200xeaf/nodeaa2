@@ -1,9 +1,9 @@
-import {useNodeStore} from "../../engine/store.ts";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import {useNodeStore} from "@/engine/store.ts";
+import {ChangeEvent, FC, memo, useEffect, useState} from "react";
 import {Input, NoteMessageEvent, WebMidi} from "webmidi";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useShallow} from "zustand/react/shallow";
-import {mainemitter} from "../../engine/utils/eventbus.ts";
+import {mainemitter} from "@/engine/utils/eventbus.ts";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
@@ -13,7 +13,7 @@ type MidiInNodeData = {
 
 type MidiInNodeType = Node<MidiInNodeData, 'midiInNode'>;
 
-const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
+const MidiInNode: FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
     const [inputNames, setInputNames] = useState<string[]>([]);
     const [selectedName, setSelectedName] = useState<string>("");
     const [selectedMidi, setSelectedMidi] = useState<Input | null>(null);
@@ -103,4 +103,4 @@ const MidiInNode: React.FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
         </NodeaaContainer>
     )
 }
-export default MidiInNode
+export default memo(MidiInNode)

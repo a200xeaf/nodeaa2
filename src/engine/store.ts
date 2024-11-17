@@ -19,7 +19,7 @@ import {
     updateAudioNode
 } from "./audio.ts";
 import {WebMidi} from "webmidi";
-import rawNodesConfig from './nodes.json'
+import rawNodesConfig from './data/nodes.json'
 import {NodesConfig} from "@/engine/types/node-types.ts";
 import {persist} from "zustand/middleware";
 
