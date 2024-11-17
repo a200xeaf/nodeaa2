@@ -14,6 +14,7 @@
     "defaultData": { "osc_frequency": 440, "osc_type": 1 },
     "audioNodeParams": { "engine": "rnbo", "type": "osc2" },
     "hasAudio": true,
+    "audioType": "instrument",
     "version": "1.0.0"
   },
   "faustGainNode": {
@@ -23,6 +24,7 @@
     "defaultData": { "faustgain_Gain": 1 },
     "audioNodeParams": { "engine": "faust", "type": "faustgain" },
     "hasAudio": true,
+    "audioType": "effect",
     "version": "1.0.0"
   },
   "faustLPFNode": {
@@ -32,6 +34,7 @@
     "defaultData": { "faustLPF_frequency": 2000, "faustLPF_quality": 0.1 },
     "audioNodeParams": { "engine": "faust", "type": "faustLPF" },
     "hasAudio": true,
+    "audioType": "effect",
     "version": "1.0.0"
   },
   "faustDelayNode": {
@@ -41,6 +44,7 @@
     "defaultData": { "faustDelay_duration": 500, "faustDelay_feedback": 0.5, "faustDelay_wet": 0.5 },
     "audioNodeParams": { "engine": "faust", "type": "faustDelay" },
     "hasAudio": true,
+    "audioType": "effect",
     "version": "1.0.0"
   },
   "faustPolyNode": {
@@ -56,6 +60,7 @@
     },
     "audioNodeParams": { "engine": "faust", "type": "faustpoly", "voices": 16 },
     "hasAudio": true,
+    "audioType": "instrument",
     "version": "1.0.0"
   },
   "faustKarplusNode": {
@@ -67,6 +72,7 @@
     },
     "audioNodeParams": { "engine": "faust", "type": "faustKarplus", "voices": 16 },
     "hasAudio": true,
+    "audioType": "instrument",
     "version": "1.0.0"
   },
   "midiInNode": {

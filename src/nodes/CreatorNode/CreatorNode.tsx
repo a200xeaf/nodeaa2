@@ -110,23 +110,58 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
             />
             {filteredResults.length > 0 && (
                 <>
-                    <hr className='border-gray-200 mt-2 border-[1px] rounded-lg' />
+                    <hr className="border-gray-200 mt-2 border-[1px] rounded-lg" />
                     <ul className="mt-2">
-                        {filteredResults.map((result, index) => (
-                            <li
-                                key={index}
-                                className={`text-sm text-gray-700 p-1 rounded-lg ${
-                                    selectedIndex === index ? "bg-blue-100" : "hover:bg-blue-100"
-                                }`}
-                            >
-                                <button
-                                    onClick={() => handleCreate(result.nodeName)}  // Log the clicked result
-                                    className="w-full text-left focus:outline-none"  // Make the button take full width and remove focus outline
+                        {filteredResults.map((result, index) => {
+                            // Determine the type and badge details
+                            let badgeLabel = "";
+                            let badgeColor = "";
+
+                            if (result.idPrefix === "") {
+                                if (result.hasAudio && result.audioType) {
+                                    badgeLabel = result.audioType === "instrument" ? "I" : "E";
+                                    badgeColor = result.audioType === "instrument" ? "bg-green-400" : "bg-purple-400";
+                                }
+                            } else {
+                                switch (result.idPrefix) {
+                                    case "midi":
+                                        badgeLabel = "M";
+                                        badgeColor = "bg-blue-400";
+                                        break;
+                                    case "data":
+                                        badgeLabel = "D";
+                                        badgeColor = "bg-black";
+                                        break;
+                                    default:
+                                        badgeLabel = "?";
+                                        badgeColor = "bg-gray-400";
+                                        break;
+                                }
+                            }
+
+                            return (
+                                <li
+                                    key={index}
+                                    className={`flex items-center text-sm text-gray-700 p-1 rounded-lg ${
+                                        selectedIndex === index ? "bg-blue-100" : "hover:bg-blue-100"
+                                    }`}
                                 >
-                                    {result.realName}
-                                </button>
-                            </li>
-                        ))}
+                                    {/* Badge */}
+                                    <div
+                                        className={`w-6 h-5 rounded-md flex items-center justify-center text-white text-xs font-bold ${badgeColor} mr-2 font-mono`}
+                                    >
+                                        {badgeLabel}
+                                    </div>
+                                    {/* Button */}
+                                    <button
+                                        onClick={() => handleCreate(result.nodeName)}
+                                        className="w-full text-left focus:outline-none"
+                                    >
+                                        {result.realName}
+                                    </button>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </>
             )}
