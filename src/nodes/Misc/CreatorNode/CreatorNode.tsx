@@ -4,6 +4,7 @@ import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {NodesConfig} from "@/engine/types/node-types.ts";
 import rawNodesConfig from "@/engine/data/nodes.json";
+import NodeBadge from "@/ui/nodes-ui/NodeBadge.tsx";
 
 type CreatorNodeData = Record<string, never>;
 
@@ -113,28 +114,23 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
                     <hr className="border-gray-200 mt-2 border-[1px] rounded-lg" />
                     <ul className="mt-2">
                         {filteredResults.map((result, index) => {
-                            // Determine the type and badge details
-                            let badgeLabel = "";
-                            let badgeColor = "";
+                            // Determine the type for the badge
+                            let type: "midi" | "data" | "instrument" | "effect" | "unknown" = "unknown";
 
                             if (result.idPrefix === "") {
                                 if (result.hasAudio && result.audioType) {
-                                    badgeLabel = result.audioType === "instrument" ? "I" : "E";
-                                    badgeColor = result.audioType === "instrument" ? "bg-green-400" : "bg-purple-400";
+                                    type = result.audioType === "instrument" ? "instrument" : "effect";
                                 }
                             } else {
                                 switch (result.idPrefix) {
                                     case "midi":
-                                        badgeLabel = "M";
-                                        badgeColor = "bg-blue-400";
+                                        type = "midi";
                                         break;
                                     case "data":
-                                        badgeLabel = "D";
-                                        badgeColor = "bg-black";
+                                        type = "data";
                                         break;
                                     default:
-                                        badgeLabel = "?";
-                                        badgeColor = "bg-gray-400";
+                                        type = "unknown";
                                         break;
                                 }
                             }
@@ -147,11 +143,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
                                     }`}
                                 >
                                     {/* Badge */}
-                                    <div
-                                        className={`w-6 h-5 rounded-md flex items-center justify-center text-white text-xs font-bold ${badgeColor} mr-2 font-mono`}
-                                    >
-                                        {badgeLabel}
-                                    </div>
+                                    <NodeBadge type={type} />
                                     {/* Button */}
                                     <button
                                         onClick={() => handleCreate(result.nodeName)}

@@ -4,7 +4,7 @@ import {useNodeStore} from '@/engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 import Knob from "@/ui/inputs/Knob.tsx";
 import {amountFormat, timeFormat} from "@/engine/utils/number-formats.ts";
-import NodeaaContainer from '@/ui/nodes-ui/NodeaaContainer';
+import NodeaaContainer from '@/ui/nodes-ui/NodeaaContainer.tsx';
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 
 type FaustDelayNodeData = {

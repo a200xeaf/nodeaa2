@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import {Handle, Node, NodeProps, Position} from '@xyflow/react';
-import {useNodeStore} from '../../engine/store.ts';
+import {useNodeStore} from '../../../engine/store.ts';
 import {useShallow} from "zustand/react/shallow";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";

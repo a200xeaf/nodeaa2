@@ -149,7 +149,7 @@ const NodeToolbarMenu = () => {
                         <MenubarSub>
                             <MenubarSubTrigger>Physical Instruments</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem>Nothing yet!</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustKarplusNode", undefined, true)}>Karplus Synth</MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                         <MenubarSeparator/>
@@ -175,13 +175,13 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Streams</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Signals</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>Nothing yet!</MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Events</MenubarTrigger>
+                    <MenubarTrigger className='pointer-events-auto'>Data</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>Nothing yet!</MenubarItem>
                     </MenubarContent>

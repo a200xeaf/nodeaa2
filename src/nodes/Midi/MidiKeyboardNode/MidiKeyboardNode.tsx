@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from "react";
-import {midiKeyMap, noteNames, octaveKeyMap, velocityKeyMap} from "@/nodes/MidiKeyboardNode/MidiTypes.ts";
+import {midiKeyMap, noteNames, octaveKeyMap, velocityKeyMap} from "@/nodes/Midi/MidiKeyboardNode/MidiTypes.ts";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";

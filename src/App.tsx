@@ -1,22 +1,22 @@
 import {Background, BackgroundVariant, ReactFlow, Connection, Edge, useViewport} from '@xyflow/react';
 import { useNodeStore } from './engine/store';
-import OutNode from './nodes/OutNode/OutNode.tsx';
-import FaustGainNode from "./nodes/FaustGainNode/FaustGainNode.tsx";
-import FaustPolyNode from "./nodes/FaustPolyNode/FaustPolyNode.tsx";
-import Osc2Node from "./nodes/Osc2Node/Osc2Node.tsx";
-import MidiInNode from "./nodes/MidiInNode/MidiInNode.tsx";
-import NumberNode from "./nodes/NumberNode/NumberNode.tsx";
-import ViewerNode from "./nodes/ViewerNode/ViewerNode.tsx";
+import OutNode from '@/nodes/Misc/OutNode/OutNode.tsx';
+import FaustGainNode from "@/nodes/Audio/FaustGainNode/FaustGainNode.tsx";
+import FaustPolyNode from "@/nodes/Audio/FaustPolyNode/FaustPolyNode.tsx";
+import Osc2Node from "@/nodes/Audio/Osc2Node/Osc2Node.tsx";
+import MidiInNode from "@/nodes/Midi/MidiInNode/MidiInNode.tsx";
+import NumberNode from "@/nodes/Data/NumberNode/NumberNode.tsx";
+import ViewerNode from "@/nodes/Data/ViewerNode/ViewerNode.tsx";
 import {useShallow} from "zustand/react/shallow";
 import AudioEdge from "./ui/edges/AudioEdge.tsx";
 import MidiEdge from "./ui/edges/MidiEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
-import CreatorNode from "@/nodes/CreatorNode/CreatorNode.tsx";
+import CreatorNode from "@/nodes/Misc/CreatorNode/CreatorNode.tsx";
 import {useEffect, useRef, useState} from "react";
-import FaustLPFNode from "@/nodes/FaustLPFNode/FaustLPFNode.tsx";
+import FaustLPFNode from "@/nodes/Audio/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
-import FaustDelayNode from "@/nodes/FaustDelayNode/FaustDelayNode.tsx";
-import MidiKeyboardNode from "@/nodes/MidiKeyboardNode/MidiKeyboardNode.tsx";
+import FaustDelayNode from "@/nodes/Audio/FaustDelayNode/FaustDelayNode.tsx";
+import MidiKeyboardNode from "@/nodes/Midi/MidiKeyboardNode/MidiKeyboardNode.tsx";
 import {mainemitter} from "@/engine/utils/eventbus.ts";
 import {infoMap, InfoObject} from "@/engine/data/info-map.ts";
 import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
@@ -24,7 +24,7 @@ import {CSSTransition} from "react-transition-group";
 import './animations.css'
 import {NODEAACONFIG} from "@/engine/data/constants.ts";
 import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
-import FaustKarplusNode from "@/nodes/FaustKarplusNode/FaustKarplusNode.tsx";
+import FaustKarplusNode from "@/nodes/Audio/FaustKarplusNode/FaustKarplusNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
