@@ -28,5 +28,3 @@ export const velocityKeyMap = new Map([
     ['c', -10],
     ['v', 10],
 ]);
-
-export const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];

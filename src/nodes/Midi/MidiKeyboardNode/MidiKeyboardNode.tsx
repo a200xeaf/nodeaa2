@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from "react";
-import {midiKeyMap, noteNames, octaveKeyMap, velocityKeyMap} from "@/nodes/Midi/MidiKeyboardNode/MidiTypes.ts";
+import {midiKeyMap, octaveKeyMap, velocityKeyMap} from "@/nodes/Midi/MidiKeyboardNode/MidiTypes.ts";
 import {Handle, Node, NodeProps, Position} from "@xyflow/react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
@@ -7,6 +7,7 @@ import {mainemitter} from "@/engine/utils/eventbus.ts";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 import PianoKeyboard from "@/ui/inputs/PianoKeyboard.tsx";
+import {noteNames} from "@/engine/data/note-constants.ts";
 
 type MidiKeyboardNodeData = {
     midikeyboard_octave: number;

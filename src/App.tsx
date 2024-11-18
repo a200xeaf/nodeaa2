@@ -22,9 +22,10 @@ import {infoMap, InfoObject} from "@/engine/data/info-map.ts";
 import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
 import {CSSTransition} from "react-transition-group";
 import './animations.css'
-import {NODEAACONFIG} from "@/engine/data/constants.ts";
+import {NODEAACONFIG} from "@/engine/data/system-constants.ts";
 import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
 import FaustKarplusNode from "@/nodes/Audio/FaustKarplusNode/FaustKarplusNode.tsx";
+import MidiScaleNode from "@/nodes/Midi/MidiScaleNode/MidiScaleNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -36,6 +37,7 @@ const nodeTypes = {
     outNode: OutNode,
     midiInNode: MidiInNode,
     midiKeyboardNode: MidiKeyboardNode,
+    midiScaleNode: MidiScaleNode,
     numberNode: NumberNode,
     viewerNode: ViewerNode,
     creatorNode: CreatorNode

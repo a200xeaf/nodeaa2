@@ -91,6 +91,14 @@
     "hasAudio": false,
     "version": "1.0.0"
   },
+  "midiScaleNode": {
+    "nodeName": "midiScaleNode",
+    "idPrefix": "midi",
+    "realName": "MIDI Scale",
+    "defaultData": { "midiscale_scalekey": 0, "midiscale_scaletype": "major",  "midiscale_scalearray": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+    "hasAudio": false,
+    "version": "1.0.0"
+  },
   "numberNode": {
     "nodeName": "numberNode",
     "idPrefix": "data",
