@@ -28,7 +28,7 @@ ctxRecorder.onstop = () => {
 
     const downloadAnchord = document.createElement("a")
     downloadAnchord.href = finalUrl
-    downloadAnchord.download = "Slushing300x-Recording.wav"
+    downloadAnchord.download = "Nodeaa-Recording.wav"
 
     downloadAnchord.click()
 
