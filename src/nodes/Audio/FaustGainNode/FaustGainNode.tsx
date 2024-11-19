@@ -27,7 +27,7 @@ const FaustGainNode: FC<NodeProps<FaustGainNodeType>> = ({id, data, selected}) =
             <div className='flex flex-col justify-center items-start nodrag cursor-default bg-white p-2 h-[5rem] rounded-b-xl' data-info-panel-id="faustGainNode-gain">
                 <span>Gain</span>
                 <Slider id='Gain' callback={setParams} value={data.faustgain_Gain} min_value={0} max_value={1}
-                        default_value={1} filled={true} orientation='horizontal' scale_exponent={1.4}/>
+                        default_value={1} filled={true} orientation='horizontal' scale_exponent={0.3}/>
                 <span>{dbFormat(20 * Math.log10(data.faustgain_Gain))}</span>
             </div>
 
