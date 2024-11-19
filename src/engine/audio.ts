@@ -2,10 +2,41 @@ import {Node as FlowNode} from "@xyflow/react";
 import {createDevice, Device, IPatcher, MIDIEvent, Parameter, WorkletDevice} from "@rnbo/js";
 import {FaustMonoAudioWorkletNode, FaustPolyAudioWorkletNode} from "@grame/faustwasm";
 import {createFaustNode} from "./utils/create-faust-node.ts";
+import { MediaRecorder, register } from 'extendable-media-recorder';
+import { connect } from 'extendable-media-recorder-wav-encoder';
+
+await register(await connect());
 
 export const context = new AudioContext({latencyHint: 1});
 console.log(context.baseLatency.toString())
 const nodes = new Map<string, Device | FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode | AudioNode>()
+
+//Handle Recorder
+const ctxRecorderNode = context.createMediaStreamDestination()
+export const ctxRecorder = new MediaRecorder(ctxRecorderNode.stream, { mimeType: 'audio/wav'})
+const currentBuffer: Blob[] = []
+
+ctxRecorder.ondataavailable = event => {
+    if (event.data.size > 0) {
+        currentBuffer.push(event.data)
+    }
+}
+
+ctxRecorder.onstop = () => {
+    const finalBlob = new Blob(currentBuffer, { type: 'audio/wav' });
+    const finalUrl = URL.createObjectURL(finalBlob)
+
+    const downloadAnchord = document.createElement("a")
+    downloadAnchord.href = finalUrl
+    downloadAnchord.download = "Slushing300x-Recording.wav"
+
+    downloadAnchord.click()
+
+    URL.revokeObjectURL(finalUrl)
+
+    currentBuffer.length = 0
+}
+
 
 nodes.set('output-1', context.destination);
 
@@ -158,9 +189,9 @@ export const deleteAudioNode = (id: string) => {
     }
 }
 
-const getAudioNode = (id: string): AudioNode | undefined => {
+const getAudioNode = (id: string): AudioNode | 'output' | undefined => {
     if (id.startsWith('output-')) {
-        return context.destination; // Special handling for 'output'
+        return 'output'; // Special handling for 'output'
     }
 
     const device = nodes.get(id);
@@ -182,6 +213,21 @@ const connectOrDisconnectNodes = (action: 'connect' | 'disconnect', sourceID: st
 
     if (!sourceNode || !targetNode) {
         throw new Error(`Invalid node IDs: ${sourceID} or ${targetID} not found`);
+    }
+
+    if (sourceNode === 'output') {
+        throw new Error(`Invalid node IDs: ${sourceID} was detected as output`);
+    }
+
+    if (targetNode === 'output') {
+        if (action === 'connect') {
+            sourceNode.connect(context.destination)
+            sourceNode.connect(ctxRecorderNode)
+        } else {
+            sourceNode.disconnect(context.destination)
+            sourceNode.disconnect(ctxRecorderNode)
+        }
+        return
     }
 
     try {

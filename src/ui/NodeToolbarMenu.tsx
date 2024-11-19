@@ -86,6 +86,20 @@ const NodeToolbarMenu = () => {
         <div className='absolute flex gap-x-6 z-[9999] h-16 w-full top-0 left-0 pt-2 px-4 pointer-events-none'>
             <Menubar className='py-[1.2rem]'>
                 <MenubarMenu>
+                    <MenubarTrigger className='pointer-events-auto'>File</MenubarTrigger>
+                    <MenubarContent>
+                        <MenubarItem onClick={handleNewProject} className='cursor-pointer'>
+                            New
+                        </MenubarItem>
+                        <MenubarItem onClick={projectSave} className='cursor-pointer'>
+                            Save
+                        </MenubarItem>
+                        <MenubarItem onClick={handleLoadProject} className='cursor-pointer'>
+                            Load
+                        </MenubarItem>
+                    </MenubarContent>
+                </MenubarMenu>
+                <MenubarMenu>
                     <MenubarTrigger className='pointer-events-auto'>Edit</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>Nothing yet!</MenubarItem>
@@ -205,15 +219,6 @@ const NodeToolbarMenu = () => {
                     <MenubarContent>
                         <MenubarItem onClick={() => setWelcomeDialog(true)} className='cursor-pointer'>
                             Open Welcome Dialog
-                        </MenubarItem>
-                        <MenubarItem onClick={handleNewProject} className='cursor-pointer'>
-                            New
-                        </MenubarItem>
-                        <MenubarItem onClick={projectSave} className='cursor-pointer'>
-                            Save
-                        </MenubarItem>
-                        <MenubarItem onClick={handleLoadProject} className='cursor-pointer'>
-                            Load
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>

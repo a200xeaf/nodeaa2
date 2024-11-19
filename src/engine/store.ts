@@ -68,6 +68,9 @@ export interface NodeStoreState {
     currentlyArmed: Map<string, boolean>;
     addArmed: (key: string, value: boolean) => void;
     removeArmed: (key: string) => void;
+
+    isRecording: boolean;
+    setIsRecording: (state: boolean) => void;
 }
 
 const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
@@ -253,6 +256,11 @@ export const useNodeStore = create<NodeStoreState>()(
                 newItems.delete(key)
                 return {currentlyArmed: newItems};
             }),
+
+            isRecording: false,
+            setIsRecording: (state: boolean) => {
+                set({isRecording: state});
+            },
         }),
         {
             name: "nodeaa-store",

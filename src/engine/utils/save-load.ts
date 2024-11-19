@@ -3,6 +3,11 @@ import {saveAs} from "file-saver";
 import {ProjectData} from "@/engine/types/save-types.ts";
 
 export const projectNew = () => {
+    if (useNodeStore.getState().isRecording) {
+        useNodeStore.getState().setIsRecording(false);
+    }
+
+    //FINAL
     useNodeStore.setState({
         ...useNodeStore.getInitialState(),  // Reset to initial state
         welcomeDialog: false,               // Override welcomeDialog to false
@@ -24,6 +29,10 @@ export const projectSave = () => {
 }
 
 export const projectLoad = async (savedProjectJSON: string): Promise<{ success: boolean; viewport: { x: number; y: number; zoom: number } | null }> => {
+    if (useNodeStore.getState().isRecording) {
+        useNodeStore.getState().setIsRecording(false);
+    }
+
     useNodeStore.getState().clearProject()
     useNodeStore.setState({loadingProgress: 0})
     useNodeStore.setState({loadingStatus: true})
