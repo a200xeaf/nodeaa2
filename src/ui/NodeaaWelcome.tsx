@@ -1,7 +1,7 @@
 import {
     AlertDialog, AlertDialogAction,
     AlertDialogContent,
-    AlertDialogDescription, AlertDialogFooter,
+    AlertDialogDescription,
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog.tsx";
@@ -88,6 +88,7 @@ const NodeaaWelcome = () => {
                                         functionality. Use the <em><strong>Feedback</strong></em> button in the top
                                         menu to report bugs or suggest new features.
                                     </p>
+                                    <AlertDialogAction className='mt-6'>Continue</AlertDialogAction>
                                 </div>
                                 <div className="w-full md:w-2/3 flex items-center justify-center p-4 md:p-10">
                                     <video
@@ -107,10 +108,6 @@ const NodeaaWelcome = () => {
                         <CarouselNext/>
                     </Carousel>
                 </AlertDialogHeader>
-
-                <AlertDialogFooter>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
     )
