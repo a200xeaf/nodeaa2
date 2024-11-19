@@ -6,6 +6,7 @@ export const projectNew = () => {
     if (useNodeStore.getState().isRecording) {
         useNodeStore.getState().setIsRecording(false);
     }
+    useNodeStore.getState().clearProject()
 
     //FINAL
     useNodeStore.setState({
