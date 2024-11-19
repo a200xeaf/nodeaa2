@@ -89,6 +89,10 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
         setParams(e.target.id, e.target.value)
     }
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        e.preventDefault()
+    }
+
     useEffect(() => {
         setParams("array", getScaleMapping(data.midiscale_scalekey, data.midiscale_scaletype))
     }, [data.midiscale_scalekey, data.midiscale_scaletype, setParams]);
@@ -147,7 +151,7 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
             <div className='flex flex-col justify-center items-center nodrag cursor-default bg-white p-2 h-[4rem] rounded-b-xl'>
                 <div className='flex items-center'>
                     <p>Key:&nbsp;</p>
-                    <select className='p-1 bg-white border-black border-2 rounded-lg' id='key' value={data.midiscale_scalekey} onChange={handleScaleChange}>
+                    <select className='p-1 bg-white border-black border-2 rounded-lg' id='key' value={data.midiscale_scalekey} onChange={handleScaleChange} onKeyDown={handleKeyDown}>
                         {notes.map((noteOption) => (
                             <option key={noteOption.value} value={noteOption.value}>
                                 {noteOption.label}
@@ -156,7 +160,7 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
                     </select>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <p>Scale:&nbsp;</p>
-                    <select className='p-1 bg-white border-black border-2 rounded-lg' id='type' value={data.midiscale_scaletype} onChange={handleScaleChange}>
+                    <select className='p-1 bg-white border-black border-2 rounded-lg' id='type' value={data.midiscale_scaletype} onChange={handleScaleChange} onKeyDown={handleKeyDown}>
                         <option value="major">Major</option>
                         <option value="minor">Minor</option>
                     </select>
