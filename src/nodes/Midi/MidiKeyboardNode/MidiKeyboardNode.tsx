@@ -56,11 +56,22 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
                 }
             }
             if (octaveKeyMap.has(e.key)) {
-                const octaveChange = octaveKeyMap.get(e.key)
+                const octaveChange = octaveKeyMap.get(e.key);
                 if (octaveChange !== undefined) {
-                    const newOctave = Math.max(Math.min((data.midikeyboard_octave + octaveChange), 48), -48)
-                    // console.log("Octave is now", newOctave)
-                    updateNode(id, {midikeyboard_octave: newOctave})
+                    const newOctave = Math.max(Math.min((data.midikeyboard_octave + octaveChange), 48), -48);
+
+                    // Turn off currently held notes
+                    pressedMidiNotes.forEach((note) => {
+                        const midiMessage: Uint8Array = new Uint8Array([128, note, 0]); // MIDI "note off" message
+                        mainemitter.emit(id + ":" + "main_midi", midiMessage);
+                    });
+
+                    // Clear pressed notes
+                    setPressedKeys(new Set());
+                    setPressedMidiNotes([]);
+
+                    // Update the octave
+                    updateNode(id, { midikeyboard_octave: newOctave });
                 }
             }
             if (velocityKeyMap.has(e.key)) {
