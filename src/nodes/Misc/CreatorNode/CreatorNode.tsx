@@ -39,10 +39,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
 
     const handleCreate = useCallback((name: string) => {
         createNode(name, {x: positionAbsoluteX, y: positionAbsoluteY})
-        if (document.activeElement instanceof HTMLInputElement) {
-            document.activeElement.blur()
-            console.log("blurring")
-        }
+        selfNodeDelete(id)
     }, [positionAbsoluteX, positionAbsoluteY])
 
     // Ensure focus happens after the component and its parent have been rendered
