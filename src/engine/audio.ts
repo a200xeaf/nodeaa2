@@ -5,16 +5,7 @@ import {createFaustNode} from "./utils/create-faust-node.ts";
 import { MediaRecorder, register } from 'extendable-media-recorder';
 import { connect } from 'extendable-media-recorder-wav-encoder';
 
-// Wrap top-level awaits in an async function
-async function initialize() {
-    await register(await connect());
-    console.log("MediaRecorder WAV encoder initialized");
-}
-
-// Call the initialization function
-initialize().catch(error => {
-    console.error("Failed to initialize:", error);
-});
+await register(await connect());
 
 export const context = new AudioContext({latencyHint: 1});
 console.log(context.baseLatency.toString())
