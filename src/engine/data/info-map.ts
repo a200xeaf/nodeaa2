@@ -71,4 +71,24 @@ export const infoMap = new Map<string, InfoObject>([
         type: "Effects",
         description: "Sets how loud or soft the audio is. Moving this control up increases the volume, while moving it down lowers it. The volume change is measured in decibels (dB)."
     }],
+
+    // Midi In Node
+    ["midiInNode", {
+        name: "MIDI In",
+        parent: null,
+        type: "MIDI",
+        description: "Provides MIDI input from an external connected MIDI device. Make sure you allow your browser to access MIDI devices."
+    }],
+    ["midiInNode-check", {
+        name: "Check Midi",
+        parent: "MIDI In",
+        type: "MIDI",
+        description: "Checks for connected MIDI devices. Requires browser permission to work."
+    }],
+    ["midiInNode-list", {
+        name: "Midi List",
+        parent: "MIDI In",
+        type: "MIDI",
+        description: "Lists all detected MIDI devices. Press \"Check Midi\" to refresh the list. Select a device to connect it."
+    }],
 ]);

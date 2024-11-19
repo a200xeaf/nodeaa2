@@ -22,8 +22,6 @@ const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({id, data, selected})
         updateNode(id, { [`faustDelay_${name}`]: value})
     }, [id, updateNode])
 
-    console.log("bad here")
-
     return (
         <NodeaaContainer selected={selected} width={15} height={9} infoID='faustDelayNode'>
             <Handle type="target" position={Position.Top} id='audio'/>
