@@ -131,12 +131,13 @@ const MidiKeyboardNode: React.FC<NodeProps<MidiKeyboardNodeType>> = ({id, data, 
     }, [data, id]);
 
     return (
-        <NodeaaContainer selected={selected} width={23} height={12}>
-            <NodeaaHeader nodeName='Midi Keyboard' headerColor='bg-blue-500' />
+        <NodeaaContainer selected={selected} width={23} height={12} infoID='midiKeyboardNode'>
+            <NodeaaHeader nodeName='MIDI Keyboard' headerColor='bg-blue-500' />
             <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[10rem] rounded-b-xl'>
                 <div className='flex justify-center'>
                     <button
                         onClick={() => toggleActive()}
+                        data-info-panel-id="midiKeyboardNode-active"
                         className={`font-bold text-center p-1 text-sm w-40 ${data.midikeyboard_active ? 'bg-green-500' : 'bg-red-500'}`}>
                         {data.midikeyboard_active ? (
                             <span className='text-white'>On</span>

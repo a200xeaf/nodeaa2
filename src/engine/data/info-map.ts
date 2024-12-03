@@ -91,4 +91,19 @@ export const infoMap = new Map<string, InfoObject>([
         type: "MIDI",
         description: "Lists all detected MIDI devices. Press \"Check Midi\" to refresh the list. Select a device to connect it."
     }],
+
+    // Midi Keyboard Node
+    ["midiKeyboardNode", {
+        name: "MIDI Keyboard",
+        parent: null,
+        type: "MIDI",
+        description: "Allows the computer keyboard to be used as a MIDI keyboard. The \"A\" row represents white keys starting at C and the \"Q\" row is black keys."
+    }],
+    // Midi Keyboard Node
+    ["midiKeyboardNode-active", {
+        name: "MIDI Keyboard",
+        parent: null,
+        type: "MIDI",
+        description: "Enables and disables the use of the keyboard as a MIDI keyboard. Note when enabled the \"Q\" and \"A\" row keys' normal functions may be bypassed."
+    }],
 ]);

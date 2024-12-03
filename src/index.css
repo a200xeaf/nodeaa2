@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.react-flow {
+    --xy-connectionline-stroke-width-default: 4px; /* Set to your desired thickness */
+}
+
 .react-flow__edge-path {
     stroke-width: 4;
 }

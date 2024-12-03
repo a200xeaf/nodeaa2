@@ -87,7 +87,7 @@ const MidiInNode: FC<NodeProps<MidiInNodeType>> = ({ id, selected }) => {
 
     return (
         <NodeaaContainer selected={selected} width={15} height={8} infoID='midiInNode'>
-            <NodeaaHeader nodeName='Midi In' headerColor='bg-blue-500' />
+            <NodeaaHeader nodeName='MIDI In' headerColor='bg-blue-500' />
             <div className='flex flex-col nodrag cursor-default bg-white p-2 h-[6rem] rounded-b-xl gap-y-2'>
                 <button onClick={handleMidi} data-info-panel-id="midiInNode-check" className='border-2 border-black rounded-lg hover:bg-gray-200'>Check Midi</button>
                 <select onChange={handleMidiSelect} data-info-panel-id="midiInNode-list" className='bg-white border-2 border-black p-1'>

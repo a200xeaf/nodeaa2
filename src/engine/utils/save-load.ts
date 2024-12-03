@@ -77,7 +77,9 @@ export const projectLoad = async (savedProjectJSON: string): Promise<{ success: 
 
         edges.forEach(edge => {
             updateStatus({phase: "edge", data: {source: edge.source, target: edge.target}})
-            useNodeStore.getState().onConnect({source: edge.source, sourceHandle: edge.sourceHandle, target: edge.target, targetHandle: edge.targetHandle});
+            if (!(edge.source.startsWith("mic"))) {
+                useNodeStore.getState().onConnect({source: edge.source, sourceHandle: edge.sourceHandle, target: edge.target, targetHandle: edge.targetHandle});
+            }
             updateProgress()
         })
 
