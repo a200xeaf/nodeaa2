@@ -17,6 +17,16 @@
     "audioType": "instrument",
     "version": "1.0.0"
   },
+  "faustAmpNode": {
+    "nodeName": "faustAmpNode",
+    "idPrefix": "",
+    "realName": "Amp",
+    "defaultData": { "faustAmp_gain": 1, "faustAmp_wet": 0.5 },
+    "audioNodeParams": { "engine": "faust", "type": "faustAmp" },
+    "hasAudio": true,
+    "audioType": "effect",
+    "version": "1.0.0"
+  },
   "faustGainNode": {
     "nodeName": "faustGainNode",
     "idPrefix": "",

@@ -27,9 +27,11 @@ import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
 import FaustKarplusNode from "@/nodes/Audio/FaustKarplusNode/FaustKarplusNode.tsx";
 import MidiScaleNode from "@/nodes/Midi/MidiScaleNode/MidiScaleNode.tsx";
 import AudioInNode from "@/nodes/Audio/AudioInNode/AudioInNode.tsx";
+import FaustAmpNode from "@/nodes/Audio/FaustAmpNode/FaustAmpNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
+    faustAmpNode: FaustAmpNode,
     faustGainNode: FaustGainNode,
     faustPolyNode: FaustPolyNode,
     faustLPFNode: FaustLPFNode,

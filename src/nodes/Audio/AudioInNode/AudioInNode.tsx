@@ -1,11 +1,16 @@
-import {FC, memo, useState} from "react";
-import {Handle, NodeProps, Position} from "@xyflow/react";
+import {FC, memo, useEffect, useState} from "react";
+import {Handle, NodeProps, Position, useUpdateNodeInternals} from "@xyflow/react";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 import {createAudioInputNode} from "@/engine/audio.ts";
 
 const AudioInNode: FC<NodeProps> = ({id, selected}) => {
     const [input, setInput] = useState<MediaStream | null>(null)
+    const updateNodeInternals = useUpdateNodeInternals();
+
+    useEffect(() => {
+        updateNodeInternals(id)
+    }, [id, input, updateNodeInternals]);
 
     const getAudioInputs = async() => {
         try {
@@ -31,7 +36,9 @@ const AudioInNode: FC<NodeProps> = ({id, selected}) => {
                     <div>{input.id}</div>
                 }
             </div>
-            <Handle type="source" position={Position.Bottom} id='audio'/>
+            {input &&
+                <Handle type="source" position={Position.Bottom} id='audio'/>
+            }
         </NodeaaContainer>
     )
 }
