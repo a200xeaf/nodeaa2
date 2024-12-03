@@ -298,3 +298,13 @@ const isFaust = (device: unknown): device is FaustMonoAudioWorkletNode | FaustPo
 const isPoly = (device: FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode): device is FaustPolyAudioWorkletNode => {
     return device instanceof FaustPolyAudioWorkletNode
 }
+
+export const createAudioInputNode = (id: string, input: MediaStream) => {
+    console.log(id, input);
+    const inputNode  = context.createMediaStreamSource(input)
+    if (!(nodes.has(id))) {
+        nodes.set(id, inputNode);
+    } else {
+        console.log("Input node exists for this device already")
+    }
+}

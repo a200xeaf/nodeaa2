@@ -26,6 +26,7 @@ import {NODEAACONFIG} from "@/engine/data/system-constants.ts";
 import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
 import FaustKarplusNode from "@/nodes/Audio/FaustKarplusNode/FaustKarplusNode.tsx";
 import MidiScaleNode from "@/nodes/Midi/MidiScaleNode/MidiScaleNode.tsx";
+import AudioInNode from "@/nodes/Audio/AudioInNode/AudioInNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -35,6 +36,7 @@ const nodeTypes = {
     faustDelayNode: FaustDelayNode,
     faustKarplusNode: FaustKarplusNode,
     outNode: OutNode,
+    audioInNode: AudioInNode,
     midiInNode: MidiInNode,
     midiKeyboardNode: MidiKeyboardNode,
     midiScaleNode: MidiScaleNode,
@@ -109,7 +111,7 @@ const App: React.FC = () => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Check if the target is an input field, textarea, or content-editable element
-            if (!(useNodeStore.getState().currentlyArmed.size === 0)) {
+            if (!(useNodeStore.getState().currentlyArmed.size === 0) && e.key !== 'n' && e.key !== 'i') {
                 mainemitter.emit("keydownarmed", e)
                 return
             }

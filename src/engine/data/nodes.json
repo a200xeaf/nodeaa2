@@ -83,6 +83,14 @@
     "hasAudio": false,
     "version": "1.0.0"
   },
+  "audioInNode": {
+    "nodeName": "audioInNode",
+    "idPrefix": "mic",
+    "realName": "Audio Input",
+    "defaultData": { "audioin_device": "" },
+    "hasAudio": false,
+    "version": "1.0.0"
+  },
   "midiKeyboardNode": {
     "nodeName": "midiKeyboardNode",
     "idPrefix": "midi",
