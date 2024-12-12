@@ -1,50 +1,86 @@
-# React + TypeScript + Vite
+# Nodeaa: Modular Browser-Based Digital Audio Workstation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Nodeaa is an innovative browser-based Digital Audio Workstation (DAW) built using React, TypeScript, and Vite. Inspired by tools like Pure Data and MaxMSP, Nodeaa enables real-time modular sound processing and node-based audio routing directly in your browser. With features like context-aware documentation, advanced audio routing, and versatile UI components. Nodeaa is designed for both beginners and audio professionals.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Real-Time Audio Processing**: Seamless, low-latency sound design directly in your browser.
+- **Node-Based Routing**: Create complex audio workflows with intuitive drag-and-drop functionality.
+- **Developer Tools**: Build custom nodes with modular UI components and React hooks.
+- **Context-Aware Documentation**: In-app tooltips and guides for every parameter and device.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+---
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Prerequisites
+
+Make sure you have Node.js (>=16.0.0) and npm (>=7.0.0) installed.
+
+### Installation
+
+Clone the repository and install the dependencies:
+
+```bash
+# Clone the repository
+git clone https://github.com/a200xeaf/nodeaa2.git
+
+# Navigate to the project directory
+cd nodeaa
+
+# Install dependencies
+npm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Development Server
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Start the development server:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm run dev
 ```
+
+The app will be available at [http://localhost:5173](http://localhost:5173).
+
+### Build for Production
+
+Create an optimized production build:
+
+```bash
+npm run build
+```
+
+### Preview Production Build
+
+Preview the production build locally:
+
+```bash
+npm run preview
+```
+
+---
+
+## Project Structure
+
+- **src/**: Contains the main application source code.
+- **public/**: Static assets like icons and images.
+- **latex-document.tex**: The accompanying LaTeX document for this project.
+- **survey-results/**: Folder containing raw survey data and summaries.
+
+---
+
+## License
+
+This project is licensed under the GNU Affero General Public License (AGPL) v3. See the `LICENSE` file for more details.
+
+---
+
+## Contact
+
+For questions or feedback, feel free to open an issue or contact the maintainer at [a200xeaf@protonmail.com](mailto:a200xeaf@protonmail.com).
+
+---
+
+Enjoy creating with Nodeaa! 🎵
