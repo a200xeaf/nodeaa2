@@ -9,7 +9,7 @@ Nodeaa is an innovative browser-based Digital Audio Workstation (DAW) built usin
 - **Real-Time Audio Processing**: Seamless, low-latency sound design directly in your browser.
 - **Node-Based Routing**: Create complex audio workflows with intuitive drag-and-drop functionality.
 - **Developer Tools**: Build custom nodes with modular UI components and React hooks.
-- **Context-Aware Documentation**: In-app tooltips and guides for every parameter and device.
+- **Context-Aware Documentation**: In-app tooltips for parameters and devices.
 
 ---
 
