@@ -66,8 +66,8 @@ npm run preview
 
 - **src/**: Contains the main application source code.
 - **public/**: Static assets like icons and images.
-- **latex-document.tex**: The accompanying LaTeX document for this project.
-- **survey-results/**: Folder containing raw survey data and summaries.
+- **LATEXSOURCE/**: The accompanying LaTeX document for this project.
+- **SURVEYRESULTS/**: Folder containing raw survey data and summaries.
 
 ---
 
