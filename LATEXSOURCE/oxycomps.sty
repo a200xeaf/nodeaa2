@@ -1,0 +1,102 @@
+% A simple two-column LaTeX style for Occidental College's CS senior projects.
+% Based on latex8.sty by Paolo.Ienne@di.epfl.ch 
+
+\usepackage{times} % use Times as the default font
+% define bold 11pt Times font for second-order headings
+\font\elvbf = ptmb scaled 1100
+
+\usepackage[style=numeric,sorting=nyt]{biblatex} % format the bibliography nicely
+\usepackage{xpatch} % used to patch \textcite
+
+% change \textcite to do family-name (year)
+\xpatchbibmacro{textcite}
+  {\printnames{labelname}}
+  {\printnames{labelname} (\printfield{year})}
+  {}
+  {}
+% sort bibliography by last name
+\DeclareNameAlias{default}{family-given}
+
+\usepackage{amsfonts} % provides many math symbols/fonts
+\usepackage{amsmath} % provides many math environments
+\usepackage{amssymb} % provides many math symbols/fonts
+\usepackage{caption} % fixes caption spacing issues
+\usepackage[usenames,dvipsnames]{color} % allows for colored text
+\usepackage{enumitem} % allows adjustment of list spacing
+\usepackage{graphicx} % allows insertion of graphics
+\usepackage{hyperref} % creates links within the page and to URLs
+\usepackage{listings} % provides the lstlisting environment
+\usepackage{url} % formats URLs properly
+\usepackage{verbatim} % provides the comment environment
+
+% set dimensions of columns, gap between columns, and paragraph indent
+\setlength{\textheight}{8.875in}
+\setlength{\textwidth}{6.875in}
+\setlength{\columnsep}{0.3125in}
+\setlength{\topmargin}{0in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\parindent}{1em}
+\setlength{\oddsidemargin}{-.304in}
+\setlength{\evensidemargin}{-.304in}
+
+% remove the space between list items
+\setlist{noitemsep}
+
+% style code listings
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    showstringspaces=false
+}
+
+% style the title
+\def\@maketitle{
+   \newpage
+   \begin{center}
+      {\Large \bf \@title \par}
+      % add two empty lines at the end of the title
+      \vspace*{2\baselineskip}
+      {
+         \large
+         \begin{tabular}[t]{c}
+            \@author
+         \end{tabular}
+         \par
+      }
+      % add small space at the end of the author name
+      \vspace*{.5em}
+      {
+         \ifx \@empty \@email
+         \else
+            \texttt{\@email}
+            \par
+            \vspace*{.25em}
+         \fi
+         \ifx \@empty \@affiliation
+         \else
+            \@affiliation
+         \fi
+      }
+      % add empty line at the end of the title block
+      \vspace*{\baselineskip}
+   \end{center}
+}
+
+% style the abstract
+\def\abstract{%
+   \centerline{\large\bf Abstract}%
+   \vspace*{\baselineskip}%
+}
+
+% define email and affiliation
+\def\email#1{\gdef\@email{#1}}
+\gdef\@email{}
+\def\affiliation#1{\gdef\@affiliation{#1}}
+\gdef\@affiliation{}
+
+% correct heading spacing and type
+\def\section{\@startsection {section}{1}{\z@}
+   {14pt plus 2pt minus 2pt}{14pt plus 2pt minus 2pt} {\large\bf}}
+\def\subsection{\@startsection {subsection}{2}{\z@}
+   {13pt plus 2pt minus 2pt}{13pt plus 2pt minus 2pt} {\elvbf}}
