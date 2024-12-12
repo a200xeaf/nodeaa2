@@ -28,7 +28,7 @@ Clone the repository and install the dependencies:
 git clone https://github.com/a200xeaf/nodeaa2.git
 
 # Navigate to the project directory
-cd nodeaa
+cd nodeaa2
 
 # Install dependencies
 npm install
