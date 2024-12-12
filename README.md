@@ -11,7 +11,7 @@ Nodeaa is an innovative browser-based Digital Audio Workstation (DAW) built usin
 - **Developer Tools**: Build custom nodes with modular UI components and React hooks.
 - **Context-Aware Documentation**: In-app tooltips for parameters and devices.
 
-Note: Data-based nodes are currently disabled for refactoring however a working copy still exists in the code and can be tested in the [rnbotestzone repo here](https://github.com/a200xeaf/rnbotestzone)
+Note: Data-based nodes are currently disabled for refactoring however a working copy still exists in the code and can be tested in the [rnbotestzone repo here](https://github.com/a200xeaf/rnbotestzone) or live on [https://nodeaatestzone.pages.dev/data](https://nodeaatestzone.pages.dev/data)
 
 ---
 
