@@ -2,6 +2,8 @@
 
 Nodeaa is an innovative browser-based Digital Audio Workstation (DAW) built using React, TypeScript, and Vite. Inspired by tools like Pure Data and MaxMSP, Nodeaa enables real-time modular sound processing and node-based audio routing directly in your browser. With features like context-aware documentation, advanced audio routing, and versatile UI components. Nodeaa is designed for both beginners and audio professionals.
 
+[nodeaa.pages.dev](nodeaa.pages.dev)
+
 ---
 
 ## Features
