@@ -6,6 +6,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   build: {
     target: 'esnext',
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,    // remove console.* calls
+        drop_debugger: true,   // remove debugger statements
+      },
+    }
   },
   plugins: [react()],
   resolve: {
