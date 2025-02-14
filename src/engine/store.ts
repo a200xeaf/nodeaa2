@@ -119,11 +119,12 @@ export const useNodeStore = create<NodeStoreState>()(
                 const data = nodeConfig.defaultData;
 
                 let position
+                const { viewport } = get();
                 //FIXME Perfect this based on node size (add to json?)
                 if (center) {
                     position = {
-                        x: (window.innerWidth / 2 - get().viewport.x - 150) / get().viewport.zoom,
-                        y: (window.innerHeight / 2 - get().viewport.y - 100) / get().viewport.zoom,
+                        x: (window.innerWidth / 2 - viewport.x - 150) / viewport.zoom,
+                        y: (window.innerHeight / 2 - viewport.y - 100) / viewport.zoom,
                     }
                 } else {
                     position = { x: pos.x, y: pos.y }
