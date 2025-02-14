@@ -5,8 +5,11 @@ import App from './App';
 import { ReactFlowProvider } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import './index.css';
+import {startAverageFPSMonitor} from "@/engine/utils/startAverageFPSMonitor.ts";
 
 const rootElement = document.getElementById('root') as HTMLElement;
+
+startAverageFPSMonitor()
 
 ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
