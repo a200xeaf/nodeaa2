@@ -12,7 +12,7 @@ import AudioEdge from "./ui/edges/AudioEdge.tsx";
 import MidiEdge from "./ui/edges/MidiEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
 import CreatorNode from "@/nodes/Misc/CreatorNode/CreatorNode.tsx";
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import FaustLPFNode from "@/nodes/Audio/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/Audio/FaustDelayNode/FaustDelayNode.tsx";
@@ -101,7 +101,7 @@ const App: React.FC = () => {
         setViewport(x, y, zoom);
     }, [x, y, zoom, setViewport]);
 
-    const [mousePos, setMousePos] = useState({x: 0, y: 0});
+    const mousePos = useRef({ x: 0, y: 0 });
     const [draggingKnobId, setDraggingKnobId] = useState<string | null>(null);
     const [initialMouseX, setInitialMouseX] = useState<number>(0);
     const [initialMouseY, setInitialMouseY] = useState<number>(0);
@@ -109,6 +109,10 @@ const App: React.FC = () => {
     const infoPanelRef = useRef<HTMLDivElement>(null)
     const [infoPanelID, setInfoPanelID] = useState<InfoObject | null>(null);
     const [showInfoPanel, setShowInfoPanel] = useState<boolean>(true);
+
+    const handleNodeaaPointerUp = useCallback((e: React.MouseEvent) => {
+        mousePos.current = { x: e.clientX, y: e.clientY };
+    }, [])
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -124,8 +128,8 @@ const App: React.FC = () => {
 
             if (e.key.toLowerCase() === 'n' && !isInputFocused) {
                 const pos = {
-                    x: (mousePos.x - 40 - x) / zoom,
-                    y: (mousePos.y - 20 - y) / zoom
+                    x: (mousePos.current.x - 40 - x) / zoom,
+                    y: (mousePos.current.y - 20 - y) / zoom
                 };
                 createNode('creatorNode', pos);
             }
@@ -161,7 +165,7 @@ const App: React.FC = () => {
         };
 
         const handleMouseMove = (e: MouseEvent) => {
-            setMousePos({ x: e.clientX, y: e.clientY });
+            mousePos.current = { x: e.clientX, y: e.clientY };
 
             if (e.target !== null && draggingKnobId === null) {
                 const target = e.target as HTMLElement;
@@ -195,7 +199,8 @@ const App: React.FC = () => {
             }
         };
 
-        const handleMouseUp = () => {
+        const handleMouseUp = (e: MouseEvent) => {
+            console.log(e)
             if (draggingKnobId) {
                 // Emit 'mouseup' event to the knob
                 mainemitter.emit(draggingKnobId, {
@@ -221,7 +226,6 @@ const App: React.FC = () => {
         document.addEventListener('keyup', handleKeyUp);
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mousedown', handleMouseDown);
-        document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
         document.addEventListener('dblclick', handleDoubleClick);
 
@@ -231,11 +235,10 @@ const App: React.FC = () => {
             document.removeEventListener('keyup', handleKeyUp);
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mousedown', handleMouseDown);
-            document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
             document.removeEventListener('dblclick', handleDoubleClick);
         }
-    }, [mousePos, x, y, zoom, createNode, draggingKnobId, initialMouseY, initialMouseX]);
+    }, [x, y, zoom, createNode, draggingKnobId, initialMouseY, initialMouseX]);
 
     // const { x, y, zoom } = useViewport();
     // const nPressed = useKeyPress('n')
@@ -257,6 +260,8 @@ const App: React.FC = () => {
                 onEdgesDelete={onEdgesDelete}
 
                 onConnect={onConnect}
+
+                onPointerUp={handleNodeaaPointerUp}
 
                 isValidConnection={isValidConnection}
             >
