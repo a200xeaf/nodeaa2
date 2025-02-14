@@ -6,18 +6,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   build: {
     target: 'esnext',
-    sourcemap: false,
-    cssCodeSplit: true,
-    rollupOptions: {
-      output: {
-        // Bundle node_modules separately for better caching
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            return id.toString().split("node_modules/")[1].split("/")[0];
-          }
-        },
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,    // remove console.* calls
+        drop_debugger: true,   // remove debugger statements
       },
-    }
+    },
   },
   plugins: [react()],
   resolve: {
