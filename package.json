@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "audit": "lighthouse http://localhost:5173 --chrome-flags=\"--allow-insecure-localhost --ignore-certificate-errors\" --preset=desktop --output json --output-path report.json"
   },
   "dependencies": {
     "@grame/faustwasm": "^0.8.2",
