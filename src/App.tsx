@@ -264,10 +264,10 @@ const App: React.FC = () => {
 
                 {graphBackground === 'none' ? null : <Background variant={getBackgroundVariant(graphBackground)} gap={28}/>}
             </ReactFlow>
-            {/*<div className='absolute z-[9999] h-screen w-screen top-0 left-0'>*/}
+            {/*<div className='absolute z-9999 h-screen w-screen top-0 left-0'>*/}
             {/*    <NodeContextMenu />*/}
             {/*</div>*/}
-            <p className='z-[9998] absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
+            <p className='z-9998 absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
                 border h-10'
             >
                 {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}

@@ -16,11 +16,11 @@ const NodeaaWelcome = () => {
     return (
         <AlertDialog defaultOpen={true} open={welcomeDialog} onOpenChange={setWelcomeDialog}>
             <AlertDialogContent
-                className="absolute z-[9999] w-[90%] max-w-[1000px] max-h-[90vh] min-w-[100px] min-h-[20px]"
+                className="absolute z-9999 w-[90%] max-w-[1000px] max-h-[90vh] min-w-[100px] min-h-[20px]"
             >
                 <AlertDialogHeader className='items-center'>
                     <AlertDialogTitle className="inline-block w-fit text-4xl font-bold text-center select-none
-                    bg-gradient-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent animate-gradient bg-[length:150%_150%]"
+                    bg-linear-to-r from-blue-500 to-pink-500 bg-clip-text text-transparent animate-gradient bg-[length:150%_150%]"
                     >
                         Welcome to Nodeaa
                     </AlertDialogTitle>

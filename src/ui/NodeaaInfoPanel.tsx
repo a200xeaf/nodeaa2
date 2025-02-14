@@ -7,7 +7,7 @@ interface NodeaaInfoPanelProps {
 
 const NodeaaInfoPanel: FC<NodeaaInfoPanelProps> = ({ idInfo }) => {
     return (
-        <div className="absolute bg-white w-64 h-52 drop-shadow-lg left-10 bottom-10 z-[9999] rounded-lg p-4 space-y-3">
+        <div className="absolute bg-white w-64 h-52 drop-shadow-lg left-10 bottom-10 z-9999 rounded-lg p-4 space-y-3">
             <div className="space-y-2">
                 <h2 className="font-semibold text-gray-800 text-lg">
                     {idInfo ? idInfo.name : <span className="text-gray-300">Name</span>}

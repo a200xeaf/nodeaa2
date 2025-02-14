@@ -94,7 +94,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
     }, [id, selfNodeDelete]);
 
     return (
-        <div className='bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-[99999]' ref={nodeRef}>
+        <div className='bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-99999' ref={nodeRef}>
             <input
                 type='text'
                 value={search}
@@ -102,7 +102,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
                 onBlur={handleBlur}  // Add onBlur event to track when input loses focus
                 ref={inputRef}  // Attach ref to the input
                 maxLength={40}  // Set the max length of input text
-                className='w-full focus:outline-none'  // Remove blue outline on focus
+                className='w-full focus:outline-hidden'  // Remove blue outline on focus
                 placeholder="Start typing..."  // Optional placeholder text
                 autoFocus
             />
@@ -144,7 +144,7 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
                                     {/* Button */}
                                     <button
                                         onClick={() => handleCreate(result.nodeName)}
-                                        className="w-full text-left focus:outline-none"
+                                        className="w-full text-left focus:outline-hidden"
                                     >
                                         {result.realName}
                                     </button>

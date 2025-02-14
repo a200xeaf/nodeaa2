@@ -18,7 +18,7 @@ const NodeaaLoading = () => {
     return (
         <AlertDialog open={loadingStatus} onOpenChange={setLoadingStatus}>
             <AlertDialogContent
-                className="absolute z-[9999] w-[40%]"
+                className="absolute z-9999 w-[40%]"
             >
                 <AlertDialogHeader>
                     <AlertDialogTitle>Loading</AlertDialogTitle>
