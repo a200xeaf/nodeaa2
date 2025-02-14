@@ -26,6 +26,7 @@
     "@xyflow/react": "^12.4.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cssnano": "^7.0.6",
     "embla-carousel-react": "^8.5.2",
     "eventemitter3": "^5.0.1",
     "extendable-media-recorder": "^9.2.19",
