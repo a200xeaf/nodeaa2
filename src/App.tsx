@@ -205,8 +205,7 @@ const App: React.FC = () => {
             }
         };
 
-        const handleMouseUp = (e: MouseEvent) => {
-            console.log(e)
+        const handleMouseUp = () => {
             if (draggingKnobIdRef.current) {
                 // Emit 'mouseup' event to the knob
                 mainemitter.emit(draggingKnobIdRef.current, {

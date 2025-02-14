@@ -1,6 +1,6 @@
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
-import {Handle, Node, NodeProps, Position, useHandleConnections} from "@xyflow/react";
+import {Handle, Node, NodeProps, Position, useNodeConnections} from "@xyflow/react";
 import {ChangeEvent, FC, memo, useCallback, useEffect, useRef} from "react";
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
 import {useNodeStore} from "@/engine/store.ts";
@@ -16,7 +16,7 @@ type MidiScaleNodeData = {
 type MidiScaleNodeType = Node<MidiScaleNodeData, 'midiScaleNode'>;
 
 const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) => {
-    const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
+    const midiConnections = useNodeConnections({handleType: 'target', handleId: 'midi'})
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
     const outputNoteToInputNote = useRef<Map<number, number>>(new Map());
     const notes = [

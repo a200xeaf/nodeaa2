@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useCallback} from 'react';
-import {Handle, Node, NodeProps, Position, useHandleConnections} from '@xyflow/react';
+import {Handle, Node, NodeProps, Position, useNodeConnections} from '@xyflow/react';
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
 import {sendMidi} from "@/engine/audio.ts";
 import {useNodeStore} from "@/engine/store.ts";
@@ -19,7 +19,7 @@ type FaustPolyNodeType = Node<FaustPolyNodeData, 'faustPolyNode'>;
 
 const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
-    const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
+    const midiConnections = useNodeConnections({handleType: 'target', handleId: 'midi'})
 
     // Memoize handleMIDI to avoid re-creating on every render
     const handleMIDI = useCallback((e: Uint8Array) => {

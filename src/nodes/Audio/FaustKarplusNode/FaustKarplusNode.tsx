@@ -1,4 +1,4 @@
-import {Handle, Node, NodeProps, Position, useHandleConnections} from "@xyflow/react";
+import {Handle, Node, NodeProps, Position, useNodeConnections} from "@xyflow/react";
 import {FC, memo, useCallback} from "react";
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
@@ -17,7 +17,7 @@ type FaustKarplusNodeType = Node<FaustKarplusNodeData, 'faustKarplusNode'>;
 
 const FaustKarplusNode: FC<NodeProps<FaustKarplusNodeType>> = ({id, data, selected}) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
-    const midiConnections = useHandleConnections({type: 'target', id: 'midi'})
+    const midiConnections = useNodeConnections({handleType: 'target', handleId: 'midi'})
 
     const handleMIDI = useCallback((e: Uint8Array) => {
         sendMidi(id, e);

@@ -1,7 +1,7 @@
 import {FC, memo} from 'react'
 import {useNodeStore} from "@/engine/store.ts";
 import {useShallow} from "zustand/react/shallow";
-import {Handle, Position, Node, NodeProps, useHandleConnections} from "@xyflow/react";
+import {Handle, Position, Node, NodeProps, useNodeConnections} from "@xyflow/react";
 import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
@@ -13,7 +13,7 @@ type ViewerNodeData = { viewer_value: never };
 type ViewerNodeType = Node<ViewerNodeData, 'viewerNode'>;
 
 const NumberNode: FC<NodeProps<ViewerNodeType>> = ({id, data, selected}) => {
-    const dataConnections = useHandleConnections({type: 'target', id: 'data'})
+    const dataConnections = useNodeConnections({handleType: 'target', handleId: 'data'})
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
 
     const handleViewer = (e: unknown) => {
