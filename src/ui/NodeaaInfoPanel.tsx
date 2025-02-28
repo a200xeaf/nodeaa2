@@ -1,5 +1,5 @@
-import {FC, memo} from "react";
-import {InfoObject} from "@/engine/data/info-map.ts";
+import { FC, memo } from "react";
+import { InfoObject } from "@/engine/data/info-map.ts";
 
 interface NodeaaInfoPanelProps {
     idInfo: InfoObject | null;
@@ -14,15 +14,16 @@ const NodeaaInfoPanel: FC<NodeaaInfoPanelProps> = ({ idInfo }) => {
                 </h2>
                 <p className="text-gray-500 text-xs">
                     <em>
-                        {idInfo
-                            ? `${idInfo.type}${idInfo.parent ? ` → ${idInfo.parent}` : ""} → ${idInfo.name}`
-                            : <span className="text-gray-300">Type → Parent → Name</span>
-                        }
+                        {idInfo ? (
+                            `${idInfo.type}${idInfo.parent ? ` → ${idInfo.parent}` : ""} → ${idInfo.name}`
+                        ) : (
+                            <span className="text-gray-300">Type → Parent → Name</span>
+                        )}
                     </em>
                 </p>
             </div>
 
-            <hr className="border-gray-300"/>
+            <hr className="border-gray-300" />
 
             <div className="text-sm text-gray-700">
                 <p>{idInfo ? idInfo.description : <span className="text-gray-300">Description..</span>}</p>

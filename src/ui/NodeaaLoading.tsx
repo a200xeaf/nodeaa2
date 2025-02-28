@@ -2,12 +2,13 @@ import {
     AlertDialog,
     AlertDialogContent,
     AlertDialogDescription,
-    AlertDialogHeader, AlertDialogTitle
+    AlertDialogHeader,
+    AlertDialogTitle,
 } from "@/components/ui/alert-dialog.tsx";
-import {useNodeStore} from "@/engine/store.ts";
-import {useShallow} from "zustand/react/shallow";
-import {Progress} from "@/components/ui/progress.tsx";
-import {memo} from "react";
+import { useNodeStore } from "@/engine/store.ts";
+import { useShallow } from "zustand/react/shallow";
+import { Progress } from "@/components/ui/progress.tsx";
+import { memo } from "react";
 
 const NodeaaLoading = () => {
     const loadingStatus = useNodeStore(useShallow((state) => state.loadingStatus));
@@ -17,9 +18,7 @@ const NodeaaLoading = () => {
 
     return (
         <AlertDialog open={loadingStatus} onOpenChange={setLoadingStatus}>
-            <AlertDialogContent
-                className="absolute z-9999 w-[40%]"
-            >
+            <AlertDialogContent className="absolute z-9999 w-[40%]">
                 <AlertDialogHeader>
                     <AlertDialogTitle>Loading</AlertDialogTitle>
                     <Progress value={loadingProgress} />
@@ -27,6 +26,6 @@ const NodeaaLoading = () => {
                 </AlertDialogHeader>
             </AlertDialogContent>
         </AlertDialog>
-    )
-}
-export default memo(NodeaaLoading)
+    );
+};
+export default memo(NodeaaLoading);

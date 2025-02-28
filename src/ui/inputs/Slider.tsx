@@ -14,24 +14,26 @@ interface SliderProps {
     callback: (id: string, value: number) => void;
     length?: number;
     scale_exponent?: number;
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: "horizontal" | "vertical";
     filled?: boolean;
 }
 
-type P5InstanceWithUpdate = p5 & { updatePosition: (newPosition: number) => void };
+type P5InstanceWithUpdate = p5 & {
+    updatePosition: (newPosition: number) => void;
+};
 
 const Slider: FC<SliderProps> = ({
-                                     id,
-                                     value,
-                                     min_value,
-                                     max_value,
-                                     default_value,
-                                     callback,
-                                     length = 200,
-                                     scale_exponent = 1,
-                                     orientation = 'horizontal',
-                                     filled = false,
-                                 }) => {
+    id,
+    value,
+    min_value,
+    max_value,
+    default_value,
+    callback,
+    length = 200,
+    scale_exponent = 1,
+    orientation = "horizontal",
+    filled = false,
+}) => {
     const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null);
     const sketchRef = useRef<HTMLDivElement>(null);
 
@@ -54,9 +56,9 @@ const Slider: FC<SliderProps> = ({
         let isDragging = false;
         const sensitivity = 0.0057; // Reduced sensitivity
 
-        const width = orientation === 'horizontal' ? length : 20;
-        const height = orientation === 'horizontal' ? 20 : length;
-        const trackLength = orientation === 'horizontal' ? width - 20 : height - 20;
+        const width = orientation === "horizontal" ? length : 20;
+        const height = orientation === "horizontal" ? 20 : length;
+        const trackLength = orientation === "horizontal" ? width - 20 : height - 20;
         const thumbSize = 10;
 
         const sketch = (p: p5) => {
@@ -77,7 +79,7 @@ const Slider: FC<SliderProps> = ({
                 p.strokeWeight(6);
                 p.noFill();
 
-                if (orientation === 'horizontal') {
+                if (orientation === "horizontal") {
                     p.line(10, p.height / 2, p.width - 10, p.height / 2);
                 } else {
                     p.line(p.width / 2, 10, p.width / 2, p.height - 10);
@@ -86,7 +88,7 @@ const Slider: FC<SliderProps> = ({
                 // Draw filled part if 'filled' prop is true
                 if (filled) {
                     p.stroke(p.color("#80c5ff"));
-                    if (orientation === 'horizontal') {
+                    if (orientation === "horizontal") {
                         const x = 10 + position * trackLength;
                         p.line(10, p.height / 2, x, p.height / 2);
                     } else {
@@ -99,7 +101,7 @@ const Slider: FC<SliderProps> = ({
                 p.fill(p.color("#60a5fa"));
                 p.noStroke();
 
-                if (orientation === 'horizontal') {
+                if (orientation === "horizontal") {
                     const x = 10 + position * trackLength;
                     const y = p.height / 2;
                     p.circle(x, y, thumbSize);
@@ -124,15 +126,15 @@ const Slider: FC<SliderProps> = ({
             const p = p5InstanceRef.current;
 
             switch (event.type) {
-                case 'mousedown':
+                case "mousedown":
                     isDragging = true;
                     break;
-                case 'mousemove':
+                case "mousemove":
                     if (isDragging) {
                         p.loop();
 
                         // Determine movement based on orientation
-                        const delta = orientation === 'horizontal' ? event.deltaX : -event.deltaY;
+                        const delta = orientation === "horizontal" ? event.deltaX : -event.deltaY;
                         const currSens = event.shiftKey ? sensitivity / 4 : sensitivity;
 
                         // Update position
@@ -145,17 +147,17 @@ const Slider: FC<SliderProps> = ({
                         callback(id, newValue);
                     }
                     break;
-                case 'mouseup':
+                case "mouseup":
                     isDragging = false;
                     p.noLoop();
                     break;
-                case 'doubleclick':
-                {
-                    position = valueToPosition(default_value);
-                    p.redraw();
-                    const newValue = positionToValue(position);
-                    callback(id, newValue);
-                }
+                case "doubleclick":
+                    {
+                        position = valueToPosition(default_value);
+                        p.redraw();
+                        const newValue = positionToValue(position);
+                        callback(id, newValue);
+                    }
                     break;
                 default:
                     break;
@@ -175,17 +177,7 @@ const Slider: FC<SliderProps> = ({
             p5InstanceRef.current = null;
             mainemitter.off("controller-" + controllerId, handleSliderEvent);
         };
-    }, [
-        min_value,
-        max_value,
-        valueToPosition,
-        positionToValue,
-        default_value,
-        id,
-        callback,
-        orientation,
-        filled,
-    ]);
+    }, [min_value, max_value, valueToPosition, positionToValue, default_value, id, callback, orientation, filled]);
 
     // Update the slider when the value prop changes
     useEffect(() => {

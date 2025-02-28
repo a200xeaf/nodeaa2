@@ -1,4 +1,4 @@
-import {create} from "zustand";
+import { create } from "zustand";
 import {
     Node as FlowNode,
     Edge,
@@ -6,9 +6,12 @@ import {
     OnEdgesChange,
     Connection,
     applyEdgeChanges,
-    applyNodeChanges, OnNodesDelete, OnEdgesDelete, OnConnect
+    applyNodeChanges,
+    OnNodesDelete,
+    OnEdgesDelete,
+    OnConnect,
 } from "@xyflow/react";
-import {nanoid} from "nanoid";
+import { nanoid } from "nanoid";
 import {
     connectNodes,
     createAudioNode,
@@ -16,23 +19,23 @@ import {
     disconnectNodes,
     isRunningEngine,
     toggleAudioEngine,
-    updateAudioNode
+    updateAudioNode,
 } from "./audio.ts";
-import {WebMidi} from "webmidi";
-import rawNodesConfig from './data/nodes.json'
-import {NodesConfig} from "@/engine/types/node-types.ts";
-import {persist} from "zustand/middleware";
+import { WebMidi } from "webmidi";
+import rawNodesConfig from "./data/nodes.json";
+import { NodesConfig } from "@/engine/types/node-types.ts";
+import { persist } from "zustand/middleware";
 
 export interface NodeStoreState {
     nodes: FlowNode[];
     edges: Edge[];
 
     viewport: {
-        x: number
-        y: number
-        zoom: number
-    }
-    setViewport: (x: number, y: number, zoom: number) => void
+        x: number;
+        y: number;
+        zoom: number;
+    };
+    setViewport: (x: number, y: number, zoom: number) => void;
 
     wm: typeof WebMidi;
 
@@ -43,15 +46,15 @@ export interface NodeStoreState {
     onEdgesChange: OnEdgesChange;
     onNodesDelete: OnNodesDelete;
     onEdgesDelete: OnEdgesDelete;
-    selfNodeDelete: (id: string) => void
+    selfNodeDelete: (id: string) => void;
     onConnect: OnConnect;
-    updateNode: (id: string, data: Partial<FlowNode['data']>) => void;
-    createNode: (type: string, pos?: {x: number, y: number}, center?: boolean, useId?: string) => Promise<void>;
+    updateNode: (id: string, data: Partial<FlowNode["data"]>) => void;
+    createNode: (type: string, pos?: { x: number; y: number }, center?: boolean, useId?: string) => Promise<void>;
 
     clearProject: () => void;
 
-    graphBackground: string
-    setGraphBackground: (selection: string) => void
+    graphBackground: string;
+    setGraphBackground: (selection: string) => void;
 
     isFullscreen: boolean;
     toggleFullscreen: () => void;
@@ -79,7 +82,12 @@ export const useNodeStore = create<NodeStoreState>()(
     persist(
         (set, get) => ({
             nodes: [
-                {id: 'output-1', type: 'outNode', data: {label: 'output'}, position: {x: 800, y: 500}}
+                {
+                    id: "output-1",
+                    type: "outNode",
+                    data: { label: "output" },
+                    position: { x: 800, y: 500 },
+                },
             ],
             edges: [],
 
@@ -88,15 +96,15 @@ export const useNodeStore = create<NodeStoreState>()(
                 y: 0,
                 zoom: 1,
             },
-            setViewport: (x: number, y: number, zoom: number)=> {
-                set({viewport: {x, y, zoom}});
+            setViewport: (x: number, y: number, zoom: number) => {
+                set({ viewport: { x, y, zoom } });
             },
 
             wm: WebMidi,
 
             isRunning: isRunningEngine(),
 
-            createNode: async(type, pos = {x: 0, y: 0}, center = false, useId = undefined) => {
+            createNode: async (type, pos = { x: 0, y: 0 }, center = false, useId = undefined) => {
                 const nodeConfig = nodesConfig[type];
 
                 // If the type is not found in the config, exit the function
@@ -106,28 +114,28 @@ export const useNodeStore = create<NodeStoreState>()(
                 }
 
                 // Generate a unique ID for the node
-                let id: string
+                let id: string;
                 if (useId) {
-                    id = useId
+                    id = useId;
                 } else {
                     if (nodeConfig.idPrefix === "") {
-                        id = nanoid()
+                        id = nanoid();
                     } else {
-                        id = `${nodeConfig.idPrefix}-${nanoid()}`
+                        id = `${nodeConfig.idPrefix}-${nanoid()}`;
                     }
                 }
                 const data = nodeConfig.defaultData;
 
-                let position
+                let position;
                 const { viewport } = get();
                 //FIXME Perfect this based on node size (add to json?)
                 if (center) {
                     position = {
                         x: (window.innerWidth / 2 - viewport.x - 150) / viewport.zoom,
                         y: (window.innerHeight / 2 - viewport.y - 100) / viewport.zoom,
-                    }
+                    };
                 } else {
-                    position = { x: pos.x, y: pos.y }
+                    position = { x: pos.x, y: pos.y };
                 }
 
                 // Add the new node to the store
@@ -143,18 +151,18 @@ export const useNodeStore = create<NodeStoreState>()(
             },
             toggleAudio: () => {
                 toggleAudioEngine().then(() => {
-                    set({isRunning: isRunningEngine()});
-                })
+                    set({ isRunning: isRunningEngine() });
+                });
             },
             onNodesChange: (changes) => {
                 set({
-                    nodes: applyNodeChanges(changes, get().nodes)
-                })
+                    nodes: applyNodeChanges(changes, get().nodes),
+                });
             },
             onEdgesChange: (changes) => {
                 set({
-                    edges: applyEdgeChanges(changes, get().edges)
-                })
+                    edges: applyEdgeChanges(changes, get().edges),
+                });
             },
             onConnect: (connection: Connection) => {
                 const id = nanoid(6);
@@ -167,45 +175,43 @@ export const useNodeStore = create<NodeStoreState>()(
                 const newEdge = {
                     id,
                     ...connection,
-                    type: edgeType,  // Set the edge type dynamically
+                    type: edgeType, // Set the edge type dynamically
                 };
 
                 set({ edges: [newEdge, ...get().edges] });
 
                 // Additional logic for connecting audio nodes
-                if (connection.sourceHandle === 'audio') {
+                if (connection.sourceHandle === "audio") {
                     connectNodes(connection.source, connection.target);
                 }
             },
             updateNode: (id, data) => {
                 if (!(id.length > 21)) {
-                    updateAudioNode(id, data)
+                    updateAudioNode(id, data);
                 }
                 set({
                     nodes: get().nodes.map((node) =>
-                        node.id === id
-                            ? {...node, data: {...node.data, ...data}}
-                            : node
+                        node.id === id ? { ...node, data: { ...node.data, ...data } } : node,
                     ),
                 });
             },
             onNodesDelete: (nodes) => {
-                for (const {id} of nodes) {
-                    if (!(id.length > 21) && !(id.includes("output"))) {
-                        deleteAudioNode(id)
+                for (const { id } of nodes) {
+                    if (!(id.length > 21) && !id.includes("output")) {
+                        deleteAudioNode(id);
                     }
                 }
             },
             onEdgesDelete: (edges) => {
                 for (const edge of edges) {
-                    if (edge.sourceHandle === 'audio') {
-                        disconnectNodes(edge.source, edge.target)
+                    if (edge.sourceHandle === "audio") {
+                        disconnectNodes(edge.source, edge.target);
                     }
                 }
             },
             selfNodeDelete: (id) => {
                 set({
-                    nodes: get().nodes.filter(node => node.id !== id)  // Remove node by filtering out the one with the given id
+                    nodes: get().nodes.filter((node) => node.id !== id), // Remove node by filtering out the one with the given id
                 });
             },
 
@@ -231,43 +237,45 @@ export const useNodeStore = create<NodeStoreState>()(
                 }
             },
             setFullscreen: (state: boolean) => {
-                set({isFullscreen: state});
+                set({ isFullscreen: state });
             },
 
             welcomeDialog: true,
             setWelcomeDialog: (state: boolean) => {
-                set({welcomeDialog: state});
+                set({ welcomeDialog: state });
             },
 
             loadingProgress: 0,
             loadingMessage: "Starting..",
             loadingStatus: false,
             setLoadingStatus: (state: boolean) => {
-                set({loadingStatus: state});
+                set({ loadingStatus: state });
             },
 
             currentlyArmed: new Map<string, boolean>(),
-            addArmed: (key: string, value: boolean) => set((state) => {
-                const newItems = new Map(state.currentlyArmed);
-                newItems.set(key, value);
-                return {currentlyArmed: newItems};
-            }),
-            removeArmed: (key: string) => set((state) => {
-                const newItems = new Map(state.currentlyArmed);
-                newItems.delete(key)
-                return {currentlyArmed: newItems};
-            }),
+            addArmed: (key: string, value: boolean) =>
+                set((state) => {
+                    const newItems = new Map(state.currentlyArmed);
+                    newItems.set(key, value);
+                    return { currentlyArmed: newItems };
+                }),
+            removeArmed: (key: string) =>
+                set((state) => {
+                    const newItems = new Map(state.currentlyArmed);
+                    newItems.delete(key);
+                    return { currentlyArmed: newItems };
+                }),
 
             isRecording: false,
             setIsRecording: (state: boolean) => {
-                set({isRecording: state});
+                set({ isRecording: state });
             },
         }),
         {
             name: "nodeaa-store",
-            partialize: state => ({
+            partialize: (state) => ({
                 welcomeDialog: state.welcomeDialog,
-            })
-        }
-    )
-)
+            }),
+        },
+    ),
+);

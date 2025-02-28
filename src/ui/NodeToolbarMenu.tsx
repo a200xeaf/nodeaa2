@@ -10,13 +10,13 @@ import {
     MenubarSubTrigger,
     MenubarTrigger,
     MenubarRadioGroup,
-    MenubarRadioItem
+    MenubarRadioItem,
 } from "@/components/ui/menubar.tsx";
-import {useNodeStore} from "@/engine/store.ts";
-import {useShallow} from "zustand/react/shallow";
-import React, {ChangeEvent, useEffect, useRef} from "react";
-import {useReactFlow} from "@xyflow/react";
-import {projectLoad, projectNew, projectSave} from "@/engine/utils/save-load.ts";
+import { useNodeStore } from "@/engine/store.ts";
+import { useShallow } from "zustand/react/shallow";
+import React, { ChangeEvent, useEffect, useRef } from "react";
+import { useReactFlow } from "@xyflow/react";
+import { projectLoad, projectNew, projectSave } from "@/engine/utils/save-load.ts";
 
 const NodeToolbarMenu = () => {
     const { setViewport } = useReactFlow();
@@ -26,7 +26,7 @@ const NodeToolbarMenu = () => {
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
     const setGraphBackground = useNodeStore(useShallow((state) => state.setGraphBackground));
 
-    const isFullscreen = useNodeStore(useShallow((state) => state.isFullscreen));  // Access fullscreen state
+    const isFullscreen = useNodeStore(useShallow((state) => state.isFullscreen)); // Access fullscreen state
     const setFullscreen = useNodeStore(useShallow((state) => state.setFullscreen)); // To update fullscreen state
 
     const setWelcomeDialog = useNodeStore(useShallow((state) => state.setWelcomeDialog));
@@ -37,11 +37,11 @@ const NodeToolbarMenu = () => {
             setFullscreen(Boolean(document.fullscreenElement));
         };
 
-        document.addEventListener('fullscreenchange', onFullscreenChange);
+        document.addEventListener("fullscreenchange", onFullscreenChange);
 
         // Cleanup event listener on unmount
         return () => {
-            document.removeEventListener('fullscreenchange', onFullscreenChange);
+            document.removeEventListener("fullscreenchange", onFullscreenChange);
         };
     }, [setFullscreen]);
 
@@ -49,7 +49,7 @@ const NodeToolbarMenu = () => {
 
     const projectInputRef = useRef<HTMLInputElement | null>(null);
 
-    const loadProjectFromFile = async(e: ChangeEvent<HTMLInputElement>) => {
+    const loadProjectFromFile = async (e: ChangeEvent<HTMLInputElement>) => {
         const projectFile = e.target.files?.[0];
 
         if (projectFile) {
@@ -73,34 +73,34 @@ const NodeToolbarMenu = () => {
 
     const handleLoadProject = () => {
         if (projectInputRef.current) {
-            projectInputRef.current.click()
+            projectInputRef.current.click();
         }
-    }
+    };
 
     const handleNewProject = () => {
-        projectNew()
+        projectNew();
         setViewport({ x: 0, y: 0, zoom: 1 }, { duration: 500 });
-    }
+    };
 
     return (
-        <div className='absolute flex gap-x-6 z-9999 h-16 w-full top-0 left-0 pt-2 px-4 pointer-events-none'>
-            <Menubar className='py-[1.2rem]'>
+        <div className="absolute flex gap-x-6 z-9999 h-16 w-full top-0 left-0 pt-2 px-4 pointer-events-none">
+            <Menubar className="py-[1.2rem]">
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>File</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">File</MenubarTrigger>
                     <MenubarContent>
-                        <MenubarItem onClick={handleNewProject} className='cursor-pointer'>
+                        <MenubarItem onClick={handleNewProject} className="cursor-pointer">
                             New
                         </MenubarItem>
-                        <MenubarItem onClick={projectSave} className='cursor-pointer'>
+                        <MenubarItem onClick={projectSave} className="cursor-pointer">
                             Save
                         </MenubarItem>
-                        <MenubarItem onClick={handleLoadProject} className='cursor-pointer'>
+                        <MenubarItem onClick={handleLoadProject} className="cursor-pointer">
                             Load
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Edit</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Edit</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>Nothing yet!</MenubarItem>
                         {/*<MenubarItem>*/}
@@ -127,7 +127,7 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>View</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">View</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Background</MenubarSubTrigger>
@@ -140,33 +140,39 @@ const NodeToolbarMenu = () => {
                                 </MenubarRadioGroup>
                             </MenubarSubContent>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem onClick={toggleFullscreen}>
-                            {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+                            {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
                             <MenubarShortcut>F11</MenubarShortcut>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
-            <Menubar className='py-[1.2rem]'>
+            <Menubar className="py-[1.2rem]">
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Instruments</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Instruments</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Synths</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>Midi Synth</MenubarItem>
-                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>Simple Oscillator</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustPolyNode", undefined, true)}>
+                                    Midi Synth
+                                </MenubarItem>
+                                <MenubarItem onClick={() => createNode("osc2Node", undefined, true)}>
+                                    Simple Oscillator
+                                </MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>Physical Instruments</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustKarplusNode", undefined, true)}>Karplus Synth</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustKarplusNode", undefined, true)}>
+                                    Karplus Synth
+                                </MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarSub>
                             <MenubarSubTrigger>Samplers</MenubarSubTrigger>
                             <MenubarSubContent>
@@ -176,55 +182,72 @@ const NodeToolbarMenu = () => {
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Effects</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Effects</MenubarTrigger>
                     <MenubarContent>
                         <MenubarSub>
                             <MenubarSubTrigger>Basic Effects</MenubarSubTrigger>
                             <MenubarSubContent>
-                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>Delay</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>Gain</MenubarItem>
-                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>Lowpass Filter</MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustDelayNode", undefined, true)}>
+                                    Delay
+                                </MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustGainNode", undefined, true)}>
+                                    Gain
+                                </MenubarItem>
+                                <MenubarItem onClick={() => createNode("faustLPFNode", undefined, true)}>
+                                    Lowpass Filter
+                                </MenubarItem>
                             </MenubarSubContent>
                         </MenubarSub>
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Signals</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Signals</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>Nothing yet!</MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Data</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Data</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>Nothing yet!</MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
-            <Menubar className='py-[1.2rem]'>
+            <Menubar className="py-[1.2rem]">
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Feedback</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Feedback</MenubarTrigger>
                     <MenubarContent>
                         <MenubarItem>
-                            <a href='https://forms.gle/SSrYo6Weiristi5f6' target='_blank'>Bug Report Feedback</a>
+                            <a href="https://forms.gle/SSrYo6Weiristi5f6" target="_blank">
+                                Bug Report Feedback
+                            </a>
                         </MenubarItem>
-                        <MenubarSeparator/>
+                        <MenubarSeparator />
                         <MenubarItem>
-                            <a href='https://forms.gle/DG422ScARNp9SUJq5' target='_blank'>Feature Request Feedback</a>
+                            <a href="https://forms.gle/DG422ScARNp9SUJq5" target="_blank">
+                                Feature Request Feedback
+                            </a>
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
-                    <MenubarTrigger className='pointer-events-auto'>Help</MenubarTrigger>
+                    <MenubarTrigger className="pointer-events-auto">Help</MenubarTrigger>
                     <MenubarContent>
-                        <MenubarItem onClick={() => setWelcomeDialog(true)} className='cursor-pointer'>
+                        <MenubarItem onClick={() => setWelcomeDialog(true)} className="cursor-pointer">
                             Open Welcome Dialog
                         </MenubarItem>
                     </MenubarContent>
                 </MenubarMenu>
             </Menubar>
-            <input type='file' onChange={loadProjectFromFile} className='hidden' ref={projectInputRef} multiple={false} accept=".nodeaa" />
+            <input
+                type="file"
+                onChange={loadProjectFromFile}
+                className="hidden"
+                ref={projectInputRef}
+                multiple={false}
+                accept=".nodeaa"
+            />
         </div>
-    )
-}
-export default React.memo(NodeToolbarMenu)
+    );
+};
+export default React.memo(NodeToolbarMenu);

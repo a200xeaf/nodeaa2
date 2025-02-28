@@ -10,7 +10,7 @@ export interface NodeConfig {
         voices?: number;
     };
     hasAudio: boolean;
-    audioType?: "instrument" | "effect"
+    audioType?: "instrument" | "effect";
     version: string;
 }
 

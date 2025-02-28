@@ -1,18 +1,18 @@
-import {Node, NodeProps} from "@xyflow/react";
-import {ChangeEvent, useState, useRef, useEffect, useCallback, useMemo, memo} from "react";
-import {useNodeStore} from "@/engine/store.ts";
-import {useShallow} from "zustand/react/shallow";
-import {NodesConfig} from "@/engine/types/node-types.ts";
+import { Node, NodeProps } from "@xyflow/react";
+import { ChangeEvent, useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
+import { useNodeStore } from "@/engine/store.ts";
+import { useShallow } from "zustand/react/shallow";
+import { NodesConfig } from "@/engine/types/node-types.ts";
 import rawNodesConfig from "@/engine/data/nodes.json";
 import NodeBadge from "@/ui/nodes-ui/NodeBadge.tsx";
 
 type CreatorNodeData = Record<string, never>;
 
-type CreatorNodeType = Node<CreatorNodeData, 'creatorNode'>;
+type CreatorNodeType = Node<CreatorNodeData, "creatorNode">;
 
 const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
 
-const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsoluteX, positionAbsoluteY}) => {
+const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({ id, positionAbsoluteX, positionAbsoluteY }) => {
     const [search, setSearch] = useState("");
     const [selectedIndex, setSelectedIndex] = useState<number>(-1); // Track the selected result index
     const inputRef = useRef<HTMLInputElement>(null); // Ref for the input element
@@ -30,17 +30,20 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
     // Filter the nodes based on the `search` input, matching `realName`
     const filteredResults = useMemo(() => {
         if (search === "") {
-            return []
+            return [];
         }
         return Object.values(nodesConfig)
-            .filter(node => node.realName.toLowerCase().includes(search.toLowerCase()))
-            .map(node => node); // Return only the realName field
+            .filter((node) => node.realName.toLowerCase().includes(search.toLowerCase()))
+            .map((node) => node); // Return only the realName field
     }, [search]); // Recalculate only when search changes
 
-    const handleCreate = useCallback((name: string) => {
-        createNode(name, {x: positionAbsoluteX, y: positionAbsoluteY})
-        selfNodeDelete(id)
-    }, [positionAbsoluteX, positionAbsoluteY])
+    const handleCreate = useCallback(
+        (name: string) => {
+            createNode(name, { x: positionAbsoluteX, y: positionAbsoluteY });
+            selfNodeDelete(id);
+        },
+        [positionAbsoluteX, positionAbsoluteY],
+    );
 
     // Ensure focus happens after the component and its parent have been rendered
     useEffect(() => {
@@ -52,28 +55,26 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
         // Use setTimeout to ensure focus after all rendering is complete
         const timer = setTimeout(focusInput, 50); // Short delay to ensure rendering completes
 
-        return () => clearTimeout(timer);  // Clean up the timer on unmount
+        return () => clearTimeout(timer); // Clean up the timer on unmount
     }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
-                selfNodeDelete(id)
+                selfNodeDelete(id);
             }
 
             if (filteredResults.length === 0) return;
 
             if (e.key === "ArrowDown") {
                 e.preventDefault();
-                setSelectedIndex((prevIndex) =>
-                    prevIndex < filteredResults.length - 1 ? prevIndex + 1 : prevIndex
-                );
+                setSelectedIndex((prevIndex) => (prevIndex < filteredResults.length - 1 ? prevIndex + 1 : prevIndex));
             } else if (e.key === "ArrowUp") {
                 e.preventDefault();
                 setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
             } else if (e.key === "Enter" && selectedIndex >= 0) {
                 e.preventDefault();
-                handleCreate(filteredResults[selectedIndex].nodeName)
+                handleCreate(filteredResults[selectedIndex].nodeName);
             }
         };
 
@@ -85,25 +86,28 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({id, positionAbsolute
     }, [filteredResults, selectedIndex, handleCreate]);
 
     // Handle the blur event (when input loses focus)
-    const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-        const targetElement = e.relatedTarget as Element | null;
+    const handleBlur = useCallback(
+        (e: React.FocusEvent<HTMLInputElement>) => {
+            const targetElement = e.relatedTarget as Element | null;
 
-        if (nodeRef.current && (!targetElement || !nodeRef.current.contains(targetElement))) {
-            selfNodeDelete(id);
-        }
-    }, [id, selfNodeDelete]);
+            if (nodeRef.current && (!targetElement || !nodeRef.current.contains(targetElement))) {
+                selfNodeDelete(id);
+            }
+        },
+        [id, selfNodeDelete],
+    );
 
     return (
-        <div className='bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-99999' ref={nodeRef}>
+        <div className="bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-99999" ref={nodeRef}>
             <input
-                type='text'
+                type="text"
                 value={search}
                 onChange={handleSearch}
-                onBlur={handleBlur}  // Add onBlur event to track when input loses focus
-                ref={inputRef}  // Attach ref to the input
-                maxLength={40}  // Set the max length of input text
-                className='w-full focus:outline-hidden'  // Remove blue outline on focus
-                placeholder="Start typing..."  // Optional placeholder text
+                onBlur={handleBlur} // Add onBlur event to track when input loses focus
+                ref={inputRef} // Attach ref to the input
+                maxLength={40} // Set the max length of input text
+                className="w-full focus:outline-hidden" // Remove blue outline on focus
+                placeholder="Start typing..." // Optional placeholder text
                 autoFocus
             />
             {filteredResults.length > 0 && (

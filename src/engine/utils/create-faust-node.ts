@@ -2,26 +2,25 @@ import {
     FaustMonoDspGenerator,
     FaustDspMeta,
     FaustMonoAudioWorkletNode,
-    FaustPolyAudioWorkletNode, FaustPolyDspGenerator
+    FaustPolyAudioWorkletNode,
+    FaustPolyDspGenerator,
 } from "@grame/faustwasm";
 
-type FaustNode =
-    | FaustMonoAudioWorkletNode
-    | FaustPolyAudioWorkletNode
+type FaustNode = FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode;
 
 interface FaustDspDistribution {
-    dspModule: WebAssembly.Module;            // Required
-    dspMeta: FaustDspMeta;                    // Required
-    effectModule?: WebAssembly.Module;        // Optional
-    effectMeta?: FaustDspMeta;                // Optional
-    mixerModule?: WebAssembly.Module;         // Optional
+    dspModule: WebAssembly.Module; // Required
+    dspMeta: FaustDspMeta; // Required
+    effectModule?: WebAssembly.Module; // Optional
+    effectMeta?: FaustDspMeta; // Optional
+    mixerModule?: WebAssembly.Module; // Optional
 }
 
 export const createFaustNode = async (
     path: string,
     context: AudioContext,
-    voices: number
-) : Promise<{ faustNode: FaustNode; dspMeta: FaustDspMeta } | never> => {
+    voices: number,
+): Promise<{ faustNode: FaustNode; dspMeta: FaustDspMeta } | never> => {
     const dspMetaResponse = await fetch(`/nodes/${path}/dsp-meta.json`);
     const dspMeta: FaustDspMeta = await dspMetaResponse.json(); // Parse the JSON response
 
@@ -29,36 +28,43 @@ export const createFaustNode = async (
     const dspModuleResponse = await fetch(`/nodes/${path}/dsp-module.wasm`);
     const dspModule = await WebAssembly.compileStreaming(dspModuleResponse);
 
-    const faustDSP: FaustDspDistribution = {dspMeta, dspModule};
+    const faustDSP: FaustDspDistribution = { dspMeta, dspModule };
 
     let faustNode: FaustNode | null = null;
 
     if (voices > 0) {
         faustDSP.mixerModule = await WebAssembly.compileStreaming(await fetch(`/nodes/${path}/mixer-module.wasm`));
-        const generator = new FaustPolyDspGenerator()
+        const generator = new FaustPolyDspGenerator();
         faustNode = await generator.createNode(
             context,
             voices,
             path,
-            { module: faustDSP.dspModule, json: JSON.stringify(faustDSP.dspMeta), soundfiles: {} },
+            {
+                module: faustDSP.dspModule,
+                json: JSON.stringify(faustDSP.dspMeta),
+                soundfiles: {},
+            },
             faustDSP.mixerModule,
             undefined,
-            false
+            false,
         );
-
     } else {
-        const generator = new FaustMonoDspGenerator()
+        const generator = new FaustMonoDspGenerator();
         faustNode = await generator.createNode(
             context,
             path,
-            { module: faustDSP.dspModule, json: JSON.stringify(faustDSP.dspMeta), soundfiles: {}},
-            false
-        )
+            {
+                module: faustDSP.dspModule,
+                json: JSON.stringify(faustDSP.dspMeta),
+                soundfiles: {},
+            },
+            false,
+        );
     }
 
     if (faustNode === null) {
-        throw new Error('Failed to create faustNode.');
+        throw new Error("Failed to create faustNode.");
     }
 
-    return {faustNode, dspMeta}
-}
+    return { faustNode, dspMeta };
+};

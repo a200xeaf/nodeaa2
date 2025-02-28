@@ -12,12 +12,7 @@
         "/usr/share/faust/delays.lib",
         "/usr/share/faust/routes.lib"
     ],
-    "include_pathnames": [
-        "/share/faust",
-        "/usr/local/share/faust",
-        "/usr/share/faust",
-        "."
-    ],
+    "include_pathnames": ["/share/faust", "/usr/local/share/faust", "/usr/share/faust", "."],
     "size": 16460,
     "code": "4EZGASQWHw==",
     "inputs": 0,

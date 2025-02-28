@@ -1,11 +1,11 @@
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
-import {Handle, Node, NodeProps, Position, useNodeConnections} from "@xyflow/react";
-import {ChangeEvent, FC, memo, useCallback, useEffect, useRef} from "react";
-import {useEmitterSubscriptions} from "@/engine/utils/hooks/useEmitterSubscription.ts";
-import {useNodeStore} from "@/engine/store.ts";
-import {useShallow} from "zustand/react/shallow";
-import {mainemitter} from "@/engine/utils/eventbus.ts";
+import { Handle, Node, NodeProps, Position, useNodeConnections } from "@xyflow/react";
+import { ChangeEvent, FC, memo, useCallback, useEffect, useRef } from "react";
+import { useEmitterSubscriptions } from "@/engine/utils/hooks/useEmitterSubscription.ts";
+import { useNodeStore } from "@/engine/store.ts";
+import { useShallow } from "zustand/react/shallow";
+import { mainemitter } from "@/engine/utils/eventbus.ts";
 
 type MidiScaleNodeData = {
     midiscale_scalekey: number;
@@ -13,25 +13,28 @@ type MidiScaleNodeData = {
     midiscale_scalearray: number[];
 };
 
-type MidiScaleNodeType = Node<MidiScaleNodeData, 'midiScaleNode'>;
+type MidiScaleNodeType = Node<MidiScaleNodeData, "midiScaleNode">;
 
-const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) => {
-    const midiConnections = useNodeConnections({handleType: 'target', handleId: 'midi'})
+const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({ id, data, selected }) => {
+    const midiConnections = useNodeConnections({
+        handleType: "target",
+        handleId: "midi",
+    });
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
     const outputNoteToInputNote = useRef<Map<number, number>>(new Map());
     const notes = [
-        { value: 0, label: 'C' },
-        { value: 1, label: 'C#' },
-        { value: 2, label: 'D' },
-        { value: 3, label: 'D#' },
-        { value: 4, label: 'E' },
-        { value: 5, label: 'F' },
-        { value: 6, label: 'F#' },
-        { value: 7, label: 'G' },
-        { value: 8, label: 'G#' },
-        { value: 9, label: 'A' },
-        { value: 10, label: 'A#' },
-        { value: 11, label: 'B' },
+        { value: 0, label: "C" },
+        { value: 1, label: "C#" },
+        { value: 2, label: "D" },
+        { value: 3, label: "D#" },
+        { value: 4, label: "E" },
+        { value: 5, label: "F" },
+        { value: 6, label: "F#" },
+        { value: 7, label: "G" },
+        { value: 8, label: "G#" },
+        { value: 9, label: "A" },
+        { value: 10, label: "A#" },
+        { value: 11, label: "B" },
     ];
 
     const getScaleMapping = (rootNote: number, scaleName: string): number[] => {
@@ -50,9 +53,7 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
         }
 
         // Transpose the scale intervals based on the root note
-        const scaleNotes = scaleIntervals
-            .map((interval) => (interval + rootNote) % 12)
-            .sort((a, b) => a - b);
+        const scaleNotes = scaleIntervals.map((interval) => (interval + rootNote) % 12).sort((a, b) => a - b);
 
         const mapping: number[] = [];
 
@@ -73,28 +74,31 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
         }
 
         return mapping;
-    }
+    };
 
-    const setParams = useCallback((name: string, value: string | number[]) => {
-        if (name === 'type') {
-            updateNode(id, { [`midiscale_scaletype`]: value})
-        } else if (name === 'key') {
-            updateNode(id, { [`midiscale_scalekey`]: +value})
-        } else {
-            updateNode(id, { [`midiscale_scalearray`]: value})
-        }
-    }, [id, updateNode])
+    const setParams = useCallback(
+        (name: string, value: string | number[]) => {
+            if (name === "type") {
+                updateNode(id, { [`midiscale_scaletype`]: value });
+            } else if (name === "key") {
+                updateNode(id, { [`midiscale_scalekey`]: +value });
+            } else {
+                updateNode(id, { [`midiscale_scalearray`]: value });
+            }
+        },
+        [id, updateNode],
+    );
 
     const handleScaleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        setParams(e.target.id, e.target.value)
-    }
+        setParams(e.target.id, e.target.value);
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        e.preventDefault()
-    }
+        e.preventDefault();
+    };
 
     useEffect(() => {
-        setParams("array", getScaleMapping(data.midiscale_scalekey, data.midiscale_scaletype))
+        setParams("array", getScaleMapping(data.midiscale_scalekey, data.midiscale_scaletype));
     }, [data.midiscale_scalekey, data.midiscale_scaletype, setParams]);
 
     const handleMIDI = useCallback(
@@ -135,23 +139,29 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
                 }
             }
         },
-        [data.midiscale_scalearray, id]
+        [data.midiscale_scalearray, id],
     );
 
     useEmitterSubscriptions({
         connections: midiConnections,
         callback: handleMIDI,
-        data
-    })
+        data,
+    });
 
     return (
         <NodeaaContainer selected={selected} width={16} height={6}>
-            <Handle type="target" position={Position.Top} id='midi' style={{backgroundColor: 'rgb(59, 130, 246)'}}/>
-            <NodeaaHeader nodeName='MIDI Scale' headerColor='bg-blue-500'/>
-            <div className='flex flex-col justify-center items-center nodrag cursor-default bg-white p-2 h-[4rem] rounded-b-xl'>
-                <div className='flex items-center'>
+            <Handle type="target" position={Position.Top} id="midi" style={{ backgroundColor: "rgb(59, 130, 246)" }} />
+            <NodeaaHeader nodeName="MIDI Scale" headerColor="bg-blue-500" />
+            <div className="flex flex-col justify-center items-center nodrag cursor-default bg-white p-2 h-[4rem] rounded-b-xl">
+                <div className="flex items-center">
                     <p>Key:&nbsp;</p>
-                    <select className='p-1 bg-white border-black border-2 rounded-lg' id='key' value={data.midiscale_scalekey} onChange={handleScaleChange} onKeyDown={handleKeyDown}>
+                    <select
+                        className="p-1 bg-white border-black border-2 rounded-lg"
+                        id="key"
+                        value={data.midiscale_scalekey}
+                        onChange={handleScaleChange}
+                        onKeyDown={handleKeyDown}
+                    >
                         {notes.map((noteOption) => (
                             <option key={noteOption.value} value={noteOption.value}>
                                 {noteOption.label}
@@ -160,15 +170,25 @@ const MidiScaleNode: FC<NodeProps<MidiScaleNodeType>> = ({id, data, selected}) =
                     </select>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <p>Scale:&nbsp;</p>
-                    <select className='p-1 bg-white border-black border-2 rounded-lg' id='type' value={data.midiscale_scaletype} onChange={handleScaleChange} onKeyDown={handleKeyDown}>
+                    <select
+                        className="p-1 bg-white border-black border-2 rounded-lg"
+                        id="type"
+                        value={data.midiscale_scaletype}
+                        onChange={handleScaleChange}
+                        onKeyDown={handleKeyDown}
+                    >
                         <option value="major">Major</option>
                         <option value="minor">Minor</option>
                     </select>
                 </div>
             </div>
-            <Handle type="source" position={Position.Bottom} id='midi-main_midi'
-                    style={{backgroundColor: 'rgb(59, 130, 246)'}}/>
+            <Handle
+                type="source"
+                position={Position.Bottom}
+                id="midi-main_midi"
+                style={{ backgroundColor: "rgb(59, 130, 246)" }}
+            />
         </NodeaaContainer>
-    )
-}
-export default memo(MidiScaleNode)
+    );
+};
+export default memo(MidiScaleNode);

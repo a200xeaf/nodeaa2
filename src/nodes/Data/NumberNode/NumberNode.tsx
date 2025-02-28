@@ -1,4 +1,4 @@
-import {ChangeEvent, useState, useEffect, FC, memo} from 'react';
+import { ChangeEvent, useState, useEffect, FC, memo } from "react";
 import { useNodeStore } from "@/engine/store.ts";
 import { useShallow } from "zustand/react/shallow";
 import { Handle, Position, Node, NodeProps } from "@xyflow/react";
@@ -10,7 +10,7 @@ import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
 type NumberNodeData = { number_number: number };
 
 // Create a custom node type
-type NumberNodeType = Node<NumberNodeData, 'numberNode'>;
+type NumberNodeType = Node<NumberNodeData, "numberNode">;
 
 const NumberNode: FC<NodeProps<NumberNodeType>> = ({ id, data, selected }) => {
     const updateNode = useNodeStore(useShallow((state) => state.updateNode));
@@ -42,23 +42,23 @@ const NumberNode: FC<NodeProps<NumberNodeType>> = ({ id, data, selected }) => {
 
     return (
         <NodeaaContainer selected={selected} width={15} height={5}>
-            <NodeaaHeader nodeName='Number' headerColor='bg-gray-500' />
-            <div className='flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[3rem] rounded-b-xl'>
+            <NodeaaHeader nodeName="Number" headerColor="bg-gray-500" />
+            <div className="flex flex-col justify-center nodrag cursor-default bg-white p-2 h-[3rem] rounded-b-xl">
                 <input
-                    type='number'
+                    type="number"
                     min="0"
                     max="1"
                     step={0.01}
                     value={inputValue}
                     onChange={handleNumber}
-                    className='bg-gray-200'
+                    className="bg-gray-200"
                 />
             </div>
             <Handle
                 type="source"
                 position={Position.Bottom}
-                id='data-number_number'
-                style={{ backgroundColor: 'grey' }}
+                id="data-number_number"
+                style={{ backgroundColor: "grey" }}
             />
         </NodeaaContainer>
     );

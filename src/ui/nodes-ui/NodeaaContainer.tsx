@@ -1,4 +1,4 @@
-import {FC, memo, ReactNode} from "react";
+import { FC, memo, ReactNode } from "react";
 
 interface NodeContainerProps {
     selected: boolean | undefined;
@@ -13,11 +13,11 @@ const NodeaaContainer: FC<NodeContainerProps> = ({ selected, children, width, he
         <div
             className="drop-shadow-lg rounded-xl"
             style={{
-                width: `${width}rem`,   // Set dynamic width
+                width: `${width}rem`, // Set dynamic width
                 height: `${height}rem`, // Set dynamic height
                 boxShadow: selected
-                    ? '0 0 5px 2px rgba(59, 130, 246, 0.5)'  // Thicker shadow with lower opacity
-                    : 'none',  // No shadow if not selected
+                    ? "0 0 5px 2px rgba(59, 130, 246, 0.5)" // Thicker shadow with lower opacity
+                    : "none", // No shadow if not selected
             }}
             data-info-panel-id={infoID}
         >

@@ -1,58 +1,65 @@
-import {Node as FlowNode} from "@xyflow/react";
-import {createDevice, Device, IPatcher, MIDIEvent, Parameter, WorkletDevice} from "@rnbo/js";
-import {FaustMonoAudioWorkletNode, FaustPolyAudioWorkletNode} from "@grame/faustwasm";
-import {createFaustNode} from "./utils/create-faust-node.ts";
-import { MediaRecorder, register } from 'extendable-media-recorder';
-import { connect } from 'extendable-media-recorder-wav-encoder';
+import { Node as FlowNode } from "@xyflow/react";
+import { createDevice, Device, IPatcher, MIDIEvent, Parameter, WorkletDevice } from "@rnbo/js";
+import { FaustMonoAudioWorkletNode, FaustPolyAudioWorkletNode } from "@grame/faustwasm";
+import { createFaustNode } from "./utils/create-faust-node.ts";
+import { MediaRecorder, register } from "extendable-media-recorder";
+import { connect } from "extendable-media-recorder-wav-encoder";
 
 await register(await connect());
 
-export const context = new AudioContext({latencyHint: 1});
-console.log(context.baseLatency.toString())
-const nodes = new Map<string, Device | FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode | AudioNode>()
+export const context = new AudioContext({ latencyHint: 1 });
+console.log(context.baseLatency.toString());
+const nodes = new Map<string, Device | FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode | AudioNode>();
 
 //Handle Recorder
-const ctxRecorderNode = context.createMediaStreamDestination()
-export const ctxRecorder = new MediaRecorder(ctxRecorderNode.stream, { mimeType: 'audio/wav'})
-const currentBuffer: Blob[] = []
+const ctxRecorderNode = context.createMediaStreamDestination();
+export const ctxRecorder = new MediaRecorder(ctxRecorderNode.stream, {
+    mimeType: "audio/wav",
+});
+const currentBuffer: Blob[] = [];
 
-ctxRecorder.ondataavailable = event => {
+ctxRecorder.ondataavailable = (event) => {
     if (event.data.size > 0) {
-        currentBuffer.push(event.data)
+        currentBuffer.push(event.data);
     }
-}
+};
 
 ctxRecorder.onstop = () => {
-    const finalBlob = new Blob(currentBuffer, { type: 'audio/wav' });
-    const finalUrl = URL.createObjectURL(finalBlob)
+    const finalBlob = new Blob(currentBuffer, { type: "audio/wav" });
+    const finalUrl = URL.createObjectURL(finalBlob);
 
-    const downloadAnchord = document.createElement("a")
-    downloadAnchord.href = finalUrl
-    downloadAnchord.download = "Nodeaa-Recording.wav"
+    const downloadAnchord = document.createElement("a");
+    downloadAnchord.href = finalUrl;
+    downloadAnchord.download = "Nodeaa-Recording.wav";
 
-    downloadAnchord.click()
+    downloadAnchord.click();
 
-    URL.revokeObjectURL(finalUrl)
+    URL.revokeObjectURL(finalUrl);
 
-    currentBuffer.length = 0
-}
+    currentBuffer.length = 0;
+};
 
+nodes.set("output-1", context.destination);
 
-nodes.set('output-1', context.destination);
-
-export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: string, data: Partial<FlowNode['data']>, thevoices: number = 0) => {
+export const createAudioNode = async (
+    id: string,
+    type: "faust" | "rnbo",
+    name: string,
+    data: Partial<FlowNode["data"]>,
+    thevoices: number = 0,
+) => {
     switch (type) {
-        case 'faust': {
+        case "faust": {
             try {
                 const node = await createFaustNode(name, context, thevoices);
 
                 // Iterate over the parameters in the node and set values from the `data` object
                 Object.entries(data).forEach(([key, value]) => {
                     // Split the key to extract the device name and the actual parameter name
-                    const [deviceName, paramName, cancel] = key.split('_');
+                    const [deviceName, paramName, cancel] = key.split("_");
 
                     if (cancel !== undefined) {
-                        return
+                        return;
                     }
 
                     // Ensure the extracted device name matches the current device name
@@ -66,7 +73,7 @@ export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: 
 
                     if (param === undefined) {
                         console.warn(`"${paramName}" parameter in device "${deviceName}" not found.`);
-                    } else if (typeof value === 'number') {
+                    } else if (typeof value === "number") {
                         // Set the value if it's a number
                         param.setValueAtTime(value, 0);
                         // console.log(`Set parameter ${paramName} to ${value}`);
@@ -83,9 +90,9 @@ export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: 
             break;
         }
 
-        case 'rnbo': {
+        case "rnbo": {
             const rawPatcher = await fetch(`/nodes/${name}/${name}.export.json`);
-            const patcher = await rawPatcher.json() as IPatcher;
+            const patcher = (await rawPatcher.json()) as IPatcher;
             const node = await createDevice({ context, patcher: patcher });
 
             // Iterate over the parameters in the RNBO node and set values from the `data` object
@@ -93,7 +100,7 @@ export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: 
                 const parameter: Parameter = node.parametersById.get(key);
 
                 if (parameter) {
-                    if (typeof value === 'number') {
+                    if (typeof value === "number") {
                         parameter.value = value;
                         console.log(`Set ${key} to ${value}`);
                     } else {
@@ -108,9 +115,9 @@ export const createAudioNode = async (id: string, type: "faust" | "rnbo", name: 
             break;
         }
     }
-}
+};
 
-export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => {
+export const updateAudioNode = (id: string, data: Partial<FlowNode["data"]>) => {
     const node = nodes.get(id);
 
     if (!node) {
@@ -118,7 +125,7 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
     }
 
     if (id.includes("output")) {
-        return
+        return;
     }
 
     try {
@@ -130,7 +137,7 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
                 const param = node.parametersById.get(key);
 
                 if (param) {
-                    if (typeof val === 'number') {
+                    if (typeof val === "number") {
                         param.value = val;
                         console.log(`Updated ${key} to ${val} on RNBO device`);
                     } else {
@@ -144,17 +151,17 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode['data']>) => 
             // Faust node: handle Faust-specific parameter updates
             for (const [key, val] of Object.entries(data)) {
                 // Split the key to extract device name and parameter name
-                const [deviceName, paramName, skip] = key.split('_');
+                const [deviceName, paramName, skip] = key.split("_");
 
                 if (skip) {
-                    return
+                    return;
                 }
 
                 // Try to get the parameter from the node's AudioParams using the correct format
                 const param = node.parameters.get(`/${deviceName}/${paramName}`);
 
                 if (param) {
-                    if (typeof val === 'number') {
+                    if (typeof val === "number") {
                         param.setValueAtTime(val, 0);
                         // console.log(`Updated ${paramName} to ${val} on Faust node`);
                     } else {
@@ -179,19 +186,19 @@ export const deleteAudioNode = (id: string) => {
     const node = nodes.get(id);
 
     if (isRNBO(node)) {
-        node.node.disconnect()
-        nodes.delete(id)
+        node.node.disconnect();
+        nodes.delete(id);
     } else if (isFaust(node)) {
-        node.disconnect()
-        nodes.delete(id)
+        node.disconnect();
+        nodes.delete(id);
     } else {
-        console.warn("unknown device attempted to be deleted")
+        console.warn("unknown device attempted to be deleted");
     }
-}
+};
 
-const getAudioNode = (id: string): AudioNode | 'output' | undefined => {
-    if (id.startsWith('output-')) {
-        return 'output'; // Special handling for 'output'
+const getAudioNode = (id: string): AudioNode | "output" | undefined => {
+    if (id.startsWith("output-")) {
+        return "output"; // Special handling for 'output'
     }
 
     const device = nodes.get(id);
@@ -207,7 +214,7 @@ const getAudioNode = (id: string): AudioNode | 'output' | undefined => {
     return device instanceof AudioNode ? device : undefined;
 };
 
-const connectOrDisconnectNodes = (action: 'connect' | 'disconnect', sourceID: string, targetID: string) => {
+const connectOrDisconnectNodes = (action: "connect" | "disconnect", sourceID: string, targetID: string) => {
     const sourceNode = getAudioNode(sourceID);
     const targetNode = getAudioNode(targetID);
 
@@ -215,27 +222,27 @@ const connectOrDisconnectNodes = (action: 'connect' | 'disconnect', sourceID: st
         throw new Error(`Invalid node IDs: ${sourceID} or ${targetID} not found`);
     }
 
-    if (sourceNode === 'output') {
+    if (sourceNode === "output") {
         throw new Error(`Invalid node IDs: ${sourceID} was detected as output`);
     }
 
-    if (targetNode === 'output') {
-        if (action === 'connect') {
-            sourceNode.connect(context.destination)
-            sourceNode.connect(ctxRecorderNode)
+    if (targetNode === "output") {
+        if (action === "connect") {
+            sourceNode.connect(context.destination);
+            sourceNode.connect(ctxRecorderNode);
         } else {
-            sourceNode.disconnect(context.destination)
-            sourceNode.disconnect(ctxRecorderNode)
+            sourceNode.disconnect(context.destination);
+            sourceNode.disconnect(ctxRecorderNode);
         }
-        return
+        return;
     }
 
     try {
         // Now we can perform either connect or disconnect depending on the action
-        if (action === 'connect') {
+        if (action === "connect") {
             sourceNode.connect(targetNode);
             console.log(`Connected ${sourceID} to ${targetID}`);
-        } else if (action === 'disconnect') {
+        } else if (action === "disconnect") {
             sourceNode.disconnect(targetNode);
             console.log(`Disconnected ${sourceID} from ${targetID}`);
         }
@@ -245,33 +252,33 @@ const connectOrDisconnectNodes = (action: 'connect' | 'disconnect', sourceID: st
 };
 
 export const connectNodes = (sourceID: string, targetID: string) => {
-    connectOrDisconnectNodes('connect', sourceID, targetID);
+    connectOrDisconnectNodes("connect", sourceID, targetID);
 };
 
 export const disconnectNodes = (sourceID: string, targetID: string) => {
-    connectOrDisconnectNodes('disconnect', sourceID, targetID);
+    connectOrDisconnectNodes("disconnect", sourceID, targetID);
 };
 
 export const isRunningEngine = () => {
-    return context.state === 'running'
-}
+    return context.state === "running";
+};
 
 export const toggleAudioEngine = () => {
-    return isRunningEngine() ? context.suspend() : context.resume()
-}
+    return isRunningEngine() ? context.suspend() : context.resume();
+};
 
 export const sendMidi = (id: string, e: Uint8Array) => {
     const deviceToSend = nodes.get(id);
     const status = e[0];
     const pitch = e[1];
     const velocity = e[2];
-    const channel = status & 0x0F; // Extract the MIDI channel
+    const channel = status & 0x0f; // Extract the MIDI channel
 
     if (isFaust(deviceToSend) && isPoly(deviceToSend)) {
-        if ((status & 0xF0) === 0x90 && velocity > 0) {
+        if ((status & 0xf0) === 0x90 && velocity > 0) {
             // Note On
             deviceToSend.keyOn(channel, pitch, velocity);
-        } else if ((status & 0xF0) === 0x80 || ((status & 0xF0) === 0x90 && velocity === 0)) {
+        } else if ((status & 0xf0) === 0x80 || ((status & 0xf0) === 0x90 && velocity === 0)) {
             // Note Off
             deviceToSend.keyOff(channel, pitch, velocity);
         }
@@ -289,22 +296,22 @@ export const sendMidi = (id: string, e: Uint8Array) => {
 
 const isRNBO = (device: unknown): device is WorkletDevice => {
     return device instanceof WorkletDevice;
-}
+};
 
 const isFaust = (device: unknown): device is FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode => {
-    return device instanceof FaustMonoAudioWorkletNode || device instanceof FaustPolyAudioWorkletNode
-}
+    return device instanceof FaustMonoAudioWorkletNode || device instanceof FaustPolyAudioWorkletNode;
+};
 
 const isPoly = (device: FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode): device is FaustPolyAudioWorkletNode => {
-    return device instanceof FaustPolyAudioWorkletNode
-}
+    return device instanceof FaustPolyAudioWorkletNode;
+};
 
 export const createAudioInputNode = (id: string, input: MediaStream) => {
     console.log(id, input);
-    const inputNode  = context.createMediaStreamSource(input)
-    if (!(nodes.has(id))) {
+    const inputNode = context.createMediaStreamSource(input);
+    if (!nodes.has(id)) {
         nodes.set(id, inputNode);
     } else {
-        console.log("Input node exists for this device already")
+        console.log("Input node exists for this device already");
     }
-}
+};

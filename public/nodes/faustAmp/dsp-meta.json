@@ -10,12 +10,7 @@
         "/usr/share/faust/maths.lib",
         "/usr/share/faust/platform.lib"
     ],
-    "include_pathnames": [
-        "/share/faust",
-        "/usr/local/share/faust",
-        "/usr/share/faust",
-        "."
-    ],
+    "include_pathnames": ["/share/faust", "/usr/local/share/faust", "/usr/share/faust", "."],
     "size": 36,
     "code": "yJW+",
     "inputs": 2,

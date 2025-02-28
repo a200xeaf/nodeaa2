@@ -1,4 +1,4 @@
-import {FC, memo} from "react";
+import { FC, memo } from "react";
 
 interface BadgeProps {
     type: "midi" | "data" | "instrument" | "effect" | "unknown";

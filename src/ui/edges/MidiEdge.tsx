@@ -1,17 +1,17 @@
-import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
-import {memo} from "react";
+import { BaseEdge, EdgeProps, getBezierPath } from "@xyflow/react";
+import { memo } from "react";
 
 const MidiEdge = ({
-                           id,
-                           sourceX,
-                           sourceY,
-                           targetX,
-                           targetY,
-                           sourcePosition,
-                           targetPosition,
-                           style = {},
-                           markerEnd,
-                       }: EdgeProps) => {
+    id,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    style = {},
+    markerEnd,
+}: EdgeProps) => {
     const [edgePath] = getBezierPath({
         sourceX,
         sourceY,
@@ -28,8 +28,8 @@ const MidiEdge = ({
             markerEnd={markerEnd}
             style={{
                 ...style,
-                stroke: 'rgb(59, 130, 246)', // Solid blue color
-                strokeWidth: 4,    // Adjust the thickness
+                stroke: "rgb(59, 130, 246)", // Solid blue color
+                strokeWidth: 4, // Adjust the thickness
             }}
         />
     );

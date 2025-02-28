@@ -14,12 +14,7 @@
         "/usr/share/faust/envelopes.lib",
         "/usr/share/faust/signals.lib"
     ],
-    "include_pathnames": [
-        "/share/faust",
-        "/usr/local/share/faust",
-        "/usr/share/faust",
-        "."
-    ],
+    "include_pathnames": ["/share/faust", "/usr/local/share/faust", "/usr/share/faust", "."],
     "size": 278724,
     "code": "wEH9",
     "inputs": 0,

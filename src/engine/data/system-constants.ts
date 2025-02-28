@@ -3,5 +3,5 @@ interface NodeaaConfig {
 }
 
 export const NODEAACONFIG: NodeaaConfig = {
-    VERSION: "0.0.14"
-}
+    VERSION: "0.0.14",
+};

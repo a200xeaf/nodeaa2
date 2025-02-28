@@ -1,12 +1,10 @@
-import {ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger} from "@/components/ui/context-menu";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
 
 const NodeContextMenu = () => {
     return (
         <ContextMenu>
             <ContextMenuTrigger>
-                <div className='w-full h-full'>
-
-                </div>
+                <div className="w-full h-full"></div>
             </ContextMenuTrigger>
             <ContextMenuContent>
                 <ContextMenuItem>Profile</ContextMenuItem>
@@ -15,6 +13,6 @@ const NodeContextMenu = () => {
                 <ContextMenuItem>Subscription</ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>
-    )
-}
-export default NodeContextMenu
+    );
+};
+export default NodeContextMenu;

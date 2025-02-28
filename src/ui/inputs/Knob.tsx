@@ -1,38 +1,30 @@
-import {useEffect, useRef, memo, FC, useMemo} from "react";
+import { useEffect, useRef, memo, FC, useMemo } from "react";
 import p5 from "p5";
-import {scaleExp} from "@/engine/utils/number-operations.ts";
-import {nanoid} from "nanoid";
-import {mainemitter} from "@/engine/utils/eventbus.ts";
-import {BaseUIEvent} from "@/engine/types/ui-types.ts";
+import { scaleExp } from "@/engine/utils/number-operations.ts";
+import { nanoid } from "nanoid";
+import { mainemitter } from "@/engine/utils/eventbus.ts";
+import { BaseUIEvent } from "@/engine/types/ui-types.ts";
 
 interface KnobProps {
-    id: string
-    value: number
-    min_value: number
-    max_value: number
-    default_value: number
-    callback: (id: string, value: number) => void
-    scale_exponent?: number
+    id: string;
+    value: number;
+    min_value: number;
+    max_value: number;
+    default_value: number;
+    callback: (id: string, value: number) => void;
+    scale_exponent?: number;
 }
 
 type P5InstanceWithUpdate = p5 & { updateAngle: (newAngle: number) => void };
 
-const Knob: FC<KnobProps> = ({
-                                        id,
-                                        value,
-                                        min_value,
-                                        max_value,
-                                        default_value,
-                                        callback,
-                                        scale_exponent = 1,
-                                    }) => {
+const Knob: FC<KnobProps> = ({ id, value, min_value, max_value, default_value, callback, scale_exponent = 1 }) => {
     //Refs for p5 canvas
-    const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null) //This one holds the p5 instance
-    const sketchRef = useRef<HTMLDivElement>(null) //This one is just for the <div> ref
+    const p5InstanceRef = useRef<P5InstanceWithUpdate | null>(null); //This one holds the p5 instance
+    const sketchRef = useRef<HTMLDivElement>(null); //This one is just for the <div> ref
 
     //Angles for knob. Start is left/end is right
-    const startAngle = Math.PI / 2 + 0.785398165
-    const endAngle = 2 * Math.PI + 0.785398165
+    const startAngle = Math.PI / 2 + 0.785398165;
+    const endAngle = 2 * Math.PI + 0.785398165;
 
     //Helper functions for angle to value conversion
     const valueToAngle = useMemo(() => {
@@ -50,7 +42,7 @@ const Knob: FC<KnobProps> = ({
     //First useEffect. ONLY runs once per mount to create Knob/ID and store the instance inside the ref
     //Also instantiates values that will be in sketch scope when it initializes
     useEffect(() => {
-        const controllerId = nanoid()
+        const controllerId = nanoid();
         let angle = valueToAngle(value);
         let isDragging: boolean = false;
         const sensitivity = 0.08;
@@ -63,7 +55,7 @@ const Knob: FC<KnobProps> = ({
 
             p.setup = () => {
                 const canvas = p.createCanvas(size, size);
-                canvas.id("controller-" + controllerId)
+                canvas.id("controller-" + controllerId);
                 p.smooth();
                 p.pixelDensity(2);
                 p.clear();
@@ -78,24 +70,10 @@ const Knob: FC<KnobProps> = ({
                 p.noFill();
 
                 // Draw background arc
-                p.arc(
-                    p.width / 2,
-                    p.height / 2,
-                    radius * 2,
-                    radius * 2,
-                    startAngle,
-                    endAngle
-                );
+                p.arc(p.width / 2, p.height / 2, radius * 2, radius * 2, startAngle, endAngle);
                 // Draw active arc
                 p.stroke(p.color("#60a5fa"));
-                p.arc(
-                    p.width / 2,
-                    p.height / 2,
-                    radius * 2,
-                    radius * 2,
-                    startAngle,
-                    angle
-                );
+                p.arc(p.width / 2, p.height / 2, radius * 2, radius * 2, startAngle, angle);
 
                 const needleX = p.width / 2 + needleLength * p.cos(angle);
                 const needleY = p.height / 2 + needleLength * p.sin(angle);
@@ -109,7 +87,7 @@ const Knob: FC<KnobProps> = ({
         const updateAngle = (newAngle: number) => {
             angle = newAngle;
             p5InstanceRef.current?.redraw();
-        }
+        };
 
         // Handle events from app.tsx
         const handleKnobEvent = (event: BaseUIEvent) => {
@@ -118,10 +96,10 @@ const Knob: FC<KnobProps> = ({
             const p = p5InstanceRef.current;
 
             switch (event.type) {
-                case 'mousedown':
+                case "mousedown":
                     isDragging = true;
                     break;
-                case 'mousemove':
+                case "mousemove":
                     if (isDragging) {
                         p.loop();
 
@@ -144,16 +122,17 @@ const Knob: FC<KnobProps> = ({
                         callback(id, newValue);
                     }
                     break;
-                case 'mouseup':
+                case "mouseup":
                     isDragging = false;
                     p.noLoop();
                     break;
-                case 'doubleclick':
-                    { angle = valueToAngle(default_value);
+                case "doubleclick": {
+                    angle = valueToAngle(default_value);
                     p.redraw();
                     const newValue = angleToValue(angle);
                     callback(id, newValue);
-                    break; }
+                    break;
+                }
                 default:
                     break;
             }
@@ -161,14 +140,14 @@ const Knob: FC<KnobProps> = ({
 
         //INITIALIZE CANVAS: p5 instance created and stored as p5InstanceRef
         p5InstanceRef.current = new p5(sketch, sketchRef.current as HTMLDivElement) as P5InstanceWithUpdate;
-        p5InstanceRef.current.updateAngle = updateAngle
+        p5InstanceRef.current.updateAngle = updateAngle;
 
-        mainemitter.on("controller-" + controllerId, handleKnobEvent)
+        mainemitter.on("controller-" + controllerId, handleKnobEvent);
 
         return () => {
             p5InstanceRef.current?.remove();
             p5InstanceRef.current = null;
-            mainemitter.off(controllerId, handleKnobEvent)
+            mainemitter.off(controllerId, handleKnobEvent);
         };
     }, [min_value, max_value, valueToAngle, angleToValue, default_value, id, callback]);
 

@@ -5,7 +5,7 @@ export const scaleExp = (
     outLow: number,
     outHigh: number,
     exp: number = 1,
-    reverse: boolean = false
+    reverse: boolean = false,
 ): number => {
     const inRange = inHigh - inLow;
     const outRange = outHigh - outLow;
@@ -30,4 +30,4 @@ export const scaleExp = (
 
 export const clamp = (value: number, min: number, max: number) => {
     return Math.max(min, Math.min(value, max));
-}
+};

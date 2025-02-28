@@ -1,144 +1,156 @@
 {
-  "outNode": {
-    "nodeName": "outNode",
-    "idPrefix": "output",
-    "realName": "Output",
-    "defaultData": {},
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "osc2Node": {
-    "nodeName": "osc2Node",
-    "idPrefix": "",
-    "realName": "Oscillator 2",
-    "defaultData": { "osc_frequency": 440, "osc_type": 1 },
-    "audioNodeParams": { "engine": "rnbo", "type": "osc2" },
-    "hasAudio": true,
-    "audioType": "instrument",
-    "version": "1.0.0"
-  },
-  "faustAmpNode": {
-    "nodeName": "faustAmpNode",
-    "idPrefix": "",
-    "realName": "Amp",
-    "defaultData": { "faustAmp_gain": 1, "faustAmp_wet": 0.5 },
-    "audioNodeParams": { "engine": "faust", "type": "faustAmp" },
-    "hasAudio": true,
-    "audioType": "effect",
-    "version": "1.0.0"
-  },
-  "faustGainNode": {
-    "nodeName": "faustGainNode",
-    "idPrefix": "",
-    "realName": "Gain",
-    "defaultData": { "faustgain_Gain": 1 },
-    "audioNodeParams": { "engine": "faust", "type": "faustgain" },
-    "hasAudio": true,
-    "audioType": "effect",
-    "version": "1.0.0"
-  },
-  "faustLPFNode": {
-    "nodeName": "faustLPFNode",
-    "idPrefix": "",
-    "realName": "Lowpass Filter",
-    "defaultData": { "faustLPF_frequency": 2000, "faustLPF_quality": 0.1 },
-    "audioNodeParams": { "engine": "faust", "type": "faustLPF" },
-    "hasAudio": true,
-    "audioType": "effect",
-    "version": "1.0.0"
-  },
-  "faustDelayNode": {
-    "nodeName": "faustDelayNode",
-    "idPrefix": "",
-    "realName": "Delay",
-    "defaultData": { "faustDelay_duration": 500, "faustDelay_feedback": 0.5, "faustDelay_wet": 0.5 },
-    "audioNodeParams": { "engine": "faust", "type": "faustDelay" },
-    "hasAudio": true,
-    "audioType": "effect",
-    "version": "1.0.0"
-  },
-  "faustPolyNode": {
-    "nodeName": "faustPolyNode",
-    "idPrefix": "",
-    "realName": "Polyphonic Synth",
-    "defaultData": {
-      "faustpoly_attack": 0.1,
-      "faustpoly_decay": 0.1,
-      "faustpoly_sustain": 0.7,
-      "faustpoly_release": 0.1,
-      "faustpoly_waveformsel": 0
+    "outNode": {
+        "nodeName": "outNode",
+        "idPrefix": "output",
+        "realName": "Output",
+        "defaultData": {},
+        "hasAudio": false,
+        "version": "1.0.0"
     },
-    "audioNodeParams": { "engine": "faust", "type": "faustpoly", "voices": 16 },
-    "hasAudio": true,
-    "audioType": "instrument",
-    "version": "1.0.0"
-  },
-  "faustKarplusNode": {
-    "nodeName": "faustKarplusNode",
-    "idPrefix": "",
-    "realName": "Karplus Synth",
-    "defaultData": {
-      "faustKarplus_damping": 0.1
+    "osc2Node": {
+        "nodeName": "osc2Node",
+        "idPrefix": "",
+        "realName": "Oscillator 2",
+        "defaultData": { "osc_frequency": 440, "osc_type": 1 },
+        "audioNodeParams": { "engine": "rnbo", "type": "osc2" },
+        "hasAudio": true,
+        "audioType": "instrument",
+        "version": "1.0.0"
     },
-    "audioNodeParams": { "engine": "faust", "type": "faustKarplus", "voices": 16 },
-    "hasAudio": true,
-    "audioType": "instrument",
-    "version": "1.0.0"
-  },
-  "midiInNode": {
-    "nodeName": "midiInNode",
-    "idPrefix": "midi",
-    "realName": "MIDI Input",
-    "defaultData": { "midiin_device": "" },
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "audioInNode": {
-    "nodeName": "audioInNode",
-    "idPrefix": "mic",
-    "realName": "Audio Input",
-    "defaultData": { "audioin_device": "" },
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "midiKeyboardNode": {
-    "nodeName": "midiKeyboardNode",
-    "idPrefix": "midi",
-    "realName": "MIDI Keyboard",
-    "defaultData": { "midikeyboard_octave": 0, "midikeyboard_velocity": 100 },
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "midiScaleNode": {
-    "nodeName": "midiScaleNode",
-    "idPrefix": "midi",
-    "realName": "MIDI Scale",
-    "defaultData": { "midiscale_scalekey": 0, "midiscale_scaletype": "major",  "midiscale_scalearray": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "numberNode": {
-    "nodeName": "numberNode",
-    "idPrefix": "data",
-    "realName": "Number Input",
-    "defaultData": { "number_number": 0 },
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "viewerNode": {
-    "nodeName": "viewerNode",
-    "idPrefix": "data",
-    "realName": "Value Viewer",
-    "defaultData": { "viewer_value": "" },
-    "hasAudio": false,
-    "version": "1.0.0"
-  },
-  "creatorNode": {
-    "nodeName": "creatorNode",
-    "idPrefix": "data",
-    "realName": "Creator Node",
-    "defaultData": {},
-    "hasAudio": false,
-    "version": "1.0.0"
-  }
+    "faustAmpNode": {
+        "nodeName": "faustAmpNode",
+        "idPrefix": "",
+        "realName": "Amp",
+        "defaultData": { "faustAmp_gain": 1, "faustAmp_wet": 0.5 },
+        "audioNodeParams": { "engine": "faust", "type": "faustAmp" },
+        "hasAudio": true,
+        "audioType": "effect",
+        "version": "1.0.0"
+    },
+    "faustGainNode": {
+        "nodeName": "faustGainNode",
+        "idPrefix": "",
+        "realName": "Gain",
+        "defaultData": { "faustgain_Gain": 1 },
+        "audioNodeParams": { "engine": "faust", "type": "faustgain" },
+        "hasAudio": true,
+        "audioType": "effect",
+        "version": "1.0.0"
+    },
+    "faustLPFNode": {
+        "nodeName": "faustLPFNode",
+        "idPrefix": "",
+        "realName": "Lowpass Filter",
+        "defaultData": { "faustLPF_frequency": 2000, "faustLPF_quality": 0.1 },
+        "audioNodeParams": { "engine": "faust", "type": "faustLPF" },
+        "hasAudio": true,
+        "audioType": "effect",
+        "version": "1.0.0"
+    },
+    "faustDelayNode": {
+        "nodeName": "faustDelayNode",
+        "idPrefix": "",
+        "realName": "Delay",
+        "defaultData": {
+            "faustDelay_duration": 500,
+            "faustDelay_feedback": 0.5,
+            "faustDelay_wet": 0.5
+        },
+        "audioNodeParams": { "engine": "faust", "type": "faustDelay" },
+        "hasAudio": true,
+        "audioType": "effect",
+        "version": "1.0.0"
+    },
+    "faustPolyNode": {
+        "nodeName": "faustPolyNode",
+        "idPrefix": "",
+        "realName": "Polyphonic Synth",
+        "defaultData": {
+            "faustpoly_attack": 0.1,
+            "faustpoly_decay": 0.1,
+            "faustpoly_sustain": 0.7,
+            "faustpoly_release": 0.1,
+            "faustpoly_waveformsel": 0
+        },
+        "audioNodeParams": { "engine": "faust", "type": "faustpoly", "voices": 16 },
+        "hasAudio": true,
+        "audioType": "instrument",
+        "version": "1.0.0"
+    },
+    "faustKarplusNode": {
+        "nodeName": "faustKarplusNode",
+        "idPrefix": "",
+        "realName": "Karplus Synth",
+        "defaultData": {
+            "faustKarplus_damping": 0.1
+        },
+        "audioNodeParams": {
+            "engine": "faust",
+            "type": "faustKarplus",
+            "voices": 16
+        },
+        "hasAudio": true,
+        "audioType": "instrument",
+        "version": "1.0.0"
+    },
+    "midiInNode": {
+        "nodeName": "midiInNode",
+        "idPrefix": "midi",
+        "realName": "MIDI Input",
+        "defaultData": { "midiin_device": "" },
+        "hasAudio": false,
+        "version": "1.0.0"
+    },
+    "audioInNode": {
+        "nodeName": "audioInNode",
+        "idPrefix": "mic",
+        "realName": "Audio Input",
+        "defaultData": { "audioin_device": "" },
+        "hasAudio": false,
+        "version": "1.0.0"
+    },
+    "midiKeyboardNode": {
+        "nodeName": "midiKeyboardNode",
+        "idPrefix": "midi",
+        "realName": "MIDI Keyboard",
+        "defaultData": { "midikeyboard_octave": 0, "midikeyboard_velocity": 100 },
+        "hasAudio": false,
+        "version": "1.0.0"
+    },
+    "midiScaleNode": {
+        "nodeName": "midiScaleNode",
+        "idPrefix": "midi",
+        "realName": "MIDI Scale",
+        "defaultData": {
+            "midiscale_scalekey": 0,
+            "midiscale_scaletype": "major",
+            "midiscale_scalearray": [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
+        "hasAudio": false,
+        "version": "1.0.0"
+    },
+    "numberNode": {
+        "nodeName": "numberNode",
+        "idPrefix": "data",
+        "realName": "Number Input",
+        "defaultData": { "number_number": 0 },
+        "hasAudio": false,
+        "version": "1.0.0"
+    },
+    "viewerNode": {
+        "nodeName": "viewerNode",
+        "idPrefix": "data",
+        "realName": "Value Viewer",
+        "defaultData": { "viewer_value": "" },
+        "hasAudio": false,
+        "version": "1.0.0"
+    },
+    "creatorNode": {
+        "nodeName": "creatorNode",
+        "idPrefix": "data",
+        "realName": "Creator Node",
+        "defaultData": {},
+        "hasAudio": false,
+        "version": "1.0.0"
+    }
 }

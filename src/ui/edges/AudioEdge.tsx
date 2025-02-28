@@ -1,20 +1,20 @@
-import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react';
+import { BaseEdge, EdgeProps, getBezierPath } from "@xyflow/react";
 import { useShallow } from "zustand/react/shallow";
 import { useNodeStore } from "@/engine/store.ts";
-import {memo} from "react";
+import { memo } from "react";
 
 const AudioEdge = ({
-                                     id,
-                                     sourceX,
-                                     sourceY,
-                                     targetX,
-                                     targetY,
-                                     sourcePosition,
-                                     targetPosition,
-                                     style = {},
-                                     markerEnd,
-                                     selected,
-                                 }: EdgeProps) => {
+    id,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+    style = {},
+    markerEnd,
+    selected,
+}: EdgeProps) => {
     const [edgePath] = getBezierPath({
         sourceX,
         sourceY,
@@ -24,7 +24,7 @@ const AudioEdge = ({
         targetPosition,
     });
 
-    const dashAnimationDuration = 1;  // Duration of the dash animation
+    const dashAnimationDuration = 1; // Duration of the dash animation
 
     // Access the isRunning state from your Zustand store
     const isRunning = useNodeStore(useShallow((state) => state.isRunning));
@@ -39,8 +39,8 @@ const AudioEdge = ({
                     markerEnd={markerEnd}
                     style={{
                         ...style,
-                        stroke: 'rgba(120, 170, 255, 0.75)',  // Light blue color (RGBA for transparency)
-                        strokeWidth: 8,  // Thicker than the base edge
+                        stroke: "rgba(120, 170, 255, 0.75)", // Light blue color (RGBA for transparency)
+                        strokeWidth: 8, // Thicker than the base edge
                     }}
                 />
             )}
@@ -52,8 +52,8 @@ const AudioEdge = ({
                 markerEnd={markerEnd}
                 style={{
                     ...style,
-                    stroke: '#505050', // Grey color for the "cable"
-                    strokeWidth: 4,    // Adjust to make the cable thicker
+                    stroke: "#505050", // Grey color for the "cable"
+                    strokeWidth: 4, // Adjust to make the cable thicker
                 }}
             />
 
@@ -64,11 +64,11 @@ const AudioEdge = ({
                 markerEnd={markerEnd}
                 style={{
                     ...style,
-                    stroke: 'rgb(50, 250, 50)',        // Green dashes
-                    strokeWidth: 4,           // Slightly thinner than the grey background
-                    strokeDasharray: '8,8',   // Dash pattern
+                    stroke: "rgb(50, 250, 50)", // Green dashes
+                    strokeWidth: 4, // Slightly thinner than the grey background
+                    strokeDasharray: "8,8", // Dash pattern
                     animation: `dash ${dashAnimationDuration}s linear infinite`,
-                    animationPlayState: isRunning ? 'running' : 'paused',  // Pause/resume animation
+                    animationPlayState: isRunning ? "running" : "paused", // Pause/resume animation
                 }}
             />
 

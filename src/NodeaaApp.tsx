@@ -1,28 +1,28 @@
-import {Background, BackgroundVariant, ReactFlow, Connection, Edge, useViewport} from '@xyflow/react';
-import { useNodeStore } from './engine/store';
-import OutNode from '@/nodes/Misc/OutNode/OutNode.tsx';
+import { Background, BackgroundVariant, ReactFlow, Connection, Edge, useViewport } from "@xyflow/react";
+import { useNodeStore } from "./engine/store";
+import OutNode from "@/nodes/Misc/OutNode/OutNode.tsx";
 import FaustGainNode from "@/nodes/Audio/FaustGainNode/FaustGainNode.tsx";
 import FaustPolyNode from "@/nodes/Audio/FaustPolyNode/FaustPolyNode.tsx";
 import Osc2Node from "@/nodes/Audio/Osc2Node/Osc2Node.tsx";
 import MidiInNode from "@/nodes/Midi/MidiInNode/MidiInNode.tsx";
 import NumberNode from "@/nodes/Data/NumberNode/NumberNode.tsx";
 import ViewerNode from "@/nodes/Data/ViewerNode/ViewerNode.tsx";
-import {useShallow} from "zustand/react/shallow";
+import { useShallow } from "zustand/react/shallow";
 import AudioEdge from "./ui/edges/AudioEdge.tsx";
 import MidiEdge from "./ui/edges/MidiEdge.tsx";
 import NodeToolbarMenu from "@/ui/NodeToolbarMenu.tsx";
 import CreatorNode from "@/nodes/Misc/CreatorNode/CreatorNode.tsx";
-import {memo, useCallback, useEffect, useRef, useState} from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import FaustLPFNode from "@/nodes/Audio/FaustLPFNode/FaustLPFNode.tsx";
 import NodeaaWelcome from "@/ui/NodeaaWelcome.tsx";
 import FaustDelayNode from "@/nodes/Audio/FaustDelayNode/FaustDelayNode.tsx";
 import MidiKeyboardNode from "@/nodes/Midi/MidiKeyboardNode/MidiKeyboardNode.tsx";
-import {mainemitter} from "@/engine/utils/eventbus.ts";
-import {infoMap, InfoObject} from "@/engine/data/info-map.ts";
+import { mainemitter } from "@/engine/utils/eventbus.ts";
+import { infoMap, InfoObject } from "@/engine/data/info-map.ts";
 import NodeaaInfoPanel from "@/ui/NodeaaInfoPanel.tsx";
-import {CSSTransition} from "react-transition-group";
-import './animations.css'
-import {NODEAACONFIG} from "@/engine/data/system-constants.ts";
+import { CSSTransition } from "react-transition-group";
+import "./animations.css";
+import { NODEAACONFIG } from "@/engine/data/system-constants.ts";
 import NodeaaLoading from "@/ui/NodeaaLoading.tsx";
 import FaustKarplusNode from "@/nodes/Audio/FaustKarplusNode/FaustKarplusNode.tsx";
 import MidiScaleNode from "@/nodes/Midi/MidiScaleNode/MidiScaleNode.tsx";
@@ -44,7 +44,7 @@ const nodeTypes = {
     midiScaleNode: MidiScaleNode,
     numberNode: NumberNode,
     viewerNode: ViewerNode,
-    creatorNode: CreatorNode
+    creatorNode: CreatorNode,
 };
 
 const edgeTypes = {
@@ -68,18 +68,18 @@ const isValidConnection = (connectionOrEdge: Connection | Edge): boolean => {
 
 const getBackgroundVariant = (selection: string): BackgroundVariant | undefined => {
     switch (selection) {
-        case 'lines':
+        case "lines":
             return BackgroundVariant.Lines;
-        case 'dots':
+        case "dots":
             return BackgroundVariant.Dots;
-        case 'crosses':
+        case "crosses":
             return BackgroundVariant.Cross;
         default:
-            return undefined;  // Handle unexpected values
+            return undefined; // Handle unexpected values
     }
 };
 
-const App: React.FC = () => {
+const NodeaaApp: React.FC = () => {
     const nodes = useNodeStore(useShallow((state) => state.nodes));
     const edges = useNodeStore(useShallow((state) => state.edges));
 
@@ -95,7 +95,7 @@ const App: React.FC = () => {
     const graphBackground = useNodeStore(useShallow((state) => state.graphBackground));
 
     const setViewport = useNodeStore(useShallow((state) => state.setViewport));
-    const {x, y, zoom} = useViewport();
+    const { x, y, zoom } = useViewport();
     const xRef = useRef(x);
     const yRef = useRef(y);
     const zoomRef = useRef(zoom);
@@ -112,50 +112,50 @@ const App: React.FC = () => {
     const initialMouseXRef = useRef(0);
     const initialMouseYRef = useRef(0);
 
-    const infoPanelRef = useRef<HTMLDivElement>(null)
+    const infoPanelRef = useRef<HTMLDivElement>(null);
     const [infoPanelID, setInfoPanelID] = useState<InfoObject | null>(null);
     const [showInfoPanel, setShowInfoPanel] = useState<boolean>(true);
 
     const handleNodeaaPointerUp = useCallback((e: React.MouseEvent) => {
         mousePos.current = { x: e.clientX, y: e.clientY };
-    }, [])
+    }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             // Check if the target is an input field, textarea, or content-editable element
-            if (!(useNodeStore.getState().currentlyArmed.size === 0) && e.key !== 'n' && e.key !== 'i') {
-                mainemitter.emit("keydownarmed", e)
-                return
+            if (!(useNodeStore.getState().currentlyArmed.size === 0) && e.key !== "n" && e.key !== "i") {
+                mainemitter.emit("keydownarmed", e);
+                return;
             }
 
-            const isInputFocused = document.activeElement &&
-                (document.activeElement.tagName === 'INPUT' ||
-                    document.activeElement.tagName === 'TEXTAREA');
+            const isInputFocused =
+                document.activeElement &&
+                (document.activeElement.tagName === "INPUT" || document.activeElement.tagName === "TEXTAREA");
 
-            if (e.key.toLowerCase() === 'n' && !isInputFocused) {
+            if (e.key.toLowerCase() === "n" && !isInputFocused) {
                 const pos = {
                     x: (mousePos.current.x - 40 - xRef.current) / zoomRef.current,
-                    y: (mousePos.current.y - 20 - yRef.current) / zoomRef.current
+                    y: (mousePos.current.y - 20 - yRef.current) / zoomRef.current,
                 };
-                createNode('creatorNode', pos);
+                createNode("creatorNode", pos);
             }
 
-            if (e.key.toLowerCase() === 'i' && !isInputFocused) {
+            if (e.key.toLowerCase() === "i" && !isInputFocused) {
                 setShowInfoPanel((prev) => !prev);
             }
         };
 
         const handleKeyUp = (e: KeyboardEvent) => {
             if (useNodeStore.getState().currentlyArmed.size === 0) {
-                return
+                return;
             } else {
-                mainemitter.emit("keyuparmed", e)
+                mainemitter.emit("keyuparmed", e);
             }
-        }
+        };
 
         const handleMouseDown = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            if (target && target.id && target.id.startsWith('controller-')) {
+            if (target && target.id && target.id.startsWith("controller-")) {
                 const canvasID = target.id;
 
                 // Start dragging
@@ -165,7 +165,7 @@ const App: React.FC = () => {
 
                 // Emit 'mousedown' event to the knob
                 mainemitter.emit(canvasID, {
-                    type: 'mousedown',
+                    type: "mousedown",
                 });
             }
         };
@@ -197,7 +197,7 @@ const App: React.FC = () => {
 
                 // Emit 'mousemove' event to the knob
                 mainemitter.emit(draggingKnobIdRef.current, {
-                    type: 'mousemove',
+                    type: "mousemove",
                     deltaX: deltaX,
                     deltaY: deltaY,
                     shiftKey: e.shiftKey,
@@ -209,7 +209,7 @@ const App: React.FC = () => {
             if (draggingKnobIdRef.current) {
                 // Emit 'mouseup' event to the knob
                 mainemitter.emit(draggingKnobIdRef.current, {
-                    type: 'mouseup',
+                    type: "mouseup",
                 });
                 draggingKnobIdRef.current = null;
             }
@@ -217,32 +217,32 @@ const App: React.FC = () => {
 
         const handleDoubleClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            if (target && target.id && target.id.startsWith('controller-')) {
+            if (target && target.id && target.id.startsWith("controller-")) {
                 const canvasID = target.id;
 
                 // Emit 'doubleclick' event to the knob
                 mainemitter.emit(canvasID, {
-                    type: 'doubleclick',
+                    type: "doubleclick",
                 });
             }
         };
 
-        document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('keyup', handleKeyUp);
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mousedown', handleMouseDown);
-        document.addEventListener('mouseup', handleMouseUp);
-        document.addEventListener('dblclick', handleDoubleClick);
+        document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("keyup", handleKeyUp);
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mousedown", handleMouseDown);
+        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("dblclick", handleDoubleClick);
 
         // Don't forget to clean up
         return function cleanup() {
-            document.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('keyup', handleKeyUp);
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mousedown', handleMouseDown);
-            document.removeEventListener('mouseup', handleMouseUp);
-            document.removeEventListener('dblclick', handleDoubleClick);
-        }
+            document.removeEventListener("keydown", handleKeyDown);
+            document.removeEventListener("keyup", handleKeyUp);
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mousedown", handleMouseDown);
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("dblclick", handleDoubleClick);
+        };
     }, []);
 
     // const { x, y, zoom } = useViewport();
@@ -251,45 +251,43 @@ const App: React.FC = () => {
     // console.log(nPressed)
 
     return (
-        <div style={{width: '100vw', height: '100vh'}}>
+        <div style={{ width: "100vw", height: "100vh" }}>
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
-
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
-
                 onNodesDelete={onNodesDelete}
                 onEdgesDelete={onEdgesDelete}
-
                 onConnect={onConnect}
-
                 onPointerUp={handleNodeaaPointerUp}
-
                 isValidConnection={isValidConnection}
             >
-                <NodeToolbarMenu/>
+                <NodeToolbarMenu />
 
-                {graphBackground === 'none' ? null : <Background variant={getBackgroundVariant(graphBackground)} gap={28}/>}
+                {graphBackground === "none" ? null : (
+                    <Background variant={getBackgroundVariant(graphBackground)} gap={28} />
+                )}
             </ReactFlow>
             {/*<div className='absolute z-9999 h-screen w-screen top-0 left-0'>*/}
             {/*    <NodeContextMenu />*/}
             {/*</div>*/}
-            <p className='z-9998 absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
-                border h-10'
+            <p
+                className="z-9998 absolute top-0 right-0 bg-white p-2 rounded-md m-2 font-medium text-sm
+                border h-10"
             >
                 {x.toFixed(2)}, {y.toFixed(2)}, {zoom.toFixed(2)}
             </p>
-            <p className='absolute bottom-[1.5px] right-[57px] text-[10px] text-gray-400 p-[1px]'>
+            <p className="absolute bottom-[1.5px] right-[57px] text-[10px] text-gray-400 p-[1px]">
                 {`Nodeaa v${NODEAACONFIG.VERSION} +`}
             </p>
             <NodeaaWelcome />
             <NodeaaLoading />
             <CSSTransition
                 in={showInfoPanel}
-                timeout={100}  // Duration of the transition
+                timeout={100} // Duration of the transition
                 classNames="fade" // Base name for transition classes
                 nodeRef={infoPanelRef} // Pass the ref to manage DOM nodes
                 unmountOnExit
@@ -302,4 +300,4 @@ const App: React.FC = () => {
     );
 };
 
-export default memo(App);
+export default memo(NodeaaApp);

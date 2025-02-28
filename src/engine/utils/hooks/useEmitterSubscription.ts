@@ -1,14 +1,14 @@
-import {Connection} from "@xyflow/react";
-import {useEffect} from "react";
-import {mainemitter} from "../eventbus.ts";
+import { Connection } from "@xyflow/react";
+import { useEffect } from "react";
+import { mainemitter } from "../eventbus.ts";
 
 type UseEmmitterSubscriptionsProps = {
-    connections: Connection[]
-    callback: (e: any) => void
-    data: any
-}
+    connections: Connection[];
+    callback: (e: any) => void;
+    data: any;
+};
 
-export const useEmitterSubscriptions = ({connections, callback, data}: UseEmmitterSubscriptionsProps) => {
+export const useEmitterSubscriptions = ({ connections, callback, data }: UseEmmitterSubscriptionsProps) => {
     useEffect(() => {
         const activeSubscriptions: (() => void)[] = [];
 
@@ -19,7 +19,7 @@ export const useEmitterSubscriptions = ({connections, callback, data}: UseEmmitt
         };
 
         // Subscribe to each connection
-// Subscribe to each connection
+        // Subscribe to each connection
         connections.forEach(({ source, sourceHandle }) => {
             let cleanedHandle = sourceHandle;
 
@@ -41,4 +41,4 @@ export const useEmitterSubscriptions = ({connections, callback, data}: UseEmmitt
             activeSubscriptions.forEach((unsubscribe) => unsubscribe());
         };
     }, [connections, data, callback]);
-}
+};
