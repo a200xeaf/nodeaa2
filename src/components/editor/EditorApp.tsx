@@ -8,6 +8,7 @@ import {
     instantiateFaustModuleFromFile,
     LibFaust,
 } from "@grame/faustwasm";
+import EditorPreview from "@/components/editor/editorui/EditorPreview.tsx";
 
 const editorAudioEngine = new AudioContext({ latencyHint: "balanced" });
 const connectionMap = new Map<AudioNode, Set<AudioNode>>();
@@ -44,12 +45,31 @@ const EditorApp = () => {
         state: "idle",
         message: "",
     });
+    const [parameters, setParameters] = useState<unknown | null>(null);
 
     const audioInputRef = useRef<HTMLAudioElement | null>(null);
     const audioInputNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
     const faustCompiler = useRef<FaustCompiler | null>(null);
     const faustEffect = useRef<FaustMonoDspGenerator | null>(null);
     const faustCompiledNode = useRef<FaustMonoAudioWorkletNode | null>(null);
+
+    const updateAudioNodeParameter = (address: string, value: unknown) => {
+        if (!parameters) {
+            console.error("Parameters not laoded? Maybe desync?");
+            return;
+        }
+        if (!faustCompiledNode.current) {
+            console.error("Faust node not found!");
+            return;
+        }
+        const audioParam = faustCompiledNode.current.parameters.get(address);
+        if (!audioParam) {
+            console.error("Faust audioparam not found!");
+        } else {
+            console.log("Audioparam found!", audioParam);
+            audioParam.setValueAtTime(value, 0);
+        }
+    };
 
     useEffect(() => {
         const handleEngineStateChange = async () => {
@@ -123,6 +143,7 @@ const EditorApp = () => {
                 setFaustCompiledState({ state: "success", message: "" });
                 if (compiledNode) {
                     console.log(compiledNode.getMeta());
+                    setParameters(compiledNode.getMeta());
                     // If a compiled node already exists, remove its connection from the destination.
                     if (faustCompiledNode.current) {
                         disconnectNodes(constantSoucreNode, faustCompiledNode.current);
@@ -195,6 +216,8 @@ const EditorApp = () => {
                         </p>
                     )}
                 </div>
+                <ArrowRight color={"#e5e7eb"} size={96} />
+                <EditorPreview parameters={parameters} updateParameter={updateAudioNodeParameter} />
             </div>
         </div>
     );
