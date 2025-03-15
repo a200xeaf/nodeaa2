@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import JSZip from "jszip";
 import {
     FaustCompiler,
     FaustDspFactory,
@@ -51,6 +52,8 @@ const EditorApp = () => {
         message: "",
     });
     const [parameters, setParameters] = useState<FaustParameters | null>(null);
+    // New state variable to hold the compiled Faust factory
+    const [compiledFactory, setCompiledFactory] = useState<FaustDspFactory | null>(null);
 
     const audioInputRef = useRef<HTMLAudioElement | null>(null);
     const audioInputNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
@@ -135,21 +138,18 @@ const EditorApp = () => {
         await toggleEngineState(true);
         if (faustEffect.current && faustCompiler.current) {
             const argv = ["-I", "libraries/"];
-            let compiledFactory: FaustDspFactory | null = null;
+            let newFactory: FaustDspFactory | null = null;
             try {
-                compiledFactory = await faustCompiler.current.createMonoDSPFactory("test", faustCode, argv.join(" "));
-            } catch (error) {
-                //@ts-expect-error fuck that
+                newFactory = await faustCompiler.current.createMonoDSPFactory("test", faustCode, argv.join(" "));
+            } catch (error: any) {
                 setFaustCompiledState({ state: "error", message: error.message });
             }
-            if (compiledFactory) {
-                const compiledNode = await faustEffect.current.createNode(
-                    editorAudioEngine,
-                    "test",
-                    compiledFactory,
-                    false,
-                );
+            if (newFactory) {
+                console.log(newFactory);
+                const compiledNode = await faustEffect.current.createNode(editorAudioEngine, "test", newFactory, false);
                 setFaustCompiledState({ state: "success", message: "" });
+                // Save the compiled factory so we can use it for download later
+                setCompiledFactory(newFactory);
                 if (compiledNode) {
                     console.log(compiledNode.getMeta());
                     setParameters(compiledNode.getMeta());
@@ -173,6 +173,24 @@ const EditorApp = () => {
                 }
             }
         }
+    };
+
+    // Function to generate and download a zip containing dsp-meta.json and dsp-module.wasm.
+    const downloadZip = async () => {
+        if (!compiledFactory) return;
+        const zip = new JSZip();
+        // Add the metadata JSON file (using the already stringified json)
+        zip.file("dsp-meta.json", compiledFactory.json);
+        // Add the WASM binary. The "code" property is a Uint8Array.
+        zip.file("dsp-module.wasm", compiledFactory.code);
+        const blob = await zip.generateAsync({ type: "blob" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "compiled_artifact.zip";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     };
 
     return (
@@ -226,7 +244,16 @@ const EditorApp = () => {
                     )}
                 </div>
                 <ArrowRight color={"#e5e7eb"} size={96} />
-                <EditorPreview parameters={parameters} updateParameter={updateAudioNodeParameter} />
+                {/* Wrap the UI preview and download button in a vertical container */}
+                <div className="flex flex-col gap-y-4">
+                    <EditorPreview parameters={parameters} updateParameter={updateAudioNodeParameter} />
+                    {/* Only show the download button if a compiled factory exists */}
+                    {compiledFactory && (
+                        <button onClick={downloadZip} className="bg-gray-500 hover:bg-gray-700 rounded text-white p-2">
+                            Download Zip
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
