@@ -60,7 +60,7 @@ const Osc2Node: FC<NodeProps<Osc2NodeType>> = ({ id, data, selected }) => {
                 </label>
             </div>
 
-            <Handle type="source" position={Position.Bottom} id="audio" />
+            <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );
 };

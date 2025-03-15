@@ -35,7 +35,9 @@ const AudioInNode: FC<NodeProps> = ({ id, selected }) => {
                 <button onClick={getAudioInputs}>test</button>
                 {input && <div>{input.id}</div>}
             </div>
-            {input && <Handle type="source" position={Position.Bottom} id="audio" />}
+            {input && (
+                <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
+            )}
         </NodeaaContainer>
     );
 };

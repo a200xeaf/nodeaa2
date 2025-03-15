@@ -60,7 +60,7 @@ const FaustKarplusNode: FC<NodeProps<FaustKarplusNodeType>> = ({ id, data, selec
                     <span>{amountFormat(data.faustKarplus_damping * 100)}</span>
                 </div>
             </div>
-            <Handle type="source" position={Position.Bottom} id="audio" />
+            <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );
 };

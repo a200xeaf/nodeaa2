@@ -27,7 +27,7 @@ const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({ id, data, selected 
 
     return (
         <NodeaaContainer selected={selected} width={15} height={9} infoID="faustDelayNode">
-            <Handle type="target" position={Position.Top} id="audio" />
+            <Handle type="target" position={Position.Top} id="audio" style={{ backgroundColor: "limegreen" }} />
             <NodeaaHeader nodeName="Delay" headerColor="bg-purple-500" />
             <div className="flex justify-between nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[7rem] rounded-b-xl">
                 <div className="flex flex-col items-center" data-info-panel-id="faustDelayNode-duration">
@@ -69,7 +69,7 @@ const FaustDelayNode: FC<NodeProps<FaustDelayNodeType>> = ({ id, data, selected 
                 </div>
             </div>
 
-            <Handle type="source" position={Position.Bottom} id="audio" />
+            <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );
 };

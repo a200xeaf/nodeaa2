@@ -26,7 +26,7 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({ id, data, selecte
 
     return (
         <NodeaaContainer selected={selected} width={11} height={9} infoID="faustLPFNode">
-            <Handle type="target" position={Position.Top} id="audio" />
+            <Handle type="target" position={Position.Top} id="audio" style={{ backgroundColor: "limegreen" }} />
             <NodeaaHeader nodeName="Lowpass Filter" headerColor="bg-purple-500" />
             <div className="flex flex-row justify-between nodrag cursor-default bg-white p-2 h-[7rem] rounded-b-xl">
                 <div className="flex flex-col items-center" data-info-panel-id="faustLPFNode-frequency">
@@ -56,7 +56,7 @@ const FaustLPFNode: React.FC<NodeProps<FaustLPFNodeType>> = ({ id, data, selecte
                 </div>
             </div>
 
-            <Handle type="source" position={Position.Bottom} id="audio" />
+            <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );
 };

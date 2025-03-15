@@ -25,7 +25,7 @@ const FaustGainNode: FC<NodeProps<FaustGainNodeType>> = ({ id, data, selected })
 
     return (
         <NodeaaContainer selected={selected} width={15} height={7} infoID="faustGainNode">
-            <Handle type="target" position={Position.Top} id="audio" />
+            <Handle type="target" position={Position.Top} id="audio" style={{ backgroundColor: "limegreen" }} />
             <NodeaaHeader nodeName="Gain" headerColor="bg-purple-500" />
             <div
                 className="flex flex-col justify-center items-start nodrag cursor-default bg-white p-2 h-[5rem] rounded-b-xl"
@@ -46,7 +46,7 @@ const FaustGainNode: FC<NodeProps<FaustGainNodeType>> = ({ id, data, selected })
                 <span>{dbFormat(20 * Math.log10(data.faustgain_Gain))}</span>
             </div>
 
-            <Handle type="source" position={Position.Bottom} id="audio" />
+            <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );
 };

@@ -76,16 +76,15 @@
 
 @layer utilities {
     .react-flow {
-        --xy-connectionline-stroke-width-default: 4px; /* Set to your desired thickness */
-    }
-
-    .react-flow__edge-path {
-        stroke-width: 4;
+        --xy-edge-stroke-width-default: 4px;
+        --xy-connectionline-stroke-width-default: 8px; /* Set to your desired thickness */
     }
 
     .react-flow .react-flow__handle {
-        width: 16px;
-        height: 16px;
+        content: "";
+        position: absolute;
+        width: 16px !important;
+        height: 16px !important;
         border-radius: 50%; /* Makes the element a circle */
         background-color: limegreen; /* Outer circle color */
     }

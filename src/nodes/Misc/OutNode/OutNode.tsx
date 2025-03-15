@@ -29,7 +29,7 @@ const OutNode: FC<NodeProps<OutNodeType>> = ({ selected }) => {
 
     return (
         <NodeaaContainer selected={selected} width={7} height={8}>
-            <Handle type="target" position={Position.Top} id="audio" />
+            <Handle type="target" position={Position.Top} id="audio" style={{ backgroundColor: "limegreen" }} />
             <NodeaaHeader nodeName="Audio Out" headerColor="bg-blue-500" />
             <div className="flex flex-col nodrag cursor-default bg-white p-2 h-[6rem] justify-center items-center rounded-b-xl gap-y-2">
                 <label>

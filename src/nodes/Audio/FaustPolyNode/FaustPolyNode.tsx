@@ -140,7 +140,7 @@ const FaustPolyNode: React.FC<NodeProps<FaustPolyNodeType>> = ({ id, data, selec
                     </select>
                 </label>
             </div>
-            <Handle type="source" position={Position.Bottom} id="audio" />
+            <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );
 };
