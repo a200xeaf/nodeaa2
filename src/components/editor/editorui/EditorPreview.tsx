@@ -31,7 +31,7 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
 
     // Function to initialize state for interactive controls recursively.
     const initializeState = (items: FaustUIItem[]): { [key: string]: number | boolean } => {
-        let state: { [key: string]: number | boolean } = {};
+        const state: { [key: string]: number | boolean } = {};
         const traverse = (items: FaustUIItem[]) => {
             items.forEach((item) => {
                 if (item.type === "hslider" && item.varname) {

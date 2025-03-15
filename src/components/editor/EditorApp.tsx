@@ -5,6 +5,7 @@ import {
     FaustDspFactory,
     FaustMonoAudioWorkletNode,
     FaustMonoDspGenerator,
+    FaustUIItem,
     instantiateFaustModuleFromFile,
     LibFaust,
 } from "@grame/faustwasm";
@@ -37,6 +38,10 @@ const constantSoucreNode = editorAudioEngine.createConstantSource();
 constantSoucreNode.offset.value = 0.0;
 constantSoucreNode.start(0);
 
+interface FaustParameters {
+    ui: FaustUIItem[] | null;
+}
+
 const EditorApp = () => {
     const [engineState, setEngineState] = useState<boolean>(false);
     const [faustCompilerState, setFaustCompilerState] = useState<string | null>(null);
@@ -45,7 +50,7 @@ const EditorApp = () => {
         state: "idle",
         message: "",
     });
-    const [parameters, setParameters] = useState<unknown | null>(null);
+    const [parameters, setParameters] = useState<FaustParameters | null>(null);
 
     const audioInputRef = useRef<HTMLAudioElement | null>(null);
     const audioInputNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
@@ -54,6 +59,10 @@ const EditorApp = () => {
     const faustCompiledNode = useRef<FaustMonoAudioWorkletNode | null>(null);
 
     const updateAudioNodeParameter = (address: string, value: unknown) => {
+        if (typeof value !== "number") {
+            console.error("Expected a number value for the parameter.");
+            return;
+        }
         if (!parameters) {
             console.error("Parameters not laoded? Maybe desync?");
             return;
