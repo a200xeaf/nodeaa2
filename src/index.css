@@ -76,8 +76,7 @@
 
 @layer utilities {
     .react-flow {
-        --xy-edge-stroke-width-default: 4px;
-        --xy-connectionline-stroke-width-default: 8px; /* Set to your desired thickness */
+        --xy-connectionline-stroke-width-default: 4px !important; /* Set to your desired thickness */
     }
 
     .react-flow .react-flow__handle {
