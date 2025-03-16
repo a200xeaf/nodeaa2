@@ -15,8 +15,9 @@ import {
 import { useNodeStore } from "@/engine/store.ts";
 import { useShallow } from "zustand/react/shallow";
 import React, { ChangeEvent, useEffect, useRef } from "react";
-import { useReactFlow } from "@xyflow/react";
+import { useReactFlow, Viewport } from "@xyflow/react";
 import { projectLoad, projectNew, projectSave } from "@/engine/utils/save-load.ts";
+import { mainemitter } from "@/engine/utils/eventbus.ts";
 
 const NodeToolbarMenu = () => {
     const { setViewport } = useReactFlow();
@@ -37,11 +38,17 @@ const NodeToolbarMenu = () => {
             setFullscreen(Boolean(document.fullscreenElement));
         };
 
+        const updateViewport = async (newState: Viewport) => {
+            await setViewport(newState, { duration: 500 });
+        };
+
         document.addEventListener("fullscreenchange", onFullscreenChange);
+        mainemitter.on("updateviewport", updateViewport);
 
         // Cleanup event listener on unmount
         return () => {
             document.removeEventListener("fullscreenchange", onFullscreenChange);
+            mainemitter.off("updateviewport", updateViewport);
         };
     }, [setFullscreen]);
 

@@ -109,6 +109,7 @@ export const projectLoad = async (
         updateProgress();
         useNodeStore.setState({ loadingStatus: false });
         useNodeStore.setState({ loadingProgress: 0 });
+        console.log("VIEWPORT", viewport);
         return { success: true, viewport: viewport || { x: 0, y: 0, zoom: 1 } };
     } catch (error) {
         console.error("Error parsing or loading project:", error);

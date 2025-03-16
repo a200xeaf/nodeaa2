@@ -1,5 +1,4 @@
 // ./src/main.tsx
-import React from "react";
 import ReactDOM from "react-dom/client";
 import { ReactFlowProvider } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -14,21 +13,19 @@ const rootElement = document.getElementById("root") as HTMLElement;
 // startAverageFPSMonitor();
 
 ReactDOM.createRoot(rootElement).render(
-    <React.StrictMode>
-        <div style={{ width: "100vw", height: "100vh" }}>
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ReactFlowProvider>
-                                <NodeaaApp />
-                            </ReactFlowProvider>
-                        }
-                    />
-                    <Route path="/editor" element={<EditorApp />} />
-                </Routes>
-            </BrowserRouter>
-        </div>
-    </React.StrictMode>,
+    <div style={{ width: "100vw", height: "100vh" }}>
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <ReactFlowProvider>
+                            <NodeaaApp />
+                        </ReactFlowProvider>
+                    }
+                />
+                <Route path="/editor" element={<EditorApp />} />
+            </Routes>
+        </BrowserRouter>
+    </div>,
 );
