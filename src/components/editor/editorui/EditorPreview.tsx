@@ -61,13 +61,21 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
         }
     }, [newInitialState, uiItems]);
 
+    // Fixed container styles
+    const containerClass = "w-[500px] h-[400px] border border-gray-300 overflow-hidden";
+
     // If there are no UI items, render a fallback message.
     if (uiItems.length === 0) {
-        return <div className="p-4 text-gray-500">No parameters available</div>;
+        return (
+            <div className={containerClass}>
+                <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-gray-500">No parameters available</span>
+                </div>
+            </div>
+        );
     }
 
     // Update a control's state and log the change.
-    // Now the updateControl function takes both the varname (for state) and the full address.
     const updateControl = (varname: string, address: string, value: number | boolean) => {
         setControlState((prevState) => {
             const newState = { ...prevState, [varname]: value };
@@ -83,19 +91,26 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
             case "vgroup":
                 return (
                     <div key={key} className="flex flex-col border p-2 m-1">
-                        {item.label && <div className="font-bold mb-2">{item.label}</div>}
+                        {item.label && (
+                            <div className="font-bold mb-2 truncate" title={item.label}>
+                                {item.label}
+                            </div>
+                        )}
                         {item.items && item.items.map((child, index) => renderItem(child, `${key}-${index}`))}
                     </div>
                 );
             case "hgroup":
                 return (
                     <div key={key} className="flex flex-row items-center border p-2 m-1">
-                        {item.label && <div className="font-bold mr-2">{item.label}</div>}
+                        {item.label && (
+                            <div className="font-bold mr-2 truncate" title={item.label}>
+                                {item.label}
+                            </div>
+                        )}
                         {item.items && item.items.map((child, index) => renderItem(child, `${key}-${index}`))}
                     </div>
                 );
             case "hslider": {
-                // Always supply a defined value.
                 const value =
                     item.varname && controlState[item.varname] !== undefined
                         ? (controlState[item.varname] as number)
@@ -105,7 +120,7 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
                 return (
                     <div key={key} className="flex flex-col m-1">
                         {item.label && (
-                            <label htmlFor={item.varname} className="mb-1 text-sm">
+                            <label htmlFor={item.varname} className="mb-1 text-sm truncate" title={item.label}>
                                 {item.label}
                             </label>
                         )}
@@ -142,7 +157,8 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
                     <div key={key} className="m-1">
                         <button
                             type="button"
-                            className={`px-4 py-2 rounded ${checked ? "bg-green-500" : "bg-red-500"} text-white`}
+                            className={`px-4 py-2 rounded text-white truncate ${checked ? "bg-green-500" : "bg-red-500"}`}
+                            title={item.label || item.shortname}
                             onClick={() => {
                                 if (item.varname && item.address) {
                                     updateControl(item.varname, item.address, !checked);
@@ -163,8 +179,10 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
     };
 
     return (
-        <div className="w-full h-full p-4 overflow-y-scroll">
-            {uiItems.map((item, index) => renderItem(item, index.toString()))}
+        <div className={containerClass}>
+            <div className="p-2 overflow-y-auto h-full">
+                {uiItems.map((item, index) => renderItem(item, index.toString()))}
+            </div>
         </div>
     );
 };

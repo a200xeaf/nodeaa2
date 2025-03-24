@@ -73,12 +73,17 @@ const FaustCustomNode: FC<NodeProps<FaustCustomNodeType>> = ({ selected }) => {
     };
 
     return (
-        <NodeaaContainer selected={selected} width={20} height={20}>
+        <NodeaaContainer selected={selected} width={34} height={22}>
             <Handle type="target" position={Position.Top} id="audio" style={{ backgroundColor: "limegreen" }} />
             <NodeaaHeader nodeName="Custom Node" headerColor="bg-purple-500" />
-            <div className="flex justify-between nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[18rem] rounded-b-xl">
-                <div className="flex flex-col">
-                    <input type="file" accept=".zip" onChange={handleFileChange} />
+            <div className="flex justify-between nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[20rem] rounded-b-xl">
+                <div className="flex flex-col items-center w-full">
+                    <input
+                        type="file"
+                        accept=".zip"
+                        onChange={handleFileChange}
+                        className="border-2 border-black rounded mb-2 mt-1 p-2"
+                    />
                     {zipFile && <p>Selected file: {zipFile.name}</p>}
                     {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                     <EditorPreview parameters={parameters} updateParameter={logParameters} />
