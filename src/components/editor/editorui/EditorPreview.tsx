@@ -162,7 +162,11 @@ const EditorPreview: React.FC<FaustUIProps> = ({ parameters, updateParameter }) 
         }
     };
 
-    return <div className="w-full h-full p-4">{uiItems.map((item, index) => renderItem(item, index.toString()))}</div>;
+    return (
+        <div className="w-full h-full p-4 overflow-y-scroll">
+            {uiItems.map((item, index) => renderItem(item, index.toString()))}
+        </div>
+    );
 };
 
 export default memo(EditorPreview);

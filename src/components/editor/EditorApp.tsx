@@ -39,7 +39,7 @@ const constantSoucreNode = editorAudioEngine.createConstantSource();
 constantSoucreNode.offset.value = 0.0;
 constantSoucreNode.start(0);
 
-interface FaustParameters {
+export interface FaustParameters {
     ui: FaustUIItem[] | null;
 }
 
