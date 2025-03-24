@@ -5,7 +5,7 @@ export interface NodeConfig {
     realName: string;
     defaultData: Record<string, unknown>;
     audioNodeParams?: {
-        engine: "faust" | "rnbo";
+        engine: "faust" | "rnbo" | "faust-custom";
         type: string;
         voices?: number;
     };

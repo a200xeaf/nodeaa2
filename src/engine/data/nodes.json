@@ -93,6 +93,16 @@
         "audioType": "instrument",
         "version": "1.0.0"
     },
+    "faustCustomNode": {
+        "nodeName": "faustCustomNode",
+        "idPrefix": "",
+        "realName": "Custom Node",
+        "defaultData": {},
+        "audioNodeParams": { "engine": "faust-custom", "type": "faustCustom" },
+        "hasAudio": true,
+        "audioType": "effect",
+        "version": "1.0.0"
+    },
     "midiInNode": {
         "nodeName": "midiInNode",
         "idPrefix": "midi",

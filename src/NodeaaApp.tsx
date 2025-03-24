@@ -28,7 +28,8 @@ import FaustKarplusNode from "@/nodes/Audio/FaustKarplusNode/FaustKarplusNode.ts
 import MidiScaleNode from "@/nodes/Midi/MidiScaleNode/MidiScaleNode.tsx";
 import AudioInNode from "@/nodes/Audio/AudioInNode/AudioInNode.tsx";
 import FaustAmpNode from "@/nodes/Audio/FaustAmpNode/FaustAmpNode.tsx";
-import useUpdateUrlState from "@/engine/utils/useUpdateUrlState.tsx";
+// import useUpdateUrlState from "@/engine/utils/useUpdateUrlState.tsx";
+import FaustCustomNode from "@/nodes/Audio/FaustCustomNode/FaustCustomNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -38,6 +39,7 @@ const nodeTypes = {
     faustLPFNode: FaustLPFNode,
     faustDelayNode: FaustDelayNode,
     faustKarplusNode: FaustKarplusNode,
+    faustCustomNode: FaustCustomNode,
     outNode: OutNode,
     audioInNode: AudioInNode,
     midiInNode: MidiInNode,
@@ -121,7 +123,7 @@ const NodeaaApp: React.FC = () => {
         mousePos.current = { x: e.clientX, y: e.clientY };
     }, []);
 
-    useUpdateUrlState();
+    // useUpdateUrlState();
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {

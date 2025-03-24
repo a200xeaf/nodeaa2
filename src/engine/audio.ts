@@ -43,7 +43,7 @@ nodes.set("output-1", context.destination);
 
 export const createAudioNode = async (
     id: string,
-    type: "faust" | "rnbo",
+    type: "faust" | "rnbo" | "faust-custom",
     name: string,
     data: Partial<FlowNode["data"]>,
     thevoices: number = 0,
@@ -112,6 +112,10 @@ export const createAudioNode = async (
             });
 
             nodes.set(id, node);
+            break;
+        }
+
+        case "faust-custom": {
             break;
         }
     }
