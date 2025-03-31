@@ -1,96 +1,190 @@
+import React, { ChangeEvent, useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
 import { Node, NodeProps } from "@xyflow/react";
-import { ChangeEvent, useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
-import { useNodeStore } from "@/engine/store.ts";
+import { useNodeStore } from "@/engine/store"; // Adjust path
 import { useShallow } from "zustand/react/shallow";
-import { NodesConfig } from "@/engine/types/node-types.ts";
-import rawNodesConfig from "@/engine/data/nodes.json";
-import NodeBadge from "@/ui/nodes-ui/NodeBadge.tsx";
+import {
+    NodesConfig,
+    NodeConfig,
+    FaustCustomNodeConfig,
+    FaustCustomNodesConfig, // Assuming this type exists in store types
+} from "@/engine/types/node-types"; // Adjust path
+import rawNodesConfig from "@/engine/data/nodes.json"; // Static nodes
+import NodeBadge from "@/ui/nodes-ui/NodeBadge"; // Adjust path
+
+// Type definitions (assuming they are imported or defined above)
+
+// Combined type for search results
+type BadgeType = "midi" | "data" | "instrument" | "effect" | "unknown";
+interface SearchResult {
+    id: string; // Unique key for list item (nodeName or custom node key)
+    displayName: string; // Name shown in UI (realName or custom name)
+    nodeType: "standard" | "custom"; // Origin type
+    nodeKey: string; // Key used for creation (nodeName or custom key)
+    badgeType: BadgeType; // Badge type
+}
 
 type CreatorNodeData = Record<string, never>;
-
 type CreatorNodeType = Node<CreatorNodeData, "creatorNode">;
 
-const nodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
+// Load static config
+const staticNodesConfig: NodesConfig = rawNodesConfig as NodesConfig;
 
 const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({ id, positionAbsoluteX, positionAbsoluteY }) => {
     const [search, setSearch] = useState("");
-    const [selectedIndex, setSelectedIndex] = useState<number>(-1); // Track the selected result index
-    const inputRef = useRef<HTMLInputElement>(null); // Ref for the input element
+    const [selectedIndex, setSelectedIndex] = useState<number>(0); // Default to first item
+    const inputRef = useRef<HTMLInputElement>(null);
     const nodeRef = useRef<HTMLDivElement>(null);
-    const selfNodeDelete = useNodeStore(useShallow((state) => state.selfNodeDelete));
-    const createNode = useNodeStore(useShallow((state) => state.createNode));
+
+    // --- Get state and actions from Zustand Store ---
+    const { selfNodeDelete, createNode, createCustomNode, externalNodes } = useNodeStore(
+        useShallow((state) => ({
+            selfNodeDelete: state.selfNodeDelete,
+            createNode: state.createNode,
+            createCustomNode: state.createCustomNode,
+            // Get the custom nodes from the store state
+            externalNodes: state.externalNodes as FaustCustomNodesConfig, // Cast if needed
+        })),
+    );
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        // Limit input length for performance/display reasons if desired
         if (e.target.value.length <= 40) {
             setSearch(e.target.value);
-            setSelectedIndex(0);
+            setSelectedIndex(0); // Reset index on new search
         }
     };
 
-    // Filter the nodes based on the `search` input, matching `realName`
-    const filteredResults = useMemo(() => {
-        if (search === "") {
-            return [];
+    // --- Combine and Filter Results ---
+    const filteredResults = useMemo<SearchResult[]>(() => {
+        const searchTerm = search.toLowerCase().trim();
+        if (searchTerm === "") {
+            return []; // No search term, no results
         }
-        return Object.values(nodesConfig)
-            .filter((node) => node.realName.toLowerCase().includes(search.toLowerCase()))
-            .map((node) => node); // Return only the realName field
-    }, [search]); // Recalculate only when search changes
 
-    const handleCreate = useCallback(
-        (name: string) => {
-            createNode(name, { x: positionAbsoluteX, y: positionAbsoluteY });
+        // Map static nodes
+        const standardResults: SearchResult[] = Object.values(staticNodesConfig)
+            .map((node: NodeConfig): SearchResult => {
+                let badgeType: BadgeType = "unknown";
+                if (node.idPrefix === "") {
+                    if (node.hasAudio && node.audioType) {
+                        badgeType = node.audioType === "instrument" ? "instrument" : "effect";
+                    }
+                } else {
+                    switch (node.idPrefix) {
+                        case "midi":
+                            badgeType = "midi";
+                            break;
+                        case "data":
+                            badgeType = "data";
+                            break;
+                        default:
+                            badgeType = "unknown";
+                            break;
+                    }
+                }
+                return {
+                    id: node.nodeName, // Use nodeName as unique id
+                    displayName: node.realName,
+                    nodeType: "standard",
+                    nodeKey: node.nodeName, // Key for createNode
+                    badgeType: badgeType,
+                };
+            })
+            .filter((node) => node.displayName.toLowerCase().includes(searchTerm));
+
+        // Map custom nodes from Zustand state
+        const customResults: SearchResult[] = Object.entries(externalNodes)
+            .map(
+                ([key, node]: [string, FaustCustomNodeConfig]): SearchResult => ({
+                    id: key, // Use the key from externalNodes as unique id
+                    displayName: node.name, // Use the name field from custom config
+                    nodeType: "custom",
+                    nodeKey: key, // Key for the custom creation logic
+                    badgeType: "effect", // All custom nodes are effects
+                }),
+            )
+            .filter((node) => node.displayName.toLowerCase().includes(searchTerm));
+
+        // Combine and return (potentially sort)
+        return [...standardResults, ...customResults].sort(
+            (a, b) => a.displayName.localeCompare(b.displayName), // Optional: sort alphabetically
+        );
+    }, [search, externalNodes]); // Re-run when search or externalNodes change
+
+    // --- Creation Handlers ---
+    const handleCreateStandard = useCallback(
+        (nodeKey: string) => {
+            createNode(nodeKey, { x: positionAbsoluteX, y: positionAbsoluteY });
             selfNodeDelete(id);
         },
-        [positionAbsoluteX, positionAbsoluteY],
+        [createNode, selfNodeDelete, id, positionAbsoluteX, positionAbsoluteY],
     );
 
-    // Ensure focus happens after the component and its parent have been rendered
-    useEffect(() => {
-        const focusInput = () => {
-            if (inputRef.current) {
-                inputRef.current.focus();
-            }
-        };
-        // Use setTimeout to ensure focus after all rendering is complete
-        const timer = setTimeout(focusInput, 50); // Short delay to ensure rendering completes
+    const handleCreateCustom = useCallback(
+        (nodeKey: string) => {
+            createCustomNode(nodeKey, { x: positionAbsoluteX, y: positionAbsoluteY });
+            selfNodeDelete(id);
+        },
+        [createCustomNode, positionAbsoluteX, positionAbsoluteY, selfNodeDelete, id],
+    );
 
-        return () => clearTimeout(timer); // Clean up the timer on unmount
+    // General handler called by UI events
+    const handleCreate = useCallback(
+        (result: SearchResult | undefined) => {
+            if (!result) return;
+
+            if (result.nodeType === "standard") {
+                handleCreateStandard(result.nodeKey);
+            } else if (result.nodeType === "custom") {
+                handleCreateCustom(result.nodeKey);
+            }
+        },
+        [handleCreateStandard, handleCreateCustom],
+    );
+
+    // --- Effects for Focus and Keyboard Navigation ---
+    useEffect(() => {
+        const timer = setTimeout(() => inputRef.current?.focus(), 50);
+        return () => clearTimeout(timer);
     }, []);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
+                e.preventDefault();
                 selfNodeDelete(id);
+                return;
             }
 
-            if (filteredResults.length === 0) return;
+            if (filteredResults.length === 0) return; // No results to navigate
 
             if (e.key === "ArrowDown") {
                 e.preventDefault();
-                setSelectedIndex((prevIndex) => (prevIndex < filteredResults.length - 1 ? prevIndex + 1 : prevIndex));
+                setSelectedIndex((prev) => (prev < filteredResults.length - 1 ? prev + 1 : prev));
             } else if (e.key === "ArrowUp") {
                 e.preventDefault();
-                setSelectedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : -1));
-            } else if (e.key === "Enter" && selectedIndex >= 0) {
+                setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0)); // Stay at 0 if at top
+            } else if (e.key === "Enter") {
                 e.preventDefault();
-                handleCreate(filteredResults[selectedIndex].nodeName);
+                if (selectedIndex >= 0 && selectedIndex < filteredResults.length) {
+                    // Call the general create handler with the selected result
+                    handleCreate(filteredResults[selectedIndex]);
+                }
             }
         };
 
         document.addEventListener("keydown", handleKeyDown);
-
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [filteredResults, selectedIndex, handleCreate]);
+        // Dependencies include handleCreate now
+    }, [filteredResults, selectedIndex, handleCreate, selfNodeDelete, id]);
 
-    // Handle the blur event (when input loses focus)
+    // Handle the blur event (when input or node loses focus)
     const handleBlur = useCallback(
-        (e: React.FocusEvent<HTMLInputElement>) => {
-            const targetElement = e.relatedTarget as Element | null;
-
-            if (nodeRef.current && (!targetElement || !nodeRef.current.contains(targetElement))) {
+        (e: React.FocusEvent<HTMLDivElement>) => {
+            // Check if the new focused element is outside the node's main div
+            if (nodeRef.current && !nodeRef.current.contains(e.relatedTarget as Element | null)) {
                 selfNodeDelete(id);
             }
         },
@@ -98,65 +192,57 @@ const CreatorNode: React.FC<NodeProps<CreatorNodeType>> = ({ id, positionAbsolut
     );
 
     return (
-        <div className="bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-99999" ref={nodeRef}>
+        <div
+            className="bg-white p-2 w-64 border-gray-200 border-2 rounded-lg nodrag z-[9999]" // Ensure high z-index
+            ref={nodeRef}
+            onBlur={handleBlur} // Add blur handler to the container
+            tabIndex={-1} // Make div focusable for reliable blur detection
+        >
             <input
                 type="text"
                 value={search}
                 onChange={handleSearch}
-                onBlur={handleBlur} // Add onBlur event to track when input loses focus
-                ref={inputRef} // Attach ref to the input
-                maxLength={40} // Set the max length of input text
-                className="w-full focus:outline-hidden" // Remove blue outline on focus
-                placeholder="Start typing..." // Optional placeholder text
-                autoFocus
+                // No direct onBlur needed on input if parent handles it
+                ref={inputRef}
+                maxLength={40}
+                className="w-full focus:outline-none mb-1" // Removed specific blue outline removal, added margin
+                placeholder="Search nodes..."
+                aria-autocomplete="list"
+                aria-controls="search-results-list"
             />
             {filteredResults.length > 0 && (
                 <>
-                    <hr className="border-gray-200 mt-2 border-[1px] rounded-lg" />
-                    <ul className="mt-2">
-                        {filteredResults.map((result, index) => {
-                            // Determine the type for the badge
-                            let type: "midi" | "data" | "instrument" | "effect" | "unknown" = "unknown";
-
-                            if (result.idPrefix === "") {
-                                if (result.hasAudio && result.audioType) {
-                                    type = result.audioType === "instrument" ? "instrument" : "effect";
-                                }
-                            } else {
-                                switch (result.idPrefix) {
-                                    case "midi":
-                                        type = "midi";
-                                        break;
-                                    case "data":
-                                        type = "data";
-                                        break;
-                                    default:
-                                        type = "unknown";
-                                        break;
-                                }
-                            }
-
-                            return (
-                                <li
-                                    key={index}
-                                    className={`flex items-center text-sm text-gray-700 p-1 rounded-lg ${
-                                        selectedIndex === index ? "bg-blue-100" : "hover:bg-blue-100"
-                                    }`}
-                                >
-                                    {/* Badge */}
-                                    <NodeBadge type={type} />
-                                    {/* Button */}
-                                    <button
-                                        onClick={() => handleCreate(result.nodeName)}
-                                        className="w-full text-left focus:outline-hidden"
-                                    >
-                                        {result.realName}
-                                    </button>
-                                </li>
-                            );
-                        })}
+                    <hr className="border-gray-200 border-[1px] rounded-lg" />
+                    <ul id="search-results-list" className="mt-2 max-h-60 overflow-y-auto">
+                        {" "}
+                        {/* Added max-height and scroll */}
+                        {filteredResults.map((result, index) => (
+                            <li
+                                key={result.id} // Use the unique id from SearchResult
+                                id={`search-result-${result.id}`}
+                                role="option"
+                                aria-selected={selectedIndex === index}
+                                className={`flex items-center text-sm text-gray-700 p-1 rounded-lg cursor-pointer ${
+                                    selectedIndex === index ? "bg-blue-100" : "hover:bg-gray-100" // Subtle hover
+                                }`}
+                                // Use onMouseDown to trigger create before blur potentially fires
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
+                                    handleCreate(result);
+                                }}
+                            >
+                                <NodeBadge type={result.badgeType} /> {/* Use pre-calculated badge type */}
+                                {/* Use a div or span instead of button if whole li is clickable */}
+                                <span className="ml-2 w-full text-left focus:outline-none">
+                                    {result.displayName} {/* Display name */}
+                                </span>
+                            </li>
+                        ))}
                     </ul>
                 </>
+            )}
+            {search !== "" && filteredResults.length === 0 && (
+                <p className="text-xs text-gray-500 mt-2">No matching nodes found.</p>
             )}
         </div>
     );

@@ -30,6 +30,7 @@ import AudioInNode from "@/nodes/Audio/AudioInNode/AudioInNode.tsx";
 import FaustAmpNode from "@/nodes/Audio/FaustAmpNode/FaustAmpNode.tsx";
 // import useUpdateUrlState from "@/engine/utils/useUpdateUrlState.tsx";
 import FaustCustomNode from "@/nodes/Audio/FaustCustomNode/FaustCustomNode.tsx";
+import ImporterNode from "@/nodes/Misc/ImporterNode/ImporterNode.tsx";
 
 const nodeTypes = {
     osc2Node: Osc2Node,
@@ -48,6 +49,7 @@ const nodeTypes = {
     numberNode: NumberNode,
     viewerNode: ViewerNode,
     creatorNode: CreatorNode,
+    importerNode: ImporterNode,
 };
 
 const edgeTypes = {

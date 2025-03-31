@@ -40,6 +40,7 @@ constantSoucreNode.offset.value = 0.0;
 constantSoucreNode.start(0);
 
 export interface FaustParameters {
+    name: string;
     ui: FaustUIItem[] | null;
 }
 

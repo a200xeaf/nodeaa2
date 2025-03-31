@@ -14,5 +14,12 @@ export interface NodeConfig {
     version: string;
 }
 
+export interface FaustCustomNodeConfig {
+    name: string;
+    metadata: object;
+    wasm: string;
+}
+
 // Define the shape of the entire configuration object
 export type NodesConfig = Record<string, NodeConfig>;
+export type FaustCustomNodesConfig = Record<string, FaustCustomNodeConfig>;

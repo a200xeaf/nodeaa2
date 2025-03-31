@@ -1,94 +1,81 @@
-import { FC, memo, useState } from "react";
+import { FC, memo } from "react"; // Removed useState
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx";
-import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx";
-import JSZip from "jszip";
-import EditorPreview from "@/components/editor/editorui/EditorPreview.tsx";
-import { FaustParameters } from "@/components/editor/EditorApp.tsx";
+import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx"; // Adjust path if necessary
+import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx"; // Adjust path if necessary
+// Removed JSZip import
+import EditorPreview from "@/components/editor/editorui/EditorPreview.tsx"; // Adjust path if necessary
+import { FaustParameters } from "@/components/editor/EditorApp.tsx"; // Adjust path if necessary
 
+// Type definitions remain the same
 type FaustCustomNodeData = {
-    faustAmp_gain: number;
-    faustAmp_wet: number;
+    customNodeMetadata: object;
 };
 
 type FaustCustomNodeType = Node<FaustCustomNodeData, "faustCustomNode">;
 
-const FaustCustomNode: FC<NodeProps<FaustCustomNodeType>> = ({ selected }) => {
-    const [zipFile, setZipFile] = useState<File | null>(null);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [parameters, setParameters] = useState<FaustParameters | null>(null);
+const FaustCustomNode: FC<NodeProps<FaustCustomNodeType>> = ({ selected, data, id }) => {
+    // Added id for potential use later
 
+    // Removed zipFile state
+    // Removed errorMessage state
+    // Removed parameters state (as EditorPreview uses data.customNodeMetadata directly)
+
+    // Placeholder function for parameter updates from EditorPreview
     const logParameters = (address: string, value: unknown) => {
-        console.log(address, value);
+        console.log(`Node ${id} - Parameter Change:`, address, value);
+        // Here you would typically update the node's state or trigger
+        // an update in your central store if parameter values need to persist
+        // or affect other parts of the application.
     };
 
-    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setErrorMessage(null); // clear any previous errors
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            setZipFile(file);
-            console.log("Selected file:", file);
+    // Log the incoming node data for debugging purposes
+    // console.log(`FaustCustomNode ${id} data:`, data);
 
-            try {
-                // Load the zip file asynchronously
-                const zip = await JSZip.loadAsync(file);
-                const allowedFiles = ["dsp-meta.json", "dsp-module.wasm"];
-                const zipFiles = Object.keys(zip.files);
+    // Removed handleFileChange function
 
-                // Validate that the zip contains only the allowed files
-                if (zipFiles.length !== allowedFiles.length || !allowedFiles.every((name) => zipFiles.includes(name))) {
-                    setZipFile(null);
-                    setErrorMessage("Invalid zip");
-                    console.error("Zip validation failed. Found files:", zipFiles);
-                    return;
-                }
-
-                // Read dsp-meta.json and set parameters
-                const metaFile = zip.file("dsp-meta.json");
-                if (!metaFile) {
-                    setZipFile(null);
-                    setErrorMessage("dsp-meta.json not found");
-                    console.error("dsp-meta.json not found in zip");
-                    return;
-                }
-
-                const metaContent = await metaFile.async("string");
-                console.log("dsp-meta.json content:", metaContent);
-
-                const parsedParameters: FaustParameters = JSON.parse(metaContent);
-                setParameters(parsedParameters);
-
-                // Optionally, you can also read dsp-module.wasm
-                const wasmFile = zip.file("dsp-module.wasm");
-                if (wasmFile) {
-                    const wasmContent = await wasmFile.async("string");
-                    console.log("dsp-module.wasm content:", wasmContent);
-                }
-            } catch (error) {
-                setZipFile(null);
-                setErrorMessage("Error reading zip file");
-                console.error("Failed to unzip file:", error);
-            }
-        }
-    };
+    // Basic check to ensure customNodeMetadata exists and is an object
+    const hasValidMetadata = data?.customNodeMetadata && typeof data.customNodeMetadata === "object";
 
     return (
-        <NodeaaContainer selected={selected} width={34} height={22}>
+        // Adjust height if needed now that file input is gone
+        <NodeaaContainer selected={selected} width={34} height={18}>
+            {/* Handles remain the same */}
             <Handle type="target" position={Position.Top} id="audio" style={{ backgroundColor: "limegreen" }} />
-            <NodeaaHeader nodeName="Custom Node" headerColor="bg-purple-500" />
-            <div className="flex justify-between nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[20rem] rounded-b-xl">
+
+            {/* Header remains the same - Use name from metadata if available */}
+            <NodeaaHeader
+                nodeName={
+                    (hasValidMetadata && (data.customNodeMetadata as unknown as FaustParameters)?.name) || "Custom Node"
+                }
+                headerColor="bg-purple-500"
+            />
+
+            {/* Main content area */}
+            <div className="flex justify-center nodrag cursor-default bg-white pb-2 pt-1 px-2 h-[16rem] rounded-b-xl overflow-hidden">
+                {" "}
+                {/* Adjusted height */}
                 <div className="flex flex-col items-center w-full">
-                    <input
-                        type="file"
-                        accept=".zip"
-                        onChange={handleFileChange}
-                        className="border-2 border-black rounded mb-2 mt-1 p-2"
-                    />
-                    {zipFile && <p>Selected file: {zipFile.name}</p>}
-                    {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-                    <EditorPreview parameters={parameters} updateParameter={logParameters} />
+                    {/* Removed file input element */}
+                    {/* Removed file name display */}
+                    {/* Removed error message display */}
+
+                    {/* Editor Preview - ensure it handles potentially missing/invalid metadata */}
+                    {hasValidMetadata ? (
+                        <EditorPreview
+                            // Cast the metadata to the expected FaustParameters type
+                            // Add error handling or default values within EditorPreview if needed
+                            parameters={data.customNodeMetadata as unknown as FaustParameters}
+                            updateParameter={logParameters}
+                        />
+                    ) : (
+                        <p className="text-xs text-red-500 p-4 text-center">
+                            Invalid or missing metadata for this custom node.
+                        </p>
+                    )}
                 </div>
             </div>
+
+            {/* Handles remain the same */}
             <Handle type="source" position={Position.Bottom} id="audio" style={{ backgroundColor: "limegreen" }} />
         </NodeaaContainer>
     );

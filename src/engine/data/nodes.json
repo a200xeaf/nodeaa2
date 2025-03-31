@@ -162,5 +162,13 @@
         "defaultData": {},
         "hasAudio": false,
         "version": "1.0.0"
+    },
+    "importerNode": {
+        "nodeName": "importerNode",
+        "idPrefix": "data",
+        "realName": "Importer Node",
+        "defaultData": {},
+        "hasAudio": false,
+        "version": "1.0.0"
     }
 }

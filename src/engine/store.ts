@@ -23,12 +23,17 @@ import {
 } from "./audio.ts";
 import { WebMidi } from "webmidi";
 import rawNodesConfig from "./data/nodes.json";
-import { NodesConfig } from "@/engine/types/node-types.ts";
+import { FaustCustomNodeConfig, FaustCustomNodesConfig, NodesConfig } from "@/engine/types/node-types.ts";
 import { persist } from "zustand/middleware";
 
 export interface NodeStoreState {
     nodes: FlowNode[];
     edges: Edge[];
+
+    externalNodes: FaustCustomNodesConfig;
+    addExternalNode: (nodeId: string, nodeConfig: FaustCustomNodeConfig) => void;
+    removeExternalNode: (nodeId: string) => void;
+    getExternalNode: (nodeId: string) => FaustCustomNodeConfig | undefined;
 
     viewport: {
         x: number;
@@ -50,6 +55,7 @@ export interface NodeStoreState {
     onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode["data"]>) => void;
     createNode: (type: string, pos?: { x: number; y: number }, center?: boolean, useId?: string) => Promise<void>;
+    createCustomNode: (name: string, pos?: { x: number; y: number }, useId?: string) => Promise<void>;
 
     clearProject: () => void;
 
@@ -90,6 +96,24 @@ export const useNodeStore = create<NodeStoreState>()(
                 },
             ],
             edges: [],
+
+            externalNodes: {},
+
+            addExternalNode: (nodeId: string, nodeConfig: FaustCustomNodeConfig) =>
+                set((state) => ({
+                    externalNodes: {
+                        ...state.externalNodes, // Shallow copy existing nodes
+                        [nodeId]: nodeConfig, // Add or overwrite the node with the given id
+                    },
+                })),
+            removeExternalNode: (nodeId: string) =>
+                set((state) => {
+                    const { [nodeId]: _, ...remainingNodes } = state.externalNodes;
+                    return { externalNodes: remainingNodes };
+                }),
+            getExternalNode: (nodeId: string): FaustCustomNodeConfig | undefined => {
+                return get().externalNodes[nodeId];
+            },
 
             viewport: {
                 x: 0,
@@ -149,6 +173,21 @@ export const useNodeStore = create<NodeStoreState>()(
 
                 // console.log(`Node '${nodeConfig.realName}' (ID: ${id}) created at position`, position);
             },
+            createCustomNode: async (name: string, pos = { x: 0, y: 0 }, useId = undefined) => {
+                const nodeConfig = get().getExternalNode(name)!;
+                let id: string;
+                if (useId) {
+                    id = useId;
+                } else {
+                    id = nanoid();
+                }
+                const position = { x: pos.x, y: pos.y };
+                const type = "faustCustomNode";
+                set({
+                    nodes: [...get().nodes, { id, type, data: { customNodeMetadata: nodeConfig.metadata }, position }],
+                });
+            },
+
             toggleAudio: () => {
                 toggleAudioEngine().then(() => {
                     set({ isRunning: isRunningEngine() });
