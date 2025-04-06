@@ -1,9 +1,10 @@
 import { Node as FlowNode } from "@xyflow/react";
 import { createDevice, Device, IPatcher, MIDIEvent, Parameter, WorkletDevice } from "@rnbo/js";
 import { FaustMonoAudioWorkletNode, FaustPolyAudioWorkletNode } from "@grame/faustwasm";
-import { createFaustNode } from "./utils/create-faust-node.ts";
+import { createCustomFaustNode, createFaustNode } from "./utils/create-faust-node.ts";
 import { MediaRecorder, register } from "extendable-media-recorder";
 import { connect } from "extendable-media-recorder-wav-encoder";
+import { FaustCustomNodeConfig } from "@/engine/types/node-types.ts";
 
 await register(await connect());
 
@@ -121,6 +122,16 @@ export const createAudioNode = async (
     }
 };
 
+export const createCustomAudioNode = async (id: string, device: FaustCustomNodeConfig) => {
+    const node = await createCustomFaustNode(device, context);
+    if (!node.faustNode) {
+        alert("error compiling audio node");
+        return;
+    } else {
+        nodes.set(id, node.faustNode);
+    }
+};
+
 export const updateAudioNode = (id: string, data: Partial<FlowNode["data"]>) => {
     const node = nodes.get(id);
 
@@ -183,6 +194,27 @@ export const updateAudioNode = (id: string, data: Partial<FlowNode["data"]>) => 
         }
     } catch (error) {
         console.error("Error updating audio node:", error);
+    }
+};
+
+export const updateCustomFaustNode = (id: string, data: object) => {
+    const node = nodes.get(id);
+    if (isFaust(node)) {
+        for (const [key, val] of Object.entries(data)) {
+            // Try to get the parameter from the node's AudioParams using the correct format
+            const param = node.parameters.get(`${key}`);
+
+            if (param) {
+                if (typeof val === "number") {
+                    param.setValueAtTime(val, 0);
+                    // console.log(`Updated ${paramName} to ${val} on Faust node`);
+                } else {
+                    console.error(`Invalid value: Must be a number`);
+                }
+            } else {
+                console.error(`Parameter ${key} not found on Faust node`);
+            }
+        }
     }
 };
 

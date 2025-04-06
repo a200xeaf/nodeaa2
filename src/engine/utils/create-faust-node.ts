@@ -5,6 +5,7 @@ import {
     FaustPolyAudioWorkletNode,
     FaustPolyDspGenerator,
 } from "@grame/faustwasm";
+import { FaustCustomNodeConfig } from "@/engine/types/node-types.ts";
 
 type FaustNode = FaustMonoAudioWorkletNode | FaustPolyAudioWorkletNode;
 
@@ -65,6 +66,37 @@ export const createFaustNode = async (
     if (faustNode === null) {
         throw new Error("Failed to create faustNode.");
     }
+
+    return { faustNode, dspMeta };
+};
+
+export const createCustomFaustNode = async (device: FaustCustomNodeConfig, context: AudioContext) => {
+    const dspMeta: FaustDspMeta = device.metadata as unknown as FaustDspMeta;
+
+    const binaryString = atob(device.wasm);
+
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    const dspModule = await WebAssembly.compile(bytes);
+
+    const faustDSP: FaustDspDistribution = { dspMeta, dspModule };
+    let faustNode: FaustNode | null = null;
+
+    const generator = new FaustMonoDspGenerator();
+
+    faustNode = await generator.createNode(
+        context,
+        dspMeta.name,
+        {
+            module: faustDSP.dspModule,
+            json: JSON.stringify(faustDSP.dspMeta),
+            soundfiles: {},
+        },
+        false,
+    );
 
     return { faustNode, dspMeta };
 };

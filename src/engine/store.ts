@@ -15,11 +15,13 @@ import { nanoid } from "nanoid";
 import {
     connectNodes,
     createAudioNode,
+    createCustomAudioNode,
     deleteAudioNode,
     disconnectNodes,
     isRunningEngine,
     toggleAudioEngine,
     updateAudioNode,
+    updateCustomFaustNode,
 } from "./audio.ts";
 import { WebMidi } from "webmidi";
 import rawNodesConfig from "./data/nodes.json";
@@ -54,6 +56,7 @@ export interface NodeStoreState {
     selfNodeDelete: (id: string) => void;
     onConnect: OnConnect;
     updateNode: (id: string, data: Partial<FlowNode["data"]>) => void;
+    updateCustomNode: (id: string, data: object) => void;
     createNode: (type: string, pos?: { x: number; y: number }, center?: boolean, useId?: string) => Promise<void>;
     createCustomNode: (name: string, pos?: { x: number; y: number }, useId?: string) => Promise<void>;
 
@@ -186,6 +189,7 @@ export const useNodeStore = create<NodeStoreState>()(
                 set({
                     nodes: [...get().nodes, { id, type, data: { customNodeMetadata: nodeConfig.metadata }, position }],
                 });
+                await createCustomAudioNode(id, nodeConfig);
             },
 
             toggleAudio: () => {
@@ -228,6 +232,14 @@ export const useNodeStore = create<NodeStoreState>()(
                 if (!(id.length > 21)) {
                     updateAudioNode(id, data);
                 }
+                set({
+                    nodes: get().nodes.map((node) =>
+                        node.id === id ? { ...node, data: { ...node.data, ...data } } : node,
+                    ),
+                });
+            },
+            updateCustomNode: (id, data) => {
+                updateCustomFaustNode(id, data);
                 set({
                     nodes: get().nodes.map((node) =>
                         node.id === id ? { ...node, data: { ...node.data, ...data } } : node,

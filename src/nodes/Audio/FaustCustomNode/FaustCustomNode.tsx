@@ -4,7 +4,9 @@ import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx"; // Adjust path 
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx"; // Adjust path if necessary
 // Removed JSZip import
 import EditorPreview from "@/components/editor/editorui/EditorPreview.tsx"; // Adjust path if necessary
-import { FaustParameters } from "@/components/editor/EditorApp.tsx"; // Adjust path if necessary
+import { FaustParameters } from "@/components/editor/EditorApp.tsx";
+import { useNodeStore } from "@/engine/store.ts";
+import { useShallow } from "zustand/react/shallow"; // Adjust path if necessary
 
 // Type definitions remain the same
 type FaustCustomNodeData = {
@@ -14,25 +16,11 @@ type FaustCustomNodeData = {
 type FaustCustomNodeType = Node<FaustCustomNodeData, "faustCustomNode">;
 
 const FaustCustomNode: FC<NodeProps<FaustCustomNodeType>> = ({ selected, data, id }) => {
-    // Added id for potential use later
+    const updateCustomNode = useNodeStore(useShallow((state) => state.updateCustomNode));
 
-    // Removed zipFile state
-    // Removed errorMessage state
-    // Removed parameters state (as EditorPreview uses data.customNodeMetadata directly)
-
-    // Placeholder function for parameter updates from EditorPreview
     const logParameters = (address: string, value: unknown) => {
-        console.log(`Node ${id} - Parameter Change:`, address, value);
-        // Here you would typically update the node's state or trigger
-        // an update in your central store if parameter values need to persist
-        // or affect other parts of the application.
+        updateCustomNode(id, { [address]: value });
     };
-
-    // Log the incoming node data for debugging purposes
-    // console.log(`FaustCustomNode ${id} data:`, data);
-
-    // Removed handleFileChange function
-
     // Basic check to ensure customNodeMetadata exists and is an object
     const hasValidMetadata = data?.customNodeMetadata && typeof data.customNodeMetadata === "object";
 
