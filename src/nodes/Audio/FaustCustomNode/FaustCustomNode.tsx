@@ -3,13 +3,14 @@ import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import NodeaaContainer from "@/ui/nodes-ui/NodeaaContainer.tsx"; // Adjust path if necessary
 import NodeaaHeader from "@/ui/nodes-ui/NodeaaHeader.tsx"; // Adjust path if necessary
 // Removed JSZip import
-import EditorPreview from "@/components/editor/editorui/EditorPreview.tsx"; // Adjust path if necessary
+import EditorPreview, { ParameterOverrides } from "@/components/editor/editorui/EditorPreview.tsx"; // Adjust path if necessary
 import { FaustParameters } from "@/components/editor/EditorApp.tsx";
 import { useNodeStore } from "@/engine/store.ts";
 import { useShallow } from "zustand/react/shallow"; // Adjust path if necessary
 
 // Type definitions remain the same
 type FaustCustomNodeData = {
+    parameters: ParameterOverrides;
     customNodeMetadata: object;
 };
 
@@ -54,6 +55,7 @@ const FaustCustomNode: FC<NodeProps<FaustCustomNodeType>> = ({ selected, data, i
                             // Add error handling or default values within EditorPreview if needed
                             parameters={data.customNodeMetadata as unknown as FaustParameters}
                             updateParameter={logParameters}
+                            parametersOverride={data.parameters}
                         />
                     ) : (
                         <p className="text-xs text-red-500 p-4 text-center">

@@ -45,6 +45,7 @@ const ImporterNode: React.FC<NodeProps<ImporterNodeType>> = ({ id, selected }) =
     const deletionTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref to store timeout ID
 
     const addExternalNode = useNodeStore((state) => state.addExternalNode);
+    const addExternalNodeLink = useNodeStore((state) => state.addExternalNodeLink);
     const selfNodeDelete = useNodeStore((state) => state.selfNodeDelete);
 
     // Handle changes in the input field
@@ -124,6 +125,7 @@ const ImporterNode: React.FC<NodeProps<ImporterNodeType>> = ({ id, selected }) =
                 wasm: wasmBase64,
             };
             addExternalNode(nodeNameKey, newNodeConfig);
+            addExternalNodeLink(trimmedUrl);
 
             // --- Success: Show message and schedule deletion ---
             setIsLoading(false); // Stop loading indicator

@@ -12,10 +12,15 @@ interface NodeMeasured {
     height: number;
 }
 
+interface CustomNodeData {
+    parameters: Record<string, number>;
+    customNodeMetadata: object;
+}
+
 interface ProjectNode {
     id: string;
     type: string;
-    data: NodeData;
+    data: NodeData | CustomNodeData;
     position: NodePosition;
     measured: NodeMeasured;
     selected?: boolean;
@@ -41,4 +46,5 @@ export interface ProjectData {
     edges: ProjectEdge[];
     viewport: ProjectViewport;
     graphBackground: string;
+    externalNodeLinks: string[];
 }

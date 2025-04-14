@@ -33,6 +33,9 @@ export interface NodeStoreState {
     edges: Edge[];
 
     externalNodes: FaustCustomNodesConfig;
+    externalNodeLinks: string[];
+    addExternalNodeLink: (nodeLink: string) => void;
+    removeExternalNodeLink: (nodeLink: string) => void;
     addExternalNode: (nodeId: string, nodeConfig: FaustCustomNodeConfig) => void;
     removeExternalNode: (nodeId: string) => void;
     getExternalNode: (nodeId: string) => FaustCustomNodeConfig | undefined;
@@ -101,7 +104,21 @@ export const useNodeStore = create<NodeStoreState>()(
             edges: [],
 
             externalNodes: {},
+            externalNodeLinks: [],
 
+            addExternalNodeLink: (nodeLink: string) =>
+                set((state) => {
+                    if (state.externalNodeLinks.includes(nodeLink)) {
+                        return state;
+                    }
+                    return {
+                        externalNodeLinks: [...state.externalNodeLinks, nodeLink],
+                    };
+                }),
+            removeExternalNodeLink: (nodeLink: string) =>
+                set((state) => ({
+                    externalNodeLinks: state.externalNodeLinks.filter((link) => link !== nodeLink),
+                })),
             addExternalNode: (nodeId: string, nodeConfig: FaustCustomNodeConfig) =>
                 set((state) => ({
                     externalNodes: {
@@ -239,10 +256,14 @@ export const useNodeStore = create<NodeStoreState>()(
                 });
             },
             updateCustomNode: (id, data) => {
+                console.log(data);
                 updateCustomFaustNode(id, data);
                 set({
                     nodes: get().nodes.map((node) =>
-                        node.id === id ? { ...node, data: { ...node.data, ...data } } : node,
+                        node.id === id
+                            ? //@ts-expect-error complicated type
+                              { ...node, data: { ...node.data, parameters: { ...node.data.parameters, ...data } } }
+                            : node,
                     ),
                 });
             },
