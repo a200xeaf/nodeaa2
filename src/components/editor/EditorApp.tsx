@@ -93,7 +93,7 @@ const EditorApp = () => {
 
     useEffect(() => {
         const prepareFaustLib = async () => {
-            const faustModulePath = new URL("@grame/faustwasm/libfaust-wasm/libfaust-wasm.js", import.meta.url).href;
+            const faustModulePath = "/assets/faustwasm/libfaust-wasm.js";
             const faustModule = await instantiateFaustModuleFromFile(faustModulePath);
             const libFaust = new LibFaust(faustModule);
             faustCompiler.current = new FaustCompiler(libFaust);
